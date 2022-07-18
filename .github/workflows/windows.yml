@@ -28,17 +28,13 @@ jobs:
       with:
         perl-version: '5.34'
           
-    - name:  Configure OpenSSL
+    - name:  Installing OpenSSL
       shell: powershell
       run: |
         wget https://www.openssl.org/source/openssl-3.0.5.tar.gz -OutFile openssl-3.0.5.tar.gz
         tar -xzf .\openssl-3.0.5.tar.gz
         cd openssl-3.0.5
         perl Configure
-        
-    - name:  Installing OpenSSL
-      shell: powershell
-      run: |
         nmake
         nmake test
         nmake install        
