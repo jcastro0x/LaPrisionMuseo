@@ -16,7 +16,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     
-    - name: Install X11
+    - name: Install Dependencies of SFML
       run: |
         sudo apt-get update
         sudo apt-get install libopenal-dev
@@ -27,6 +27,16 @@ jobs:
         sudo apt-get install xorg-dev
         sudo apt-get install freeglut3-dev
         sudo apt-get install libudev-dev
+        
+    - name:  Install OpenSSL
+      run: |
+        wget https://www.openssl.org/source/openssl-3.0.5m.tar.gz
+        tar -xf openssl-3.0.5.tar.gz
+        cd openssl-3.0.5
+        sudo ./Configure
+        sudo make
+        sudo make test
+        sudo make install
       
     - name: Install SFML
       run: |
