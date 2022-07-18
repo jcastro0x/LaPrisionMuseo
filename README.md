@@ -1,6 +1,8 @@
 # La Prisión - Museo
 ![screenshot](doc/splash.png)
 
+[![Build Status](https://github.com/jcastro0x/LaPrisionMuseo/workflows/CMake/badge.svg)](https://github.com/jcastro0x/LaPrisionMuseo/actions?workflow=CMake)
+
 ## Resumen
 Recorre la prisión creada por _Dinamic Multimedia_ con los graficos originales del juego. Comparte con otros usuarios tu
 experiencia, descubre detalles ineditos en cada sala y encuentra los objetos ocultos antes que nadie para obtener 
