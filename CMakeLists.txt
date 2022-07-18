@@ -16,4 +16,4 @@ find_package(SFML 2.5 COMPONENTS graphics audio REQUIRED)
 add_subdirectory(libs/socket.io-client-cpp)
 include_directories(libs/socket.io-client-cpp/src)
 
-target_link_libraries(${PROJECT_NAME} sfml-graphics sfml-audio sfml-main sioclient)
+target_link_libraries(${PROJECT_NAME} sfml-graphics sfml-audio sioclient)
