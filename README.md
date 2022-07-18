@@ -1,7 +1,7 @@
 # La Prisión - Museo
 ![screenshot](doc/splash.png)
 
-[![Build Status](https://github.com/jcastro0x/LaPrisionMuseo/workflows/CMake/badge.svg)](https://github.com/jcastro0x/LaPrisionMuseo/actions?workflow=CMake)
+[![Windows](https://github.com/jcastro0x/LaPrisionMuseo/actions/workflows/cmake.yml/badge.svg)](https://github.com/jcastro0x/LaPrisionMuseo/actions/workflows/cmake.yml)
 
 ## Resumen
 Recorre la prisión creada por _Dinamic Multimedia_ con los graficos originales del juego. Comparte con otros usuarios tu
