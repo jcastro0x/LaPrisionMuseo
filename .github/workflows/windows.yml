@@ -36,7 +36,7 @@ jobs:
         cd openssl-3.0.5
         perl Configure
         nmake
-        nmake test
+        #nmake test
         nmake install        
         
     - name: Install SFML
