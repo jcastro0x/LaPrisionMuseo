@@ -15,21 +15,33 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - uses: shogo82148/actions-setup-perl@v1
+    # https://github.com/marketplace/actions/enable-developer-command-prompt
+    - uses: ilammy/msvc-dev-cmd@v1
+      with:
+        arch: 'amd64'
+    # https://github.com/marketplace/actions/set-up-nasm
     - uses: ilammy/setup-nasm@v1
+      with:
+        version: '2.15.05'
+    # https://github.com/marketplace/actions/setup-perl-environment
+    - uses: shogo82148/actions-setup-perl@v1
       with:
         perl-version: '5.34'
           
-    - name:  Install OpenSSL
+    - name:  Configure OpenSSL
       shell: powershell
       run: |
         wget https://www.openssl.org/source/openssl-3.0.5.tar.gz -OutFile openssl-3.0.5.tar.gz
         tar -xzf .\openssl-3.0.5.tar.gz
         cd openssl-3.0.5
         perl Configure
+        
+    - name:  Installing OpenSSL
+      shell: powershell
+      run: |
         nmake
         nmake test
-        nmake install
+        nmake install        
         
     - name: Install SFML
       run: |
