@@ -18,6 +18,7 @@ jobs:
     
     - name: Install X11
       run: |
+        sudo apt-get update
         sudo apt-get install libx11-dev
         sudo apt-get install xorg-dev
         sudo apt-get install freeglut3-dev
