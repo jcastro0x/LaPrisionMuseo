@@ -1,4 +1,4 @@
-name: CMake
+name: Windows
 
 on:
   push:
@@ -15,6 +15,17 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    
+    - name: Install SFML
+      run: |
+        git clone https://github.com/SFML/SFML.git
+        cd SFML
+        git checkout remotes/origin/2.5.x
+        mkdir _b
+        cd _b
+        cmake -DBUILD_SHARED_LIBS=false -DSFML_USE_STATIC_STD_LIBS=true -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} ..
+        cmake --build . --target install
+        
 
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
