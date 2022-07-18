@@ -1,7 +1,7 @@
 # La Prisión - Museo
 ![screenshot](doc/splash.png)
 
-[![Windows](https://github.com/jcastro0x/LaPrisionMuseo/actions/workflows/cmake.yml/badge.svg)](https://github.com/jcastro0x/LaPrisionMuseo/actions/workflows/cmake.yml)
+[![Windows](https://github.com/jcastro0x/LaPrisionMuseo/actions/workflows/windows.yml/badge.svg)](https://github.com/jcastro0x/LaPrisionMuseo/actions/workflows/windows.yml)
 [![Linux](https://github.com/jcastro0x/LaPrisionMuseo/actions/workflows/linux.yml/badge.svg)](https://github.com/jcastro0x/LaPrisionMuseo/actions/workflows/linux.yml)
 
 ## Resumen
