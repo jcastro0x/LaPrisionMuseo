@@ -23,7 +23,7 @@ jobs:
         cd openssl-3.0.5
         sudo ./Configure
         sudo make
-        sudo make test
+        #sudo make test
         sudo make install
     
     - name: Install Dependencies of SFML
