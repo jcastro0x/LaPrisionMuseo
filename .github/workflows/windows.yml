@@ -15,7 +15,21 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-      
+    - uses: shogo82148/actions-setup-perl@v1
+      with:
+        perl-version: '5.34'
+          
+    - name:  Install OpenSSL
+      shell: powershell
+      run: |
+        wget https://www.openssl.org/source/openssl-3.0.5.tar.gz -OutFile openssl-3.0.5.tar.gz
+        tar -xzf .\openssl-3.0.5.tar.gz
+        cd openssl-3.0.5
+        perl Configure
+        nmake
+        nmake test
+        nmake install
+        
     - name: Install SFML
       run: |
         git clone --branch 2.5.x https://github.com/SFML/SFML.git
