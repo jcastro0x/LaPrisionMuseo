@@ -9,6 +9,8 @@ Recorre la prisión creada por Dinamic Multimedia con los gráficos originales d
 experiencia, descubre detalles inéditos en cada sala y encuentra los objetos ocultos antes que nadie para obtener
 ventajas únicas en la salida oficial de La Prisión - Reloaded.
 
+Obten más información en https://forum.prisonserver.net/
+
 > La Prisión - Museo y La Prisión - Reloaded no tienen ninguna relación legal ni con Dinamic Multimedia, Cryo-Networks
 > ni Serving Online Worlds, S.L.
 
