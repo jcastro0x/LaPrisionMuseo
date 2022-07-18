@@ -3,7 +3,6 @@
 
 [![Windows](https://github.com/jcastro0x/LaPrisionMuseo/actions/workflows/cmake.yml/badge.svg)](https://github.com/jcastro0x/LaPrisionMuseo/actions/workflows/cmake.yml)
 [![Linux](https://github.com/jcastro0x/LaPrisionMuseo/actions/workflows/linux.yml/badge.svg)](https://github.com/jcastro0x/LaPrisionMuseo/actions/workflows/linux.yml)
-[![mac OS](https://github.com/jcastro0x/LaPrisionMuseo/actions/workflows/macos.yml/badge.svg)](https://github.com/jcastro0x/LaPrisionMuseo/actions/workflows/macos.yml)
 
 ## Resumen
 Recorre la prisión creada por _Dinamic Multimedia_ con los graficos originales del juego. Comparte con otros usuarios tu
