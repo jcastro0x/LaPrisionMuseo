@@ -8,12 +8,25 @@ set(SRC_FILES
     src/main.cpp
 )
 
-set(SFML_STATIC_LIBRARIES TRUE)
-add_executable(${PROJECT_NAME} ${SRC_FILES})
+set(SRC_IMGUI
+    libs/imgui/imgui.cpp
+    libs/imgui/imgui_widgets.cpp
+    libs/imgui/imgui_draw.cpp
+    libs/imgui/imgui_tables.cpp
+    libs/imgui/imgui_demo.cpp
+    libs/imgui-sfml/imgui-SFML.cpp
+)
 
-find_package(SFML 2.5 COMPONENTS graphics audio REQUIRED)
+add_executable(${PROJECT_NAME} ${SRC_FILES} ${SRC_IMGUI})
+
+set(SFML_STATIC_LIBRARIES TRUE)
+find_package(SFML 2.5 COMPONENTS graphics audio system window REQUIRED)
 
 add_subdirectory(libs/socket.io-client-cpp)
 include_directories(libs/socket.io-client-cpp/src)
 
-target_link_libraries(${PROJECT_NAME} sfml-graphics sfml-audio sioclient)
+set(IMGUI_DIR ${CMAKE_SOURCE_DIR}/libs/imgui)
+add_subdirectory(libs/imgui-sfml)
+include_directories(libs/imgui libs/imgui-sfml)
+
+target_link_libraries(${PROJECT_NAME} sfml-graphics sfml-audio sfml-system sioclient ImGui-SFML::ImGui-SFML)

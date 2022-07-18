@@ -1,7 +1,11 @@
 #include <SFML/Graphics.hpp>
+#include <SFML/System/Clock.hpp>
+
 #include <sio_client.h>
 
 #include <iostream>
+#include <imgui.h>
+#include <imgui-SFML.h>
 
 
 /**
@@ -26,6 +30,10 @@ void resize(sf::VertexArray& va, sf::Vector2i winSize, float aspectRatio)
 int main()
 {
     sf::RenderWindow window(sf::VideoMode(640, 480), "La Prision - Museo");
+    window.setFramerateLimit(60);
+    ImGui::SFML::Init(window);
+
+    sf::Clock deltaClock;
 
     sf::Texture texture;
     texture.loadFromFile("AL_Almacen1_Mask.png");
@@ -60,6 +68,8 @@ int main()
     {
         while (window.pollEvent(event))
         {
+            ImGui::SFML::ProcessEvent(window, event);
+
             switch (event.type) {
                 default:break;
 
@@ -74,10 +84,20 @@ int main()
 
         }
 
+        ImGui::SFML::Update(window, deltaClock.restart());
+
+        ImGui::ShowDemoWindow();
+
+        ImGui::Begin("Hello, world!");
+        ImGui::Button("Look at this pretty button");
+        ImGui::End();
+
         window.clear();
         window.draw(background);
+        ImGui::SFML::Render(window);
         window.display();
     }
 
-    return 0;
+    ImGui::SFML::Shutdown();
+    return EXIT_SUCCESS;
 }
