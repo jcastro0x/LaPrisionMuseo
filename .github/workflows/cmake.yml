@@ -21,13 +21,9 @@ jobs:
     
     - name: Install SFML
       run: |
-        git clone https://github.com/SFML/SFML.git
-        cd SFML
-        git checkout remotes/origin/2.5.x
-        mkdir _b
-        cd _b
-        cmake -DBUILD_SHARED_LIBS=false -DSFML_USE_STATIC_STD_LIBS=true -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} ..
-        cmake --build . --target install
+        git clone --branch remotes/origin/2.5.x https://github.com/SFML/SFML.git
+        cmake -B SFML/_b -S SFML -DBUILD_SHARED_LIBS=false -DSFML_USE_STATIC_STD_LIBS=true -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} ..
+        cmake --build SFML/_b --target install
         
 
     - name: Configure CMake
