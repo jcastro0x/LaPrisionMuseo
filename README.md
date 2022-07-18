@@ -23,3 +23,4 @@ Obten más información en https://forum.prisonserver.net/
 ## Tecnologias usadas
 - SFML 2.5.1
 - Socket.io
+- OpenSSL
