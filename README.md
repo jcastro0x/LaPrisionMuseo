@@ -15,6 +15,8 @@ ventajas únicas en la salida oficial de La Prisión - Reloaded.
 
 Obten más información en https://forum.prisonserver.net/
 
+> **Note**
+> 
 > La Prisión - Museo y La Prisión - Reloaded no tienen ninguna relación legal ni con Dinamic Multimedia, Cryo-Networks
 > ni Serving Online Worlds, S.L.
 
