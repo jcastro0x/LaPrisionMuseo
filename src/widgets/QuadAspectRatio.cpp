@@ -59,39 +59,36 @@ void QuadAspectRatio::draw(sf::RenderTarget& target, sf::RenderStates states) co
     auto start = std::chrono::system_clock::now();
     states.texture = &texture_;
 
-    sf::Vector2f tarSizeF = {static_cast<float>(target.getSize().x),   static_cast<float>(target.getSize().y)};
-    sf::Vector2f texSizeF = {static_cast<float>(texture_.getSize().x), static_cast<float>(texture_.getSize().y)};
+    sf::Vector2f tarSizeF = { static_cast<float>(target.getSize().x),   static_cast<float>(target.getSize().y) };
+    sf::Vector2f texSizeF = { static_cast<float>(texture_.getSize().x), static_cast<float>(texture_.getSize().y)};
 
     // height needed to use with target.getSize().x that generate correct aspect ratio
     auto h = tarSizeF.x / aspectRatio_;
+    auto w = tarSizeF.x;
 
     if(h > tarSizeF.y && aspectRatioRule_ == EAspectRatioRule::FitToParent)
     {
         h = tarSizeF.y;
 
         // width needed to use with target.getSize().y that generate correct aspect ratio
-        auto w = aspectRatio_ * h;
-        tarSizeF.x = w;
+        w = aspectRatio_ * h;
     }
 
     // Top and bottom gap to vertically center de image
-    const auto heightGap = (tarSizeF.y - texSizeF.y - (h - texSizeF.y)) / 2;
+    const auto heightGap = (tarSizeF.y - h) / 2;
 
     // Right and left gap to horizontally center de image
-    const auto widthGap  = (tarSizeF.y - texSizeF.y - (h - texSizeF.y)) / 2;
+    const auto widthGap  = (tarSizeF.x - w) / 2;
 
+    vertices_[0].position = sf::Vector2f(widthGap,     heightGap);
+    vertices_[1].position = sf::Vector2f(w + widthGap, heightGap);
+    vertices_[2].position = sf::Vector2f(w + widthGap, h + heightGap);
+    vertices_[3].position = sf::Vector2f(widthGap,     h + heightGap);
 
+    const auto end      = std::chrono::system_clock::now();
+    const auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count();
 
-    vertices_[0].position = sf::Vector2f(0,             heightGap);
-    vertices_[1].position = sf::Vector2f(tarSizeF.x,    heightGap);
-    vertices_[2].position = sf::Vector2f(tarSizeF.x,    h + heightGap);
-    vertices_[3].position = sf::Vector2f(0,             h + heightGap);
-
-
-    auto end = std::chrono::system_clock::now();
-    auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count();
-
-    ImGui::Begin("Redraw");
+    ImGui::Begin("QuadAspectRatio - Debug");
     ImGui::LabelText("Duration", "%d nanoseconds", duration);
     ImGui::LabelText("Window", "x: %d y: %d", target.getSize().x, target.getSize().y);
     ImGui::Spacing();
