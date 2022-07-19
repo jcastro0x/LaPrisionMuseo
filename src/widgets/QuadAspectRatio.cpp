@@ -24,6 +24,8 @@
 
 #include <imgui.h>
 
+#include <chrono>
+
 /**
  [0]----[1]
   .      .
@@ -41,8 +43,8 @@ QuadAspectRatio::QuadAspectRatio()
     texture_.setSrgb(false);
     texture_.setRepeated(false);
 
-    aspectRatio_ = static_cast<float>(texture_.getSize().y)
-                 / static_cast<float>(texture_.getSize().x);
+    aspectRatio_ = static_cast<float>(texture_.getSize().x)
+                 / static_cast<float>(texture_.getSize().y);
 
     const sf::Vector2f texSizeF = {static_cast<float>(texture_.getSize().x), static_cast<float>(texture_.getSize().y)};
 
@@ -55,27 +57,30 @@ QuadAspectRatio::QuadAspectRatio()
 #define VtxToStr(V) V.position.x, V.position.y
 void QuadAspectRatio::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
+    auto start = std::chrono::system_clock::now();
     states.texture = &texture_;
-
 
     const sf::Vector2f tarSizeF   = {static_cast<float>(target.getSize().x), static_cast<float>(target.getSize().y)};
 
-    const auto targetAspectRatio = tarSizeF.y / tarSizeF.x;
-    const auto deltaAspectRatio  = .0f + (targetAspectRatio - aspectRatio_);
 
-    auto heightDiff = static_cast<float>(target.getSize().y - texture_.getSize().y);
-    auto widthDiff  = static_cast<float>(target.getSize().x - texture_.getSize().x);
-
-    vertices_[0].position = sf::Vector2f(0,             heightDiff / 2 - widthDiff / 2);
-    vertices_[1].position = sf::Vector2f(tarSizeF.x,    heightDiff / 2 - widthDiff / 2);
-    vertices_[2].position = sf::Vector2f(tarSizeF.x,    480 + heightDiff / 2 + widthDiff / 2);
-    vertices_[3].position = sf::Vector2f(0,             480 + heightDiff / 2 + widthDiff / 2);
+    float h = tarSizeF.x / aspectRatio_;
+    auto heightDiff = static_cast<float>(target.getSize().y - texture_.getSize().y)
+                    - (h - static_cast<float>(texture_.getSize().y));
 
 
+    vertices_[0].position = sf::Vector2f(0,             heightDiff / 2);
+    vertices_[1].position = sf::Vector2f(tarSizeF.x,    heightDiff / 2);
+    vertices_[2].position = sf::Vector2f(tarSizeF.x,    h + heightDiff / 2);
+    vertices_[3].position = sf::Vector2f(0,             h + heightDiff / 2);
+
+
+
+    auto end = std::chrono::system_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count();
 
     ImGui::Begin("Redraw");
+    ImGui::LabelText("Duration", "%d nanoseconds", duration);
     ImGui::LabelText("Window", "x: %d y: %d", target.getSize().x, target.getSize().y);
-    ImGui::LabelText("AR", "%.4f", deltaAspectRatio);
     ImGui::Spacing();
     ImGui::Spacing();
     ImGui::LabelText("0", "(x: %.2f y: %.2f)", VtxToStr(vertices_[0]));
@@ -86,6 +91,7 @@ void QuadAspectRatio::draw(sf::RenderTarget& target, sf::RenderStates states) co
     ImGui::Spacing();
     ImGui::LabelText("TextSiz", "(x: %.2f y: %.2f)", vertices_[1].position.x - vertices_[0].position.x, vertices_[3].position.y - vertices_[0].position.y);
     ImGui::LabelText("TextAR", "%.4f", (vertices_[1].position.x - vertices_[0].position.x) / (vertices_[3].position.y - vertices_[0].position.y));
+    ImGui::LabelText("TextDesHe", "%.4f", h);
 
     ImGui::End();
 
