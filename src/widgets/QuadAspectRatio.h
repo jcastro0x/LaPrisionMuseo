@@ -27,7 +27,14 @@
 class QuadAspectRatio : public sf::Drawable
 {
 public:
-    QuadAspectRatio();
+    enum class EAspectRatioRule : uint8_t
+    {
+        Width,
+        FitToParent
+    };
+
+public:
+    explicit QuadAspectRatio(std::string_view textureName, EAspectRatioRule rule = EAspectRatioRule::Width);
 
 private:
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
@@ -36,4 +43,6 @@ private:
     sf::Texture texture_;
     mutable sf::VertexArray vertices_;
     float aspectRatio_;
+
+    EAspectRatioRule aspectRatioRule_;
 };

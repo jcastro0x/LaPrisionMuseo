@@ -33,12 +33,11 @@
  [3]----[2]
  */
 
-QuadAspectRatio::QuadAspectRatio()
+QuadAspectRatio::QuadAspectRatio(std::string_view textureName, EAspectRatioRule rule)
 : vertices_(sf::Quads, 4)
+, aspectRatioRule_(rule)
 {
-
-    //texture_.loadFromFile("AL_Almacen1.jpg");
-    texture_.loadFromFile("checker640x480.png");
+    texture_.loadFromFile(textureName.data());
     texture_.setSmooth(false);
     texture_.setSrgb(false);
     texture_.setRepeated(false);
@@ -60,19 +59,33 @@ void QuadAspectRatio::draw(sf::RenderTarget& target, sf::RenderStates states) co
     auto start = std::chrono::system_clock::now();
     states.texture = &texture_;
 
-    const sf::Vector2f tarSizeF   = {static_cast<float>(target.getSize().x), static_cast<float>(target.getSize().y)};
+    sf::Vector2f tarSizeF = {static_cast<float>(target.getSize().x),   static_cast<float>(target.getSize().y)};
+    sf::Vector2f texSizeF = {static_cast<float>(texture_.getSize().x), static_cast<float>(texture_.getSize().y)};
+
+    // height needed to use with target.getSize().x that generate correct aspect ratio
+    auto h = tarSizeF.x / aspectRatio_;
+
+    if(h > tarSizeF.y && aspectRatioRule_ == EAspectRatioRule::FitToParent)
+    {
+        h = tarSizeF.y;
+
+        // width needed to use with target.getSize().y that generate correct aspect ratio
+        auto w = aspectRatio_ * h;
+        tarSizeF.x = w;
+    }
+
+    // Top and bottom gap to vertically center de image
+    const auto heightGap = (tarSizeF.y - texSizeF.y - (h - texSizeF.y)) / 2;
+
+    // Right and left gap to horizontally center de image
+    const auto widthGap  = (tarSizeF.y - texSizeF.y - (h - texSizeF.y)) / 2;
 
 
-    float h = tarSizeF.x / aspectRatio_;
-    auto heightDiff = static_cast<float>(target.getSize().y - texture_.getSize().y)
-                    - (h - static_cast<float>(texture_.getSize().y));
 
-
-    vertices_[0].position = sf::Vector2f(0,             heightDiff / 2);
-    vertices_[1].position = sf::Vector2f(tarSizeF.x,    heightDiff / 2);
-    vertices_[2].position = sf::Vector2f(tarSizeF.x,    h + heightDiff / 2);
-    vertices_[3].position = sf::Vector2f(0,             h + heightDiff / 2);
-
+    vertices_[0].position = sf::Vector2f(0,             heightGap);
+    vertices_[1].position = sf::Vector2f(tarSizeF.x,    heightGap);
+    vertices_[2].position = sf::Vector2f(tarSizeF.x,    h + heightGap);
+    vertices_[3].position = sf::Vector2f(0,             h + heightGap);
 
 
     auto end = std::chrono::system_clock::now();

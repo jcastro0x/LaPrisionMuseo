@@ -15,12 +15,12 @@
 int main()
 {
     sf::RenderWindow window(sf::VideoMode(640, 580), "La Prision - Museo");
-    window.setFramerateLimit(60);
+    //window.setFramerateLimit(60);
     ImGui::SFML::Init(window);
 
     sf::Clock deltaClock;
 
-    QuadAspectRatio quadAspectRatio;
+    QuadAspectRatio quadAspectRatio("checker640x480.png", QuadAspectRatio::EAspectRatioRule::FitToParent);
 
 //    sio::client client;
 //
