@@ -27,10 +27,12 @@
 #include <chrono>
 
 /**
- [0]----[1]
-  .      .
-  .      .
- [3]----[2]
+    QuadAspectRatio's vertices lie as follow:
+
+    [0]----[1]
+    .      .
+    .      .
+    [3]----[2]
  */
 
 QuadAspectRatio::QuadAspectRatio(std::string_view textureName, EAspectRatioRule rule)
@@ -47,41 +49,44 @@ QuadAspectRatio::QuadAspectRatio(std::string_view textureName, EAspectRatioRule 
 
     const sf::Vector2f texSizeF = {static_cast<float>(texture_.getSize().x), static_cast<float>(texture_.getSize().y)};
 
-    vertices_[0].texCoords = { 0.f,        0.f};
-    vertices_[1].texCoords = { texSizeF.x, 0.f};
-    vertices_[2].texCoords = { texSizeF.x, texSizeF.y};
-    vertices_[3].texCoords = { 0.f,        texSizeF.y};
+    vertices_[0].texCoords = { 0.f,        0.f        };
+    vertices_[1].texCoords = { texSizeF.x, 0.f        };
+    vertices_[2].texCoords = { texSizeF.x, texSizeF.y };
+    vertices_[3].texCoords = { 0.f,        texSizeF.y };
 }
 
 std::optional<sf::Vector2u> QuadAspectRatio::transformPointToTextureCoords(sf::RenderTarget& target, sf::Vector2i point) const
 {
-    sf::Vector2u transform = { 
-        static_cast<unsigned>(std::max(0, point.x)),
-        static_cast<unsigned>(std::max(0, point.y)) 
-    };
+    sf::Vector2u transform;
 
     const auto quadSize = getQuadSize(target);
 
-    auto a1 = static_cast<float>(texture_.getSize().y) / quadSize.texHeight;
-    auto a2 = static_cast<float>(texture_.getSize().x) / quadSize.texHeight;
+    auto diffHeight = static_cast<float>(texture_.getSize().y) / quadSize.texHeight;
+    auto diffWidth  = static_cast<float>(texture_.getSize().x) / quadSize.texWidth;
 
-    transform.y = transform.y * a1 - quadSize.heightGap * a1;
-    transform.x = transform.x * a2 - quadSize.widthGap * a2;
+    transform.y = point.y * diffHeight - quadSize.heightGap * diffHeight;
+    transform.x = point.x * diffWidth  - quadSize.widthGap  * diffWidth;
 
-    transform.x = std::clamp<float>(0, texture_.getSize().x, transform.x);
-    transform.y = std::clamp<float>(0, texture_.getSize().y, transform.y);
+    if(transform.y > texture_.getSize().y
+    || transform.x > texture_.getSize().x)
+    {
+        ImGui::Begin("QuadAspectRatio - transformMouseCoordToTextureCoords");
+        ImGui::LabelText("transform", "n/a");
+        ImGui::End();
+
+        return {};
+    }
 
     ImGui::Begin("QuadAspectRatio - transformMouseCoordToTextureCoords");
     ImGui::LabelText("transform", "x: %u y: %u", transform.x, transform.y);
     ImGui::End();
-
+    
     return transform;
 }
 
+
 void QuadAspectRatio::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-    auto start = std::chrono::system_clock::now();
-
     const auto quadSize = getQuadSize(target);
 
     vertices_[0].position = sf::Vector2f(quadSize.widthGap,                     quadSize.heightGap);
@@ -89,11 +94,8 @@ void QuadAspectRatio::draw(sf::RenderTarget& target, sf::RenderStates states) co
     vertices_[2].position = sf::Vector2f(quadSize.texWidth + quadSize.widthGap, quadSize.texHeight + quadSize.heightGap);
     vertices_[3].position = sf::Vector2f(quadSize.widthGap,                     quadSize.texHeight + quadSize.heightGap);
 
-    const auto end      = std::chrono::system_clock::now();
-    const auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count();
 
     ImGui::Begin("QuadAspectRatio - Debug");
-    ImGui::LabelText("Duration", "%d nanoseconds", duration);
     ImGui::LabelText("Window", "x: %d y: %d", target.getSize().x, target.getSize().y);
     ImGui::Spacing();
     ImGui::LabelText("TextSiz", "(x: %.2f y: %.2f)", vertices_[1].position.x - vertices_[0].position.x, vertices_[3].position.y - vertices_[0].position.y);

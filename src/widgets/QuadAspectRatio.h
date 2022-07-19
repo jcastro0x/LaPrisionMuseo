@@ -52,10 +52,10 @@ private:
 
     struct QuadSize
     {
-        unsigned texWidth;
-        unsigned texHeight;
-        unsigned heightGap;
-        unsigned widthGap;
+        float texWidth;
+        float texHeight;
+        float heightGap;
+        float widthGap;
     };
     QuadSize getQuadSize(sf::RenderTarget& target) const;
 
