@@ -4,6 +4,10 @@
 [![Windows](https://github.com/jcastro0x/LaPrisionMuseo/actions/workflows/windows.yml/badge.svg)](https://github.com/jcastro0x/LaPrisionMuseo/actions/workflows/windows.yml)
 [![Linux](https://github.com/jcastro0x/LaPrisionMuseo/actions/workflows/linux.yml/badge.svg)](https://github.com/jcastro0x/LaPrisionMuseo/actions/workflows/linux.yml)
 
+> **Warning**
+>
+> Este proyecto se encuentra bajo desarrollo. Su estado actual es INJUGABLE.
+
 ## Resumen
 Recorre la prisión creada por Dinamic Multimedia con los gráficos originales del juego. Comparte con otros usuarios tu 
 experiencia, descubre detalles inéditos en cada sala y encuentra los objetos ocultos antes que nadie para obtener
