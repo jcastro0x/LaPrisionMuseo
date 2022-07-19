@@ -53,7 +53,47 @@ QuadAspectRatio::QuadAspectRatio(std::string_view textureName, EAspectRatioRule 
     vertices_[3].texCoords = { 0.f,        texSizeF.y};
 }
 
-#define VtxToStr(V) V.position.x, V.position.y
+std::optional<sf::Vector2u> QuadAspectRatio::transformPointToTextureCoords(sf::RenderTarget& target, sf::Vector2i point) const
+{
+    sf::Vector2u transform = { 
+        static_cast<unsigned>(std::max(0, point.x)),
+        static_cast<unsigned>(std::max(0, point.y)) 
+    };
+
+
+    sf::Vector2f tarSizeF = { static_cast<float>(target.getSize().x),   static_cast<float>(target.getSize().y) };
+    sf::Vector2f texSizeF = { static_cast<float>(texture_.getSize().x), static_cast<float>(texture_.getSize().y)};
+
+    auto h = tarSizeF.x / aspectRatio_;
+    auto w = tarSizeF.x;
+
+    if(h > tarSizeF.y && aspectRatioRule_ == EAspectRatioRule::FitToParent)
+    {
+        h = tarSizeF.y;
+        w = aspectRatio_ * h;
+    }
+
+    const auto heightGap = (tarSizeF.y - h) / 2;
+    const auto widthGap  = (tarSizeF.x - w) / 2;
+
+
+    auto a1 = texSizeF.y / h;
+    auto a2 = texSizeF.x / w;
+
+    transform.y = transform.y * a1 - heightGap * a1;
+    transform.x = transform.x * a2 - widthGap * a2;
+
+
+    transform.x = std::clamp<float>(0, texSizeF.x, transform.x);
+    transform.y = std::clamp<float>(0, texSizeF.y, transform.y);
+
+    ImGui::Begin("QuadAspectRatio - transformMouseCoordToTextureCoords");
+    ImGui::LabelText("transform", "x: %u y: %u", transform.x, transform.y);
+    ImGui::End();
+
+    return transform;
+}
+
 void QuadAspectRatio::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
     auto start = std::chrono::system_clock::now();
@@ -92,13 +132,6 @@ void QuadAspectRatio::draw(sf::RenderTarget& target, sf::RenderStates states) co
     ImGui::LabelText("Duration", "%d nanoseconds", duration);
     ImGui::LabelText("Window", "x: %d y: %d", target.getSize().x, target.getSize().y);
     ImGui::Spacing();
-    ImGui::Spacing();
-    ImGui::LabelText("0", "(x: %.2f y: %.2f)", VtxToStr(vertices_[0]));
-    ImGui::LabelText("1", "(x: %.2f y: %.2f)", VtxToStr(vertices_[1]));
-    ImGui::LabelText("2", "(x: %.2f y: %.2f)", VtxToStr(vertices_[2]));
-    ImGui::LabelText("3", "(x: %.2f y: %.2f)", VtxToStr(vertices_[3]));
-    ImGui::Spacing();
-    ImGui::Spacing();
     ImGui::LabelText("TextSiz", "(x: %.2f y: %.2f)", vertices_[1].position.x - vertices_[0].position.x, vertices_[3].position.y - vertices_[0].position.y);
     ImGui::LabelText("TextAR", "%.4f", (vertices_[1].position.x - vertices_[0].position.x) / (vertices_[3].position.y - vertices_[0].position.y));
     ImGui::LabelText("TextDesHe", "%.4f", h);
@@ -106,4 +139,32 @@ void QuadAspectRatio::draw(sf::RenderTarget& target, sf::RenderStates states) co
     ImGui::End();
 
     target.draw(vertices_, states);
+}
+
+QuadAspectRatio::QuadSize QuadAspectRatio::getQuadSize(sf::RenderTarget& target) const
+{
+    QuadSize quadSize;
+
+    sf::Vector2f tarSizeF = { static_cast<float>(target.getSize().x),   static_cast<float>(target.getSize().y) };
+    sf::Vector2f texSizeF = { static_cast<float>(texture_.getSize().x), static_cast<float>(texture_.getSize().y)};
+
+    // height needed to use with target.getSize().x that generate correct aspect ratio
+    quadSize.texHeight = tarSizeF.x / aspectRatio_;
+    quadSize.texWidth = tarSizeF.x;
+
+    if(quadSize.texHeight > tarSizeF.y && aspectRatioRule_ == EAspectRatioRule::FitToParent)
+    {
+        quadSize.texHeight = tarSizeF.y;
+
+        // width needed to use with target.getSize().y that generate correct aspect ratio
+        quadSize.texWidth = aspectRatio_ * quadSize.texHeight;
+    }
+
+    // Top and bottom gap to vertically center de image
+    quadSize.heightGap = (tarSizeF.y - quadSize.texHeight) / 2;
+
+    // Right and left gap to horizontally center de image
+    quadSize.widthGap  = (tarSizeF.x - quadSize.texWidth) / 2;
+
+    return quadSize;
 }

@@ -70,6 +70,7 @@ int main()
 
         //ImGui::ShowDemoWindow();
 
+        quadAspectRatio.transformPointToTextureCoords(window, sf::Mouse::getPosition(window));
 
 
         window.clear();

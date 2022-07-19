@@ -23,6 +23,7 @@
 
 #include <SFML/Graphics/VertexArray.hpp>
 #include <SFML/Graphics/Texture.hpp>
+#include <optional>
 
 class QuadAspectRatio : public sf::Drawable
 {
@@ -36,8 +37,27 @@ public:
 public:
     explicit QuadAspectRatio(std::string_view textureName, EAspectRatioRule rule = EAspectRatioRule::Width);
 
+    /**
+     * @brief Given mouse coord in window space, returns the coord within texture as the QuadAspctRatio
+     * doesn't be resized.
+     * 
+     * @param point coords in window space
+     * @return sf::Vector2u Coords within texture as if isn't resized. If coords are invalid,
+     * return an empty optional
+     */
+    [[nodiscard]] std::optional<sf::Vector2u> transformPointToTextureCoords(sf::RenderTarget& target, sf::Vector2i point) const;
+
 private:
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+
+    struct QuadSize
+    {
+        unsigned texWidth;
+        unsigned texHeight;
+        unsigned heightGap;
+        unsigned widthGap;
+    };
+    QuadSize getQuadSize(sf::RenderTarget& target) const;
 
 private:
     sf::Texture texture_;
