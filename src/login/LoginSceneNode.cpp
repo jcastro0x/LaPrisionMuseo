@@ -19,20 +19,19 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-#pragma once
+#include "LoginSceneNode.h"
 
-class SceneNode
+void LoginSceneNode::init()
 {
-    friend class Scene;
 
-public:
-    void setSceneOwner(class Scene* const owner);
+}
 
-protected:
-    virtual void init() = 0;
-    virtual void tick(float deltaTime) = 0;
-    virtual void destroy() = 0;
+void LoginSceneNode::tick(float deltaTime)
+{
+    
+}
 
-private:
-    class Scene* const owner_ = nullptr;
-};
+void LoginSceneNode::destroy()
+{
+    
+}

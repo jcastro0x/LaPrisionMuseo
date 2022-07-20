@@ -21,18 +21,12 @@
 
 #pragma once
 
-class SceneNode
+#include <scene/SceneNode.h>
+
+class LoginSceneNode : public SceneNode
 {
-    friend class Scene;
-
-public:
-    void setSceneOwner(class Scene* const owner);
-
 protected:
-    virtual void init() = 0;
-    virtual void tick(float deltaTime) = 0;
-    virtual void destroy() = 0;
-
-private:
-    class Scene* const owner_ = nullptr;
+    void init() override;
+    void tick(float deltaTime) override;
+    void destroy() override;
 };

@@ -1,7 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/System/Clock.hpp>
 
-#include <sio_client.h>
 
 #include <iostream>
 #include <imgui.h>
@@ -12,10 +11,11 @@
 
 
 
-int main()
+int main(const int, const char**)
 {
     sf::RenderWindow window(sf::VideoMode(640, 580), "La Prision - Museo");
-    //window.setFramerateLimit(60);
+    window.setFramerateLimit(60);
+    
     ImGui::SFML::Init(window);
 
     sf::Clock deltaClock;
@@ -34,18 +34,7 @@ int main()
     sf::Sprite maskSprDbg(maskTexDbg);
 
 
-//    sio::client client;
-//
-//    client.set_open_listener([](){
-//        std::cout << "Connected\n";
-//    });
-//    client.set_close_listener([](sio::client::close_reason const& reason){
-//        std::cout << "Disconnected\n";
-//    });
-//    client.set_fail_listener([](){
-//        std::cout << "Fail Connected\n";
-//    });
-//    client.connect("wss://testserv.prisonserver.net:5000");
+
 
     sf::Event event {};
     while (window.isOpen())

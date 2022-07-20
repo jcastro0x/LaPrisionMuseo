@@ -6,7 +6,19 @@ set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
 include_directories(src)
 set(SRC_FILES
-        src/Program.cpp
+    src/Program.cpp
+
+    src/login/LoginSceneNode.cpp
+
+    src/network/DebugNetwork.cpp
+    src/network/NullNetwork.cpp
+    src/network/SocketIONetwork.cpp
+
+    src/room/RoomCamera.cpp
+    src/room/RoomSceneNode.cpp
+
+    src/scene/Scene.cpp
+    src/scene/SceneNode.cpp
 
     src/widgets/QuadAspectRatio.cpp
 )

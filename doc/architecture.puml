@@ -31,6 +31,7 @@ class Scene
 class SceneNode
 {
     - nodes : ref SceneNode[]
+    + name : string
     __
     # virtual init() = 0
     # virtual destroy() = 0
@@ -39,7 +40,7 @@ class SceneNode
     # getSceneNodes() : SceneNode[]
 }
 
-class Room
+class RoomSceneNode
 {
     - name : string
     - background : QuadAspectRatio
@@ -122,11 +123,11 @@ INetwork <|-- DebugNetwork
 INetwork <|-- NullNetwork
 
 
-SceneNode <|-- Room
+SceneNode <|-- RoomSceneNode
 SceneNode <|-- LoginScreen
 
-Room *-- RoomCamera
-Room *-- QuadAspectRatio
+RoomSceneNode *-- RoomCamera
+RoomSceneNode *-- QuadAspectRatio
 
 RoomCamera *-- RoomNote
 RoomCamera *-- BackgroundAnim

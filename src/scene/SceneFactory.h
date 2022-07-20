@@ -21,18 +21,20 @@
 
 #pragma once
 
-class SceneNode
+#include <memory>
+#include <type_traits>
+#include <scene/Scene.h>
+#include <scene/SceneNode.h>
+
+class SceneFactory
 {
-    friend class Scene;
-
 public:
-    void setSceneOwner(class Scene* const owner);
+    template<typename T, typename... Args> requieres T = std::is_base_of_v<T, SceneNode>
+    static std::unique_ptr<T> createScene(Scene* const scene, Args... args)
+    {
+        std::unique_ptr<T> node(std::make_unique<T>(args...));
+        node->setSceneOwner(scene);
 
-protected:
-    virtual void init() = 0;
-    virtual void tick(float deltaTime) = 0;
-    virtual void destroy() = 0;
-
-private:
-    class Scene* const owner_ = nullptr;
-};
+        return node;
+    }
+}

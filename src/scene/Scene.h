@@ -21,7 +21,35 @@
 
 #pragma once
 
+#include <memory>
+#include <vector>
+
+/**
+ * @brief Holds elements to be processes (draw, update, ...) in current context.
+ *  
+ */
 class Scene
 {
+public:
+    /**
+     * Initialize the current scene. Adquiring resouces mostly
+     */
+    void init();
 
+    /**
+     * Update elements of the scene according to deltaTime 
+     * @param deltaTime seconds passed since last update
+     */
+    void tick(float deltaTime);
+
+    /**
+     * Des-initialize the current scene. Releasing resources mostly 
+     */
+    void destroy();
+
+public:
+    static void loadScene();
+
+private:
+    std::vector<std::unique_ptr<class SceneNode>> nodes_;
 };
