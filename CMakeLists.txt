@@ -6,7 +6,7 @@ set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
 include_directories(src)
 set(SRC_FILES
-    src/main.cpp
+        src/Program.cpp
 
     src/widgets/QuadAspectRatio.cpp
 )

@@ -21,56 +21,7 @@
 
 #pragma once
 
-#include <string>
-#include <array>
-
-/**
- * @brief Compass directions.
- */
-enum class EDirection : uint8_t
-{
-    None    = 0,
-
-    North   = 0 << 1,
-    East    = 1 << 2,
-    South   = 1 << 3,
-    West    = 1 << 4,
-
-    Door    = 1 << 5,
-
-    NorthEast = North | East,
-    SouthEast = South | East,
-    SouthWest = South | West,
-    NorthWest = North | West
-};
-
-
-struct Node
+class Room
 {
 
-};
-
-struct Backgrounds : public Node
-{
-    std::string textureName;
-    std::string maskName;
-
-};
-
-struct Exits
-{
-    uint32_t color;
-    EDirection direction;
-    Node* destiny;
-};
-
-template<size_t ArraySize>
-struct Room : public Node
-{
-
-
-
-
-    std::string name;
-    std::array<Backgrounds, ArraySize> backgrounds;
 };

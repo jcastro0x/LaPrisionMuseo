@@ -1,28 +1,20 @@
 @startuml
 
-class Room
+class Program
 {
-    - name : string
-    - background : QuadAspectRatio
-    - soundPlayer : Sound
-    - music : SoundBuffer
-    - sfx : SoundBuffer[]
-    - cameras : RoomCamera[]
+    - network : INetwork
+    - binaryReader : Packager
+    - cursor : Cursor
+    - scene : Scene
+
+    - ENTRY_PROGRAM_POINT()
+    - MainLoop()
 }
 
 class Configuration
 {
     {static} musicVolumen : float
     {static} sfxVolumen : float
-}
-
-class RoomCamera
-{
-    + texture : Texture
-    + mask : Texture
-    + anims : BackgroundAnim[]
-    + directorNote : DirectorNote[]
-    + playerNote : PlayerNote[]
 }
 
 class Scene
@@ -40,24 +32,47 @@ class SceneNode
 {
     - nodes : ref SceneNode[]
     __
-    # init()
-    # destroy()
-    # tick(deltaTime)
+    # virtual init() = 0
+    # virtual destroy() = 0
+    # virtual tick(deltaTime) = 0
     __
     # getSceneNodes() : SceneNode[]
 }
 
-class Program
+class Room
 {
-    - network : INetwork
-    - binaryReader : Packager
-    - cursor : Cursor
-    - scene : Scene
-
-    - ENTRY_PROGRAM_POINT()
-    - MainLoop()
+    - name : string
+    - background : QuadAspectRatio
+    - soundPlayer : Sound
+    - music : SoundBuffer
+    - sfx : SoundBuffer[]
+    - cameras : RoomCamera[]
 }
 
+class RoomCamera
+{
+    + texture : Texture
+    + mask : Texture
+    + anims : BackgroundAnim[]
+    + notes : RoomNote[]
+}
+
+class RoomNote
+{
+    owner : string
+    avatar : Image
+    content : string
+    icon : Texture
+    position : Vec2u
+}
+
+class BackgroundAnim
+{
+    texture : Texture
+    sprite : Sprite
+    rate : float
+    coord : Vec2u
+}
 
 abstract INetwork
 {
@@ -112,6 +127,9 @@ SceneNode <|-- LoginScreen
 
 Room *-- RoomCamera
 Room *-- QuadAspectRatio
+
+RoomCamera *-- RoomNote
+RoomCamera *-- BackgroundAnim
 
 Scene *-- SceneNode
 
