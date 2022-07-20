@@ -2,13 +2,20 @@
 
 class Program
 {
+    - engine : Engine
+    + {static} main()
+}
+
+class Engine
+{
     - network : INetwork
     - binaryReader : Packager
     - cursor : Cursor
     - scene : Scene
+    - window : RenderWindow
+    - clock : clock
 
-    - ENTRY_PROGRAM_POINT()
-    - MainLoop()
+    + run()
 }
 
 class Configuration
@@ -75,30 +82,37 @@ class BackgroundAnim
     coord : Vec2u
 }
 
+class Player
+{
+    name : string
+
+}
+
 abstract INetwork
 {
     + initialize()
     __ConnectionObservers__
     # onConnected()
     # onDisconnected()
-    # onError()
-    # onKicked()
-    # onLoginStatus(success)
+    # onError(reason : string)
+    # onKicked(reason : string)
+    # onLoginStatus(success : bool)
     # onRoomChanged(room)
     __PlayersObservers__
-    # onPlayerEnterRoom()
-    # onPlayerLeaveRoom()
-    # onPlayerEnterCamera()
-    # onPlayerLeaveCamera()
-    # onPlayersList()
-    # onPlayerPosition()
+    # onPlayerEnterRoom(player : Player)
+    # onPlayerLeaveRoom(player : Player)
+    # onPlayerEnterCamera(player : Player, camera : string)
+    # onPlayerLeaveCamera(player : Player, camera : string)
+    # onPlayersRoomList(players : Player[])
+    # onPlayerPosition(player : Player, pos : Vec2u)
     __ChatObservers__
-    # onRoomMessage()
-    # onPlayerMessage()
-    # onPrivateMessage()
+    # onGlobalMessage(message : string)
+    # onPlayerMessage(player : Player, message : string)
+    # onPrivateMessage(player : Player, message : string)
     __RoomObservers__
-    # onSpawnItem()
-    # onDestroyItem()
+    # onRoomMessage(message : string)
+    # onSpawnItem(item : RoomItem)
+    # onDestroyItem(item : RoomItem)
     __Sends__
     + changeRoom(room)
     + sendMessage(message)

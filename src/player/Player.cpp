@@ -19,15 +19,6 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-#pragma once
+#include "Player.h"
 
-#include <network/INetwork.h>
 
-class DebugNetwork : public INetwork
-{
-public:
-    void init() override;
-    void changeRoom(class RoomSceneNode* room) override;
-    void sendMessage(class Player* player, const char* message) override;
-    void sendMessage(const char* message) override;
-};

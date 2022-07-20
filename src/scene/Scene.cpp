@@ -20,3 +20,41 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "Scene.h"
+
+#include <scene/SceneNode.h>
+
+Scene::~Scene() = default;
+
+void Scene::init()
+{
+    for(auto& node : nodes_)
+    {
+        node->init();
+    }
+}
+
+void Scene::tick(float deltaTime)
+{
+    for(auto& node : nodes_)
+    {
+        node->tick(deltaTime);
+    }
+}
+
+void Scene::destroy()
+{
+    for(auto& node : nodes_)
+    {
+        node->destroy();
+    }    
+}
+
+void Scene::addSceneNode(std::unique_ptr<class SceneNode> node)
+{
+    nodes_.emplace_back(std::move(node));
+}
+
+void Scene::loadScene()
+{
+    
+}

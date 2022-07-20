@@ -20,3 +20,23 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "DebugNetwork.h"
+
+void DebugNetwork::init()
+{
+
+}
+
+void DebugNetwork::changeRoom(class RoomSceneNode* room)
+{
+    
+}
+
+void DebugNetwork::sendMessage(class Player* player, const char* message)
+{
+    
+}
+
+void DebugNetwork::sendMessage(const char* message)
+{
+    
+}

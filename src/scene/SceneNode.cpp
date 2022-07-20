@@ -20,3 +20,10 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "SceneNode.h"
+
+#include <scene/Scene.h>
+
+void SceneNode::setSceneOwner(const Scene* owner)
+{
+    owner_ = owner;
+}

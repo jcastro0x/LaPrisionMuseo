@@ -23,7 +23,7 @@
 #include "SocketIONetwork.h"
 
 #include <sio_client.h>
-
+#include <player/Player.h>
 
 
 //    sio::client client;

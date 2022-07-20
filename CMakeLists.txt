@@ -21,6 +21,7 @@ set(SRC_FILES
     src/scene/SceneNode.cpp
 
     src/widgets/QuadAspectRatio.cpp
+    src/widgets/Cursor.cpp
 )
 
 set(SRC_IMGUI

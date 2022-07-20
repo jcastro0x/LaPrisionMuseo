@@ -29,7 +29,7 @@
 class SceneFactory
 {
 public:
-    template<typename T, typename... Args> requieres T = std::is_base_of_v<T, SceneNode>
+    template<typename T, typename... Args> //requires T = std::is_base_of_v<T, SceneNode>
     static std::unique_ptr<T> createScene(Scene* const scene, Args... args)
     {
         std::unique_ptr<T> node(std::make_unique<T>(args...));
@@ -37,4 +37,4 @@ public:
 
         return node;
     }
-}
+};

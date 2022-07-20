@@ -21,13 +21,16 @@
 
 #pragma once
 
-#include <network/INetwork.h>
+#include <SFML/Graphics/Sprite.hpp>
+#include <SFML/Graphics/Texture.hpp>
 
-class DebugNetwork : public INetwork
+class Cursor : public sf::Sprite
 {
 public:
-    void init() override;
-    void changeRoom(class RoomSceneNode* room) override;
-    void sendMessage(class Player* player, const char* message) override;
-    void sendMessage(const char* message) override;
+    Cursor();
+
+    void tick(float deltaTime);
+
+private:
+    sf::Texture texture_;
 };

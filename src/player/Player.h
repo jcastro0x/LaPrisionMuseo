@@ -21,13 +21,9 @@
 
 #pragma once
 
-#include <network/INetwork.h>
+#include <string>
 
-class DebugNetwork : public INetwork
+class Player
 {
-public:
-    void init() override;
-    void changeRoom(class RoomSceneNode* room) override;
-    void sendMessage(class Player* player, const char* message) override;
-    void sendMessage(const char* message) override;
+    std::string name_;
 };

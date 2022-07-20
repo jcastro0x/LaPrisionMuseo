@@ -26,7 +26,10 @@ class SceneNode
     friend class Scene;
 
 public:
-    void setSceneOwner(class Scene* const owner);
+    virtual ~SceneNode();
+
+public:
+    void setSceneOwner(const class Scene* owner);
 
 protected:
     virtual void init() = 0;
@@ -34,5 +37,5 @@ protected:
     virtual void destroy() = 0;
 
 private:
-    class Scene* const owner_ = nullptr;
+    const class Scene* owner_ = nullptr;
 };

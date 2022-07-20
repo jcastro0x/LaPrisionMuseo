@@ -31,7 +31,12 @@
 class Scene
 {
 public:
+
+    Scene() = default;
+    ~Scene();
+
     /**
+     * 
      * Initialize the current scene. Adquiring resouces mostly
      */
     void init();
@@ -46,6 +51,9 @@ public:
      * Des-initialize the current scene. Releasing resources mostly 
      */
     void destroy();
+
+    
+    void addSceneNode(std::unique_ptr<class SceneNode> node);
 
 public:
     static void loadScene();

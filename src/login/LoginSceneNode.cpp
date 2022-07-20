@@ -21,6 +21,16 @@
 
 #include "LoginSceneNode.h"
 
+#include <widgets/QuadAspectRatio.h>
+
+LoginSceneNode::LoginSceneNode()
+: background_(std::make_unique<QuadAspectRatio>("loginScreen.png", QuadAspectRatio::EAspectRatioRule::FitToParent))
+{
+}
+
+LoginSceneNode::~LoginSceneNode() = default;
+
+
 void LoginSceneNode::init()
 {
 

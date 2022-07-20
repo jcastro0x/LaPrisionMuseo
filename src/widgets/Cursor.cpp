@@ -19,15 +19,15 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-#pragma once
+#include "Cursor.h"
 
-#include <network/INetwork.h>
-
-class DebugNetwork : public INetwork
+Cursor::Cursor()
 {
-public:
-    void init() override;
-    void changeRoom(class RoomSceneNode* room) override;
-    void sendMessage(class Player* player, const char* message) override;
-    void sendMessage(const char* message) override;
-};
+    texture_.loadFromFile("laprisi_cursor.png");
+    setTexture(texture_);
+}
+
+void Cursor::tick(float deltaTime)
+{
+
+}

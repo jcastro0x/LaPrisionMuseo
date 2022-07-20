@@ -20,3 +20,64 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #pragma once
+
+#include <vector>
+
+#define DECLARE_OBSERVER(Name) void(*Name)()
+#define DECLARE_OBSERVER_OneParam(Name,Param1) void(*Name)(Param1)
+#define DECLARE_OBSERVER_TwoParam(Name,Param1,Param2) void(*Name)(Param1,Param2)
+#define DECLARE_OBSERVER_ThreeParam(Name,Param1,Param2,Param3) void(*Name)(Param1,Param2,Param3)
+
+class INetwork
+{
+public:
+    virtual void init() = 0;
+
+    virtual void changeRoom(class RoomSceneNode* room) = 0;
+    virtual void sendMessage(class Player* player, const char* message) = 0;
+    virtual void sendMessage(const char* message) = 0;
+
+public:
+    struct Observers
+    {
+        //
+        // Connection
+        // ~=======================================================================================
+        DECLARE_OBSERVER(Connected);
+        DECLARE_OBSERVER(Disconnected);
+        DECLARE_OBSERVER_OneParam(ConnectionError, const char* /*reason*/);
+        DECLARE_OBSERVER_OneParam(ConnectionKicked, const char* /*reason*/);
+        DECLARE_OBSERVER_OneParam(LoginStatus, bool /*success*/);
+        DECLARE_OBSERVER_OneParam(RoomChanged, class RoomSceneNode* /*success*/);
+
+        //
+        // Players
+        // ~=======================================================================================
+        DECLARE_OBSERVER_OneParam(PlayerEnterRoom, class Player* /*player*/);
+        DECLARE_OBSERVER_OneParam(PlayerLeaveRoom, class Player* /*player*/);
+        DECLARE_OBSERVER_TwoParam(PlayerEnterCamera, class Player* /*player*/, const char* /*camera*/);
+        DECLARE_OBSERVER_TwoParam(PlayerLeaveCamera, class Player* /*player*/, const char* /*camera*/);
+        DECLARE_OBSERVER_OneParam(PlayersRoomList, std::vector<class Player*> /*players*/);
+        DECLARE_OBSERVER_ThreeParam(PlayerPosition, class Player* /*player*/, unsigned /*posX*/, unsigned /*posY*/);
+
+        //
+        // Chat
+        // ~=======================================================================================
+        DECLARE_OBSERVER_OneParam(GlobalMessage, const char* /*message*/);
+        DECLARE_OBSERVER_TwoParam(PlayerMessage, class Player* /*player*/, const char* /*message*/);
+        DECLARE_OBSERVER_TwoParam(PrivateMessage, class Player* /*player*/, const char* /*message*/);
+
+        //
+        // Room
+        // ~=======================================================================================
+        DECLARE_OBSERVER_OneParam(RoomMessage, const char* /*message*/);
+        DECLARE_OBSERVER_OneParam(SpawnItem, class RoomItem* /*item*/);
+        DECLARE_OBSERVER_OneParam(DestroyItem, class RoomItem* /*item*/);
+
+    } observers_;
+};
+
+#undef DECLARE_OBSERVER
+#undef DECLARE_OBSERVER_OneParam
+#undef DECLARE_OBSERVER_TwoParam
+#undef DECLARE_OBSERVER_ThreeParam

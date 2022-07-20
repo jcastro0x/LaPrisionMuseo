@@ -25,8 +25,15 @@
 
 class LoginSceneNode : public SceneNode
 {
+public:
+    LoginSceneNode();
+    ~LoginSceneNode() override;
+    
 protected:
     void init() override;
     void tick(float deltaTime) override;
     void destroy() override;
+
+private:
+    std::unique_ptr<class QuadAspectRatio> background_;
 };
