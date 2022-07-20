@@ -27,7 +27,7 @@
 #include <chrono>
 
 /**
-    QuadAspectRatio's vertices lie as follow:
+    QuadAspectRatio's vertices lies as follow:
 
     [0]----[1]
     .      .
@@ -67,8 +67,8 @@ std::optional<sf::Vector2u> QuadAspectRatio::transformPointToTextureCoords(sf::R
     transform.y = point.y * diffHeight - quadSize.heightGap * diffHeight;
     transform.x = point.x * diffWidth  - quadSize.widthGap  * diffWidth;
 
-    if(transform.y > texture_.getSize().y
-    || transform.x > texture_.getSize().x)
+    if(transform.y > texture_.getSize().y - 1
+    || transform.x > texture_.getSize().x - 1)
     {
         ImGui::Begin("QuadAspectRatio - transformMouseCoordToTextureCoords");
         ImGui::LabelText("transform", "n/a");

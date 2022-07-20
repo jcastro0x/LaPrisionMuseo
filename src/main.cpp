@@ -20,7 +20,19 @@ int main()
 
     sf::Clock deltaClock;
 
-    QuadAspectRatio quadAspectRatio("checker640x480.png", QuadAspectRatio::EAspectRatioRule::FitToParent);
+    QuadAspectRatio quadAspectRatio("AL_Almacen1.jpg", QuadAspectRatio::EAspectRatioRule::FitToParent);
+
+    sf::Texture maskTex;
+    maskTex.loadFromFile("AL_Almacen1_Mask.png");
+    maskTex.setRepeated(false);
+    maskTex.setSrgb(false);
+    maskTex.setSmooth(false);
+    auto maskImg = maskTex.copyToImage();
+
+    sf::Texture maskTexDbg;
+    maskTexDbg.create(64, 64);
+    sf::Sprite maskSprDbg(maskTexDbg);
+
 
 //    sio::client client;
 //
@@ -70,7 +82,22 @@ int main()
 
         //ImGui::ShowDemoWindow();
 
-        quadAspectRatio.transformPointToTextureCoords(window, sf::Mouse::getPosition(window));
+        auto coord = quadAspectRatio.transformPointToTextureCoords(window, sf::Mouse::getPosition(window));
+        sf::Color c = sf::Color::Transparent;
+        if(coord)
+        {
+            c = maskImg.getPixel(coord->x, coord->y);
+        }
+
+
+        ImGui::Begin("Mask color");
+        ImGui::ImageButton(maskSprDbg, 0, c);
+        ImGui::LabelText("Mask" ,  "x: %d y: %d", maskImg.getSize().x, maskImg.getSize().y);
+        if(coord)
+        {
+            ImGui::LabelText("Coord" , "x: %d y: %d", coord->x, coord->y);
+        }
+        ImGui::End();
 
 
         window.clear();

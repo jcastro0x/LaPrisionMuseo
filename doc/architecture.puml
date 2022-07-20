@@ -1,0 +1,122 @@
+@startuml
+
+class Room
+{
+    - name : string
+    - background : QuadAspectRatio
+    - soundPlayer : Sound
+    - music : SoundBuffer
+    - sfx : SoundBuffer[]
+    - cameras : RoomCamera[]
+}
+
+class Configuration
+{
+    {static} musicVolumen : float
+    {static} sfxVolumen : float
+}
+
+class RoomCamera
+{
+    + texture : Texture
+    + mask : Texture
+    + anims : BackgroundAnim[]
+    + directorNote : DirectorNote[]
+    + playerNote : PlayerNote[]
+}
+
+class Scene
+{
+    - nodes : SceneNode[]
+    __
+    + init()
+    + destroy()
+    + tick(deltaTime)
+    __
+    + {static} loadScene(data)
+}
+
+class SceneNode
+{
+    - nodes : ref SceneNode[]
+    __
+    # init()
+    # destroy()
+    # tick(deltaTime)
+    __
+    # getSceneNodes() : SceneNode[]
+}
+
+class Program
+{
+    - network : INetwork
+    - binaryReader : Packager
+    - cursor : Cursor
+    - scene : Scene
+
+    - ENTRY_PROGRAM_POINT()
+    - MainLoop()
+}
+
+
+abstract INetwork
+{
+    + initialize()
+    __ConnectionObservers__
+    # onConnected()
+    # onDisconnected()
+    # onError()
+    # onKicked()
+    # onLoginStatus(success)
+    # onRoomChanged(room)
+    __PlayersObservers__
+    # onPlayerEnterRoom()
+    # onPlayerLeaveRoom()
+    # onPlayerEnterCamera()
+    # onPlayerLeaveCamera()
+    # onPlayersList()
+    # onPlayerPosition()
+    __ChatObservers__
+    # onRoomMessage()
+    # onPlayerMessage()
+    # onPrivateMessage()
+    __RoomObservers__
+    # onSpawnItem()
+    # onDestroyItem()
+    __Sends__
+    + changeRoom(room)
+    + sendMessage(message)
+    + takeItem()
+}
+
+class SocketIONetwork
+{
+    - socketClient : Socket.io
+}
+
+class DebugNetwork
+{
+}
+
+
+'
+' Relations
+'-----------------------------------------------------------------------------------------------------------------------
+INetwork <|-- SocketIONetwork
+INetwork <|-- DebugNetwork
+INetwork <|-- NullNetwork
+
+
+SceneNode <|-- Room
+SceneNode <|-- LoginScreen
+
+Room *-- RoomCamera
+Room *-- QuadAspectRatio
+
+Scene *-- SceneNode
+
+Program *-- Scene
+Program *-- INetwork
+
+
+@enduml
