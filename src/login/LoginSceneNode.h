@@ -23,6 +23,8 @@
 
 #include <scene/SceneNode.h>
 
+#include <memory>
+
 class LoginSceneNode : public SceneNode
 {
 public:

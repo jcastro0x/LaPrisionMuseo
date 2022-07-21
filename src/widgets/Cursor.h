@@ -24,13 +24,20 @@
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Texture.hpp>
 
+#include <memory>
+
 class Cursor : public sf::Sprite
 {
 public:
     Cursor();
+    ~Cursor() override;
 
-    void tick(float deltaTime);
+    void tick(float deltaTime, sf::Window& window);
+
+    void setCursor(std::string_view name);
 
 private:
     sf::Texture texture_;
+    std::unique_ptr<class Animator> animator_;
+    std::string_view currentAnimation_;
 };

@@ -19,45 +19,32 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-#include "Cursor.h"
+#pragma once
 
-#include <components/Animator.h>
+#include <string>
+#include <vector>
+#include <SFML/Graphics/Rect.hpp>
 
-#include <imgui.h>
-#include <SFML/Window/Mouse.hpp>
-
-
-Cursor::Cursor()
-: animator_(std::make_unique<Animator>())
-, currentAnimation_("default")
+class Animator
 {
-    texture_.loadFromFile("cursors.png");
-    setTexture(texture_);
-    setTextureRect(sf::IntRect(2, 4, 23, 23));
-
-    animator_->loadAnimations("cursors.json");
-}
-
-Cursor::~Cursor() = default;
-
-void Cursor::tick(float deltaTime, sf::Window& window)
-{
-    animator_->tick(deltaTime);
-    setTextureRect(animator_->getCurrentRect(currentAnimation_));
-
-    const float mouseX = static_cast<float>(sf::Mouse::getPosition(window).x);
-    const float mouseY = static_cast<float>(sf::Mouse::getPosition(window).y);
-    setPosition(mouseX, mouseY);
-
-    ImGui::Begin("Cursor - Animations");
-    for(const auto& anim : animator_->getAnimations())
+public:
+    struct Animation
     {
-        if(ImGui::Button(anim.name.c_str())) setCursor(anim.name);
-    }
-    ImGui::End();
-}
+        std::string name;
+        float rate = 0;
+        std::vector<sf::IntRect> frames;
+    };
 
-void Cursor::setCursor(std::string_view name)
-{
-    currentAnimation_ = name;
-}
+public:
+    void tick(float deltaTime);
+    void loadAnimations(std::string_view fileName);
+
+    sf::IntRect getCurrentRect(std::string_view animation) const;
+
+
+    const std::vector<Animation>& getAnimations() const;
+
+private:
+    float currentTime_ = 0;
+    std::vector<Animation> animations_;
+};

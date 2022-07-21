@@ -26,7 +26,7 @@ class SceneNode
     friend class Scene;
 
 public:
-    virtual ~SceneNode();
+    virtual ~SceneNode() = default;
 
 public:
     void setSceneOwner(const class Scene* owner);

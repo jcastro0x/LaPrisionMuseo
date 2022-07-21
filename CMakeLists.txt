@@ -4,9 +4,11 @@ project(LaPrisionMuseo)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
-include_directories(src)
+include_directories(src include/json/include)
 set(SRC_FILES
     src/Program.cpp
+
+    src/components/Animator.cpp
 
     src/login/LoginSceneNode.cpp
 

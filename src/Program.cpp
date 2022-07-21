@@ -86,13 +86,13 @@ void Engine::run()
         #endif
 
         //ImGui::ShowDemoWindow();
+
+
+        cursor_.tick(time.asSeconds(), window_);
         
         ImGui::SFML::Render(window_);
 
-        const float mouseX = static_cast<float>(sf::Mouse::getPosition(window_).x);
-        const float mouseY = static_cast<float>(sf::Mouse::getPosition(window_).y);
-        cursor_.setPosition(mouseX, mouseY);
-        cursor_.tick(time.asSeconds());
+
 
         window_.draw(cursor_);
         
