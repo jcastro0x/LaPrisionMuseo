@@ -26,17 +26,17 @@ void DebugNetwork::init()
 
 }
 
-void DebugNetwork::changeRoom(class RoomSceneNode* room)
+void DebugNetwork::changeRoom(class RoomSceneNode* /*room*/)
 {
     
 }
 
-void DebugNetwork::sendMessage(class Player* player, const char* message)
+void DebugNetwork::sendMessage(class Player* /*player*/, const char* /*message*/)
 {
     
 }
 
-void DebugNetwork::sendMessage(const char* message)
+void DebugNetwork::sendMessage(const char* /*message*/)
 {
     
 }

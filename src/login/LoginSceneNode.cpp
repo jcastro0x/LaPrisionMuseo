@@ -36,7 +36,7 @@ void LoginSceneNode::init()
 
 }
 
-void LoginSceneNode::tick(float deltaTime)
+void LoginSceneNode::tick(float /*deltaTime*/)
 {
     
 }

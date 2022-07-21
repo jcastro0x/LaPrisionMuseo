@@ -50,3 +50,13 @@ add_subdirectory(libs/imgui-sfml)
 include_directories(libs/imgui libs/imgui-sfml)
 
 target_link_libraries(${PROJECT_NAME} sfml-graphics sfml-audio sfml-system sioclient_tls ImGui-SFML::ImGui-SFML)
+
+
+target_compile_options(${PROJECT_NAME} BEFORE PRIVATE
+    $<$<CXX_COMPILER_ID:MSVC>:/W4 /WX>
+    $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra -pedantic -Werror>
+)
+
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    ${CMAKE_SOURCE_DIR}/binaries $<TARGET_FILE_DIR:${PROJECT_NAME}>)
