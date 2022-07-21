@@ -34,7 +34,10 @@ public:
 
 private:
     void processEvents();
+
+    #ifndef NDEBUG
     void drawFPS(float deltaSeconds);
+    #endif
 
 private:
     std::unique_ptr<INetwork> network_;
@@ -48,7 +51,7 @@ private:
 
 Engine::Engine()
 : network_(std::make_unique<DebugNetwork>())
-, binaryReader_(NULL)
+, binaryReader_(0)
 , scene_(std::make_unique<Scene>())
 , window_(sf::VideoMode(DEFAULT_WINDOW_SIZE_X, DEFAULT_WINDOW_SIZE_Y), "La Prision - Museo")
 , clock_(std::make_unique<sf::Clock>())
@@ -139,14 +142,14 @@ void Engine::processEvents()
     }
 }
 
+#ifndef NDEBUG
 void Engine::drawFPS(float deltaSeconds)
 {
-    #ifndef NDEBUG
     ImGui::Begin("Debug - FPS");
     ImGui::LabelText("FPS", "%d", static_cast<unsigned>(1.f / deltaSeconds));
     ImGui::End();
-    #endif
 }
+#endif
 
 int main(const int, const char**)
 {

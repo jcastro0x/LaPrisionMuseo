@@ -31,6 +31,8 @@
 class INetwork
 {
 public:
+    virtual ~INetwork() = default;
+
     virtual void init() = 0;
 
     virtual void changeRoom(class RoomSceneNode* room) = 0;

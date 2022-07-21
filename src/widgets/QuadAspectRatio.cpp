@@ -100,7 +100,7 @@ void QuadAspectRatio::draw(sf::RenderTarget& target, sf::RenderStates states) co
     ImGui::Spacing();
     ImGui::LabelText("TextSiz", "(x: %.2f y: %.2f)", vertices_[1].position.x - vertices_[0].position.x, vertices_[3].position.y - vertices_[0].position.y);
     ImGui::LabelText("TextAR", "%.4f", (vertices_[1].position.x - vertices_[0].position.x) / (vertices_[3].position.y - vertices_[0].position.y));
-    ImGui::LabelText("TextDesHe", "%d", quadSize.texHeight);
+    ImGui::LabelText("TextDesHe", "%f", quadSize.texHeight);
     ImGui::End();
 
     states.texture = &texture_;
@@ -112,7 +112,6 @@ QuadAspectRatio::QuadSize QuadAspectRatio::getQuadSize(sf::RenderTarget& target)
     QuadSize quadSize;
 
     sf::Vector2f tarSizeF = { static_cast<float>(target.getSize().x),   static_cast<float>(target.getSize().y) };
-    sf::Vector2f texSizeF = { static_cast<float>(texture_.getSize().x), static_cast<float>(texture_.getSize().y)};
 
     // height needed to use with target.getSize().x that generate correct aspect ratio
     quadSize.texHeight = tarSizeF.x / aspectRatio_;
