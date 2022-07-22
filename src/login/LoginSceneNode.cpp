@@ -95,16 +95,40 @@ void LoginSceneNode::draw(sf::RenderTarget& target, sf::RenderStates states) con
     ImGui::LabelText("req", "%.0fx%.0f", quadSize.texWidth, quadSize.texHeight);
     ImGui::End();
 
-    sf::View copy = target.getView();
+    // sf::View copy = target.getView();
+
+    // auto view = sf::View({
+    //     x,y,w,h
+    // });
+    // view.setViewport({vx,vy,vw,vh});
+
+    // target.setView(view);
+    // target.draw(sprite, states);
+    // target.setView(copy);
+
+    sf::View originalView = target.getView();
+
+    sf::Vector2f tarSizeF = { static_cast<float>(target.getSize().x),   static_cast<float>(target.getSize().y) };
 
     auto view = sf::View({
-        x,y,w,h
+        0, 0, static_cast<float>(texture.getSize().x), static_cast<float>(texture.getSize().y)
     });
-    view.setViewport({vx,vy,vw,vh});
+    
+    float r_wgap = quadSize.widthGap  / target.getSize().x;
+    float r_hgap = quadSize.heightGap / target.getSize().y;
+    float r_tw   = quadSize.texWidth  / target.getSize().x;
+    float r_th   = quadSize.texHeight / target.getSize().y;
+    
+    view.setViewport({
+        r_wgap,
+        r_hgap,
+        r_tw,
+        r_th
+    });
 
     target.setView(view);
     target.draw(sprite, states);
-    target.setView(copy);
+    target.setView(originalView);
 }
 
 
