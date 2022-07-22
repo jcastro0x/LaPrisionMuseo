@@ -35,7 +35,7 @@ namespace sf
 class ClickableText final : public SceneNode
 {
 public:
-    ClickableText(sf::String string, class Scene* owner);
+    ClickableText(const sf::String& string, class Scene* owner);
     ~ClickableText() override;
 
 public:

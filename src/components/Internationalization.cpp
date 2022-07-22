@@ -21,7 +21,35 @@
 
 #include "Internationalization.h"
 
-sf::String Internationalization::getString(std::string /*ns*/, std::string key)
+#include <fstream>
+
+Internationalization::Internationalization()
 {
-    return key;
+    std::ifstream f("i18n.json");
+    json_ = nlohmann::json::parse(f);
+}
+
+sf::String Internationalization::getString(std::string ns, std::string key) const
+{
+    for(auto& entry : json_)
+    {
+        if(entry["language"] == currentLanguageName_)
+        {
+            for(auto& entry_ns : entry["namespaces"])
+            {
+                if(entry_ns["name"] == ns)
+                {
+                    for(auto& content : entry_ns["content"])
+                    {
+                        if(content["key"] == key)
+                        {
+                            return content["value"];
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    return ns + "_" + key;
 }

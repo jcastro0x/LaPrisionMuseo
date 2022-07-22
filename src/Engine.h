@@ -31,6 +31,7 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 
 #include <Resources.h>
+#include <components/Internationalization.h>
 
 #define DEFAULT_WINDOW_SIZE_X 740u
 #define DEFAULT_WINDOW_SIZE_Y 480u
@@ -44,6 +45,7 @@ public:
 
 public:
     [[nodiscard]] const Resources& getResources() const  { return *resources_; }
+    [[nodiscard]] const Internationalization& getI18N() const  { return internationalization_; }
     [[nodiscard]] Cursor& getCursor()                    { return cursor_;    }
 
     [[nodiscard]] sf::Vector2i getMousePosition() const;
@@ -70,4 +72,5 @@ private:
     int binaryReader_                   { 0 };
     Cursor cursor_;
     std::unique_ptr<Resources> resources_;
+    Internationalization internationalization_;
 };

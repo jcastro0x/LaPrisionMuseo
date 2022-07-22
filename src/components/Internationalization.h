@@ -20,12 +20,19 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #pragma once
+
 #include <SFML/System/String.hpp>
+#include <nlohmann/json.hpp>
 
 class Internationalization
 {
 public:
-    static sf::String getString(std::string ns, std::string key);
+    Internationalization();
+    sf::String getString(std::string ns, std::string key) const;
+
+private:
+    nlohmann::json json_;
+    std::string currentLanguageName_ = "en";
 };
 
 using i18n = Internationalization;

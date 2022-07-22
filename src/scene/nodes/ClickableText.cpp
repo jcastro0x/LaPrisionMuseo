@@ -31,7 +31,7 @@
 #include <imgui.h>
 
 
-ClickableText::ClickableText(sf::String string, Scene* owner)
+ClickableText::ClickableText(const sf::String& string, Scene* owner)
 : SceneNode(owner)
 , text_(std::make_unique<sf::Text>())
 , soundHover_(std::make_unique<sf::Sound>())

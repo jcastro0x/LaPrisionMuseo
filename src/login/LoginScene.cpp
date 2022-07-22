@@ -40,13 +40,12 @@ LoginScene::LoginScene(class Engine* engine) : Scene(engine)
         addSceneNode(std::move(button));
     };
 
-    addButton(i18n::getString("ui", "Play Online"), {320.f, 227.f});
-    addButton(i18n::getString("ui", "Play Offline"), {320.f, 268.f});
-    addButton(i18n::getString("ui", "Settings"), {320.f, 307.f});
-    addButton(i18n::getString("ui", "Credits"), {320.f, 346.f});
-    addButton(i18n::getString("ui", "Colaborate"), {320.f, 385.f});
-    addButton(i18n::getString("ui", "Exit"), {320.f, 424.f});
-
+    addButton(getEngine()->getI18N().getString("ui", "play_online"),  {320.f, 227.f});
+    addButton(getEngine()->getI18N().getString("ui", "play_offline"), {320.f, 268.f});
+    addButton(getEngine()->getI18N().getString("ui", "settings"),     {320.f, 307.f});
+    addButton(getEngine()->getI18N().getString("ui", "credits"),      {320.f, 346.f});
+    addButton(getEngine()->getI18N().getString("ui", "colaborate"),   {320.f, 385.f});
+    addButton(getEngine()->getI18N().getString("ui", "quit"),         {320.f, 424.f});
 }
 
 LoginScene::~LoginScene() = default;
@@ -56,46 +55,3 @@ void LoginScene::tick(float deltaTime)
 {
     Scene::tick(deltaTime);
 }
-
-
-/*
- * 227
- * 268
- * 307
- * 346
- * 385
- * 424
- * */
-
-// float x = 320, y = 227;
-// float px = 0, py = 0;
-// char t[100];
-// void LoginScene::draw(sf::RenderTarget& target, sf::RenderStates states) const
-// {
-//     ImGui::Begin("Font - Debug");
-//     ImGui::DragFloat("x", &x);
-//     ImGui::DragFloat("y", &y);
-//     ImGui::Separator();
-//     ImGui::DragFloat("px", &px);
-//     ImGui::DragFloat("py", &py);
-//     ImGui::Separator();
-//     ImGui::InputText("text", &t[0], 100);
-//     ImGui::End();
-
-//     sf::View originalView = target.getView();
-
-//     const auto arView =
-//             AspectRatio::getViewportAspectRatio(texture.getSize(), target.getSize(),
-//                                                 AspectRatio::EAspectRatioRule::FitToParent);
-//     target.setView(arView);
-
-//     target.draw(sprite, states);
-    
-//     text.setString(i18n::getString("ui", "Play Online"));
-//     text.setOrigin(text.getGlobalBounds().width / 2.f, text.getGlobalBounds().height / 2.f);
-//     text.setPosition({x,y});
-
-//     target.draw(text, states);
-
-//     target.setView(originalView);
-// }
