@@ -24,11 +24,13 @@
 #include <memory>
 #include <vector>
 
+#include <SFML/Graphics/Drawable.hpp>
+
 /**
  * @brief Holds elements to be processes (draw, update, ...) in current context.
  *  
  */
-class Scene
+class Scene : public sf::Drawable
 {
 public:
 
@@ -55,8 +57,10 @@ public:
     
     void addSceneNode(std::unique_ptr<class SceneNode> node);
 
-public:
     static void loadScene();
+
+protected:
+    void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 private:
     std::vector<std::unique_ptr<class SceneNode>> nodes_;

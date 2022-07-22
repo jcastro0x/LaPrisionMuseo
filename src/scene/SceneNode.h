@@ -21,7 +21,9 @@
 
 #pragma once
 
-class SceneNode
+#include <SFML/Graphics/Drawable.hpp>
+
+class SceneNode : public sf::Drawable
 {
     friend class Scene;
 
@@ -35,6 +37,8 @@ protected:
     virtual void init() = 0;
     virtual void tick(float deltaTime) = 0;
     virtual void destroy() = 0;
+
+    void draw(sf::RenderTarget& target, sf::RenderStates states) const = 0;
 
 private:
     const class Scene* owner_ = nullptr;

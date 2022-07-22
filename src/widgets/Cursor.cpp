@@ -40,13 +40,13 @@ Cursor::Cursor()
 
 Cursor::~Cursor() = default;
 
-void Cursor::tick(float deltaTime, sf::Window& window)
+void Cursor::tick(float deltaTime, const sf::Window& window)
 {
     animator_->tick(deltaTime);
     setTextureRect(animator_->getCurrentRect(currentAnimation_));
 
-    const float mouseX = static_cast<float>(sf::Mouse::getPosition(window).x);
-    const float mouseY = static_cast<float>(sf::Mouse::getPosition(window).y);
+    const auto mouseX = static_cast<float>(sf::Mouse::getPosition(window).x);
+    const auto mouseY = static_cast<float>(sf::Mouse::getPosition(window).y);
     setPosition(mouseX, mouseY);
 
     ImGui::Begin("Cursor - Animations");

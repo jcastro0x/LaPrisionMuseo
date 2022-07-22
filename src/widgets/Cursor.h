@@ -32,7 +32,7 @@ public:
     Cursor();
     ~Cursor() override;
 
-    void tick(float deltaTime, sf::Window& window);
+    void tick(float deltaTime, const sf::Window& window);
 
     void setCursor(std::string_view name);
 

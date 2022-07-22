@@ -19,9 +19,9 @@
 
 #include <memory>
 
-#define DEFAULT_WINDOW_SIZE_X 640u
+#define DEFAULT_WINDOW_SIZE_X 740u
 #define DEFAULT_WINDOW_SIZE_Y 480u
-
+#define DEFAULT_WINDOW_TITLE "La Prision - Museo"
 
 
 class Engine
@@ -40,28 +40,21 @@ private:
     #endif
 
 private:
-    std::unique_ptr<INetwork> network_;
-    int binaryReader_;
+    std::unique_ptr<INetwork> network_  { std::make_unique<DebugNetwork>() };
+    int binaryReader_                   { 0 };
     Cursor cursor_;
-    std::unique_ptr<Scene> scene_;
-    sf::RenderWindow window_;
-    std::unique_ptr<sf::Clock> clock_;
+    std::unique_ptr<Scene> scene_       { std::make_unique<Scene>() };
+    sf::RenderWindow window_            { sf::VideoMode(DEFAULT_WINDOW_SIZE_X, DEFAULT_WINDOW_SIZE_Y), DEFAULT_WINDOW_TITLE };
+    std::unique_ptr<sf::Clock> clock_   { std::make_unique<sf::Clock>() };
 };
 
-
 Engine::Engine()
-: network_(std::make_unique<DebugNetwork>())
-, binaryReader_(0)
-, scene_(std::make_unique<Scene>())
-, window_(sf::VideoMode(DEFAULT_WINDOW_SIZE_X, DEFAULT_WINDOW_SIZE_Y), "La Prision - Museo")
-, clock_(std::make_unique<sf::Clock>())
 {
     window_.setFramerateLimit(30);
+    window_.setMouseCursorVisible(false);
 
     ImGui::SFML::Init(window_);
     ImGui::GetIO().ConfigFlags ^= ImGuiConfigFlags_::ImGuiConfigFlags_NoMouseCursorChange;
-
-    window_.setMouseCursorVisible(false);
 }
 
 void Engine::run()
@@ -72,33 +65,24 @@ void Engine::run()
     clock_->restart();
     while (window_.isOpen())
     {
-        
         const auto time = clock_->restart();
         
         processEvents();
         ImGui::SFML::Update(window_, time);
 
-        window_.clear();
-        if(scene_)
-        {
-            scene_->tick(time.asSeconds());
-        }
-        
+        scene_->tick(time.asSeconds());
+        cursor_.tick(time.asSeconds(), window_);
+
         #ifndef NDEBUG
         drawFPS(time.asSeconds());
         #endif
 
         //ImGui::ShowDemoWindow();
 
-
-        cursor_.tick(time.asSeconds(), window_);
-        
+        window_.clear();
+        window_.draw(*scene_);
         ImGui::SFML::Render(window_);
-
-
-
         window_.draw(cursor_);
-        
         window_.display();
     }
 

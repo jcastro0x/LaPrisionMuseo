@@ -64,8 +64,8 @@ std::optional<sf::Vector2u> QuadAspectRatio::transformPointToTextureCoords(sf::R
     auto diffHeight = static_cast<float>(texture_.getSize().y) / quadSize.texHeight;
     auto diffWidth  = static_cast<float>(texture_.getSize().x) / quadSize.texWidth;
 
-    transform.y = point.y * diffHeight - quadSize.heightGap * diffHeight;
-    transform.x = point.x * diffWidth  - quadSize.widthGap  * diffWidth;
+    transform.y = unsigned(point.y * diffHeight - quadSize.heightGap * diffHeight);
+    transform.x = unsigned(point.x * diffWidth  - quadSize.widthGap  * diffWidth);
 
     if(transform.y > texture_.getSize().y - 1
     || transform.x > texture_.getSize().x - 1)

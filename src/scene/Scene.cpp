@@ -58,3 +58,11 @@ void Scene::loadScene()
 {
     
 }
+
+void Scene::draw(sf::RenderTarget& target, sf::RenderStates states) const
+{
+    for(auto& node : nodes_)
+    {
+        node->draw(target, states);
+    }
+}

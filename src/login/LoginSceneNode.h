@@ -25,6 +25,10 @@
 
 #include <memory>
 
+#include <SFML/Graphics/Sprite.hpp>
+#include <SFML/Graphics/Texture.hpp>
+
+
 class LoginSceneNode : public SceneNode
 {
 public:
@@ -36,6 +40,31 @@ protected:
     void tick(float deltaTime) override;
     void destroy() override;
 
+    void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+
+
 private:
     std::unique_ptr<class QuadAspectRatio> background_;
+
+
+    sf::Sprite sprite;
+    sf::Texture texture;
+
+
+
+    enum class EAspectRatioRule : uint8_t
+    {
+        Width,
+        FitToParent
+    };
+    float aspectRatio_ = 640.f/480.f;
+    EAspectRatioRule aspectRatioRule_ = EAspectRatioRule::FitToParent;
+    struct QuadSize
+    {
+        float texWidth;
+        float texHeight;
+        float heightGap;
+        float widthGap;
+    };
+    QuadSize getQuadSize(sf::RenderTarget& target) const;
 };
