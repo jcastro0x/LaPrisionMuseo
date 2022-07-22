@@ -29,7 +29,8 @@
 
 #include <SFML/System/Clock.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
-#include <SFML/Graphics/Font.hpp>
+
+#include <Resources.h>
 
 #define DEFAULT_WINDOW_SIZE_X 740u
 #define DEFAULT_WINDOW_SIZE_Y 480u
@@ -42,9 +43,8 @@ public:
     void run();
 
 public:
-    [[nodiscard]] const sf::Font& getEntryFont() const  { return fontEntry_; }
-    [[nodiscard]] const sf::Font& getLogoFont() const   { return fontLogo_;  }
-    [[nodiscard]] Cursor& getCursor()       { return cursor_;    }
+    [[nodiscard]] const Resources& getResources() const  { return *resources_; }
+    [[nodiscard]] Cursor& getCursor()                    { return cursor_;    }
 
     [[nodiscard]] sf::Vector2i getMousePosition() const;
 
@@ -63,12 +63,11 @@ private:
 
 private:
     std::unique_ptr<INetwork> network_  { std::make_unique<DebugNetwork>() };
-    int binaryReader_                   { 0 };
-    Cursor cursor_;
     std::unique_ptr<Scene> scene_;
     sf::RenderWindow window_            { sf::VideoMode(DEFAULT_WINDOW_SIZE_X, DEFAULT_WINDOW_SIZE_Y), DEFAULT_WINDOW_TITLE };
     std::unique_ptr<sf::Clock> clock_   { std::make_unique<sf::Clock>() };
 
-    sf::Font fontEntry_;
-    sf::Font fontLogo_;
+    int binaryReader_                   { 0 };
+    Cursor cursor_;
+    std::unique_ptr<Resources> resources_;
 };

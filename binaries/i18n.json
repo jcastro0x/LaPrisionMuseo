@@ -1,0 +1,77 @@
+[
+  {
+    "language": "en",
+    "culture": "US",
+    "namespaces" :
+    [
+      {
+        "name": "ui",
+        "content":
+        [
+          {
+            "key" : "play_online",
+            "value" : "Play Online"
+          },
+          {
+            "key" : "play_offline",
+            "value" : "Play Offline"
+          },
+          {
+            "key" : "settings",
+            "value" : "Settings"
+          },
+          {
+            "key" : "credits",
+            "value" : "Credits"
+          },
+          {
+            "key" : "colaborate",
+            "value" : "Colaborate"
+          },
+          {
+            "key" : "quit",
+            "value" : "Exit"
+          }
+        ]
+      }
+    ]
+  },
+
+  {
+    "language": "es",
+    "culture": "ES",
+    "namespaces" :
+    [
+      {
+        "name": "ui",
+        "content":
+        [
+          {
+            "key" : "play_online",
+            "value" : "Jugar Online"
+          },
+          {
+            "key" : "play_offline",
+            "value" : "Jugar Offline"
+          },
+          {
+            "key" : "settings",
+            "value" : "Opciones"
+          },
+          {
+            "key" : "credits",
+            "value" : "Creditos"
+          },
+          {
+            "key" : "colaborate",
+            "value" : "Colabora"
+          },
+          {
+            "key" : "quit",
+            "value" : "Salir"
+          }
+        ]
+      }
+    ]
+  }
+]

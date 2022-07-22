@@ -27,6 +27,8 @@ set(SRC_FILES
     src/scene/nodes/BackgroundNode.cpp
     src/scene/nodes/ClickableText.cpp
 
+    src/Resources.cpp
+
     src/widgets/QuadAspectRatio.cpp
     src/widgets/Cursor.cpp
 )

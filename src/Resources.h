@@ -21,37 +21,39 @@
 
 #pragma once
 
-#include <scene/SceneNode.h>
+#include <unordered_map>
+#include <string>
 #include <memory>
-
-#include <SFML/System/String.hpp>
+#include <optional>
 
 namespace sf
 {
-    class Text;
-    class Sound;
+    class Texture;
+    class SoundBuffer;
+    class Font;
 }
 
-class ClickableText final : public SceneNode
+class resource_exception final : public std::exception
 {
-public:
-    ClickableText(sf::String string, class Scene* owner);
-    ~ClickableText() override;
+};
+
+class Resources
+{
+    template<typename Type>
+    using Resource = std::unordered_map<std::string, std::unique_ptr<Type>>;
 
 public:
-    void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+    Resources();
+    ~Resources();
 
-protected:
-    void onMouseEnter() const;
-    void onMouseExit() const;
-    void onMouseClickDown() const;
-    void onMouseClickUp() const;
+public:
+    [[nodiscard]] std::optional<const sf::Texture*> getTexture(std::string_view key) const;
+    [[nodiscard]] std::optional<const sf::SoundBuffer*> getSoundBuffer(std::string_view key) const;
+    [[nodiscard]] std::optional<const sf::Font*> getFont(std::string_view key) const;
+
 
 private:
-    std::unique_ptr<sf::Text> text_;
-    std::unique_ptr<sf::Sound> soundHover_;
-    std::unique_ptr<sf::Sound> soundClick_;
-
-    mutable bool bMouseEnter_     = false;
-    mutable bool bMouseClickDown_ = false;
+    Resource<sf::Texture> textures_;
+    Resource<sf::SoundBuffer> sounds_;
+    Resource<sf::Font> fonts_;
 };

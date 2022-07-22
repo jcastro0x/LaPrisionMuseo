@@ -26,6 +26,7 @@
 #include <scene/nodes/BackgroundNode.h>
 #include <scene/nodes/ClickableText.h>
 
+#include <Engine.h>
 
 #include <imgui.h>
 

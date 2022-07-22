@@ -22,6 +22,8 @@
 #include "ClickableText.h"
 
 #include <SFML/Graphics/Text.hpp>
+#include <SFML/Window/Mouse.hpp>
+#include <SFML/Audio/Sound.hpp>
 
 #include <scene/Scene.h>
 #include <Engine.h>
@@ -32,10 +34,40 @@
 ClickableText::ClickableText(sf::String string, Scene* owner)
 : SceneNode(owner)
 , text_(std::make_unique<sf::Text>())
+, soundHover_(std::make_unique<sf::Sound>())
+, soundClick_(std::make_unique<sf::Sound>())
 {
-    text_->setFont(owner_->getEngine()->getEntryFont());
-    text_->setString(string);
-    text_->setOrigin(text_->getGlobalBounds().width / 2.f, text_->getGlobalBounds().height / 2.f);
+    const auto& resources = owner_->getEngine()->getResources();
+
+    if(auto font = resources.getFont("FontEntry"))
+    {
+        text_->setFont(**font);
+        text_->setString(string);
+        text_->setOrigin(text_->getGlobalBounds().width / 2.f, text_->getGlobalBounds().height / 2.f);
+    }
+    else
+    {
+        throw resource_exception();
+    }
+
+    if(auto soundHover = resources.getSoundBuffer("ButtonHover"))
+    {
+        soundHover_->setBuffer(**soundHover);
+    }
+    else
+    {
+        throw resource_exception();
+    }
+
+    if(auto soundClick = resources.getSoundBuffer("ButtonClick"))
+    {
+        soundClick_->setBuffer(**soundClick);
+    }
+    else
+    {
+        throw resource_exception();
+    }
+
 }
 
 ClickableText::~ClickableText() = default;
@@ -51,14 +83,58 @@ void ClickableText::draw(sf::RenderTarget& target, sf::RenderStates states) cons
     if(clickableGlobalRect.contains((float)mousePos.x, (float)mousePos.y))
     {
         text_->setFillColor(sf::Color::Yellow);
-        owner_->getEngine()->getCursor().setCursor("arrow_rotate");
+
+        if(!bMouseEnter_)
+        {
+            bMouseEnter_ = true;
+            onMouseEnter();
+        }
+
+        if(sf::Mouse::isButtonPressed(sf::Mouse::Left) && !bMouseClickDown_)
+        {
+            bMouseClickDown_ = true;
+            onMouseClickDown();
+        }
+
+        if(!sf::Mouse::isButtonPressed(sf::Mouse::Left) && bMouseClickDown_)
+        {
+            bMouseClickDown_ = false;
+            onMouseClickUp();
+        }
     }
     else
     {
         text_->setFillColor(sf::Color::White);
-        owner_->getEngine()->getCursor().setCursor("default");
+
+        if(bMouseEnter_)
+        {
+            bMouseEnter_ = false;
+            bMouseClickDown_ = false;
+            onMouseExit();
+        }
     }
 
     states.transform *= getTransform();
     target.draw(*text_, states);
+}
+
+void ClickableText::onMouseEnter() const
+{
+    owner_->getEngine()->getCursor().setCursor("arrow_rotate");
+    soundHover_->play();
+}
+
+void ClickableText::onMouseExit() const
+{
+    owner_->getEngine()->getCursor().setCursor("default");
+}
+
+void ClickableText::onMouseClickDown() const
+{
+
+}
+
+void ClickableText::onMouseClickUp() const
+{
+    soundClick_->play();
 }

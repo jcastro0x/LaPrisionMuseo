@@ -8,14 +8,23 @@
 
 #include <Engine.h>
 
+#include <iostream>
+
 
 Engine::Engine()
 {
     window_.setFramerateLimit(30);
     window_.setMouseCursorVisible(false);
 
-    fontEntry_.loadFromFile("FontEntry.ttf");
-    fontLogo_.loadFromFile("FontLogo.ttf");
+    try
+    {
+        resources_ = std::make_unique<Resources>();
+    }
+    catch(resource_exception const&)
+    {
+        std::cerr << "FATAL ERROR reading resources\n";
+        throw;
+    }
 
     ImGui::SFML::Init(window_);
     ImGui::GetIO().ConfigFlags ^= ImGuiConfigFlags_::ImGuiConfigFlags_NoMouseCursorChange;
