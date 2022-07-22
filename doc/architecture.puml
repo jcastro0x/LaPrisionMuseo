@@ -24,6 +24,12 @@ class Configuration
     {static} sfxVolumen : float
 }
 
+class SceneManager
+{
+    - scenes : map<name,ptr*>
+    + createScene(name) : Scene
+}
+
 class Scene
 {
     - nodes : SceneNode[]

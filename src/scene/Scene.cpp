@@ -22,15 +22,20 @@
 #include "Scene.h"
 
 #include <scene/SceneNode.h>
+#include <components/AspectRatio.h>
+#include <SFML/Graphics/RenderTarget.hpp>
 
-Scene::~Scene() = default;
+Scene::Scene(Engine* engine)
+: engine_(engine)
+{
+}
 
-void Scene::init()
+Scene::~Scene()
 {
     for(auto& node : nodes_)
     {
-        node->init();
-    }
+        node->destroy();
+    } 
 }
 
 void Scene::tick(float deltaTime)
@@ -41,28 +46,25 @@ void Scene::tick(float deltaTime)
     }
 }
 
-void Scene::destroy()
-{
-    for(auto& node : nodes_)
-    {
-        node->destroy();
-    }    
-}
-
-void Scene::addSceneNode(std::unique_ptr<class SceneNode> node)
+void Scene::addSceneNode(SceneNodePtr node)
 {
     nodes_.emplace_back(std::move(node));
 }
 
-void Scene::loadScene()
-{
-    
-}
-
 void Scene::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
+    // Store original view to restore it later
+    const sf::View originalView = target.getView();
+
+    // Calculate viewport needed to fit to a aspet ratio of 1.333333
+    target.setView(AspectRatio::getViewportAspectRatio({640, 480}, target.getSize(),
+                                                       AspectRatio::EAspectRatioRule::FitToParent));
+
     for(auto& node : nodes_)
     {
         node->draw(target, states);
     }
+
+    // Restore original view
+    target.setView(originalView);
 }

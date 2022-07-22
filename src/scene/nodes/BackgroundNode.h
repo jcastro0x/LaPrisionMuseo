@@ -21,22 +21,25 @@
 
 #pragma once
 
-#include <memory>
-#include <type_traits>
 #include <scene/SceneNode.h>
+#include <memory>
+#include <string_view>
 
+namespace sf
+{
+    class Sprite;
+    class Texture;    
+}
 
-class SceneFactory
+class BackgroundNode final : public SceneNode
 {
 public:
-    
-    template<typename T, typename... Args> requires std::is_base_of_v<SceneNode, T>
-    static std::unique_ptr<T> createSceneNode(Scene* const scene, Args... args)
-    {
-        std::unique_ptr<T> node(std::make_unique<T>(args...));
-        node->setSceneOwner(scene);
-        return node;
-    }
+    BackgroundNode(std::string_view textureName);
+    ~BackgroundNode();
 
+    void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
+private:
+    std::unique_ptr<sf::Texture> texture_;
+    std::unique_ptr<sf::Sprite> sprite_;
 };

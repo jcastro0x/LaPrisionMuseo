@@ -19,24 +19,5 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-#pragma once
 
-#include <memory>
-#include <type_traits>
-#include <scene/SceneNode.h>
-
-
-class SceneFactory
-{
-public:
-    
-    template<typename T, typename... Args> requires std::is_base_of_v<SceneNode, T>
-    static std::unique_ptr<T> createSceneNode(Scene* const scene, Args... args)
-    {
-        std::unique_ptr<T> node(std::make_unique<T>(args...));
-        node->setSceneOwner(scene);
-        return node;
-    }
-
-
-};
+#include "SceneManager.h"

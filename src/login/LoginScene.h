@@ -21,22 +21,22 @@
 
 #pragma once
 
+#include <scene/Scene.h>
+
 #include <memory>
-#include <type_traits>
-#include <scene/SceneNode.h>
+
+// #include <SFML/Graphics/Sprite.hpp>
+// #include <SFML/Graphics/Texture.hpp>
+// #include <SFML/Graphics/Font.hpp>
+// #include <SFML/Graphics/Text.hpp>
 
 
-class SceneFactory
+class LoginScene : public Scene
 {
 public:
+    LoginScene(class Engine* engine);
+    ~LoginScene() override;
     
-    template<typename T, typename... Args> requires std::is_base_of_v<SceneNode, T>
-    static std::unique_ptr<T> createSceneNode(Scene* const scene, Args... args)
-    {
-        std::unique_ptr<T> node(std::make_unique<T>(args...));
-        node->setSceneOwner(scene);
-        return node;
-    }
-
-
+protected:
+    void tick(float deltaTime) override;
 };

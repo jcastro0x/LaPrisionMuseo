@@ -21,33 +21,36 @@
 
 #pragma once
 
-#include <scene/SceneNode.h>
+#include <unordered_map>
+#include <string>
+#include <functional>
+#include "Scene.h"
 
-#include <memory>
-
-#include <SFML/Graphics/Sprite.hpp>
-#include <SFML/Graphics/Texture.hpp>
-#include <SFML/Graphics/Font.hpp>
-#include <SFML/Graphics/Text.hpp>
-
-
-class LoginSceneNode : public SceneNode
+class scene_exception final : public std::exception
 {
+};
+
+class SceneManager
+{
+    using ScenePtr = std::unique_ptr<Scene>;
+
 public:
-    LoginSceneNode();
-    ~LoginSceneNode() override;
-    
-protected:
-    void init() override;
-    void tick(float deltaTime) override;
-    void destroy() override;
+    template<typename SceneType> requires std::is_base_of_v<class Scene, SceneType>
+    void registerScene(std::string_view name)
+    {
+        scenes_.insert({name, []() -> ScenePtr {
+            return std::make_unique<SceneType>();
+        }});
+    }
 
-    void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+    ScenePtr findScene(std::string_view name)
+    {
+        if(!scenes_.contains(name.data()))
+            throw scene_exception();
 
+        return scenes_[name.data()]();
+    }
 
 private:
-    sf::Sprite sprite;
-    sf::Texture texture;
-    sf::Font font;
-    mutable sf::Text text;
+    std::unordered_map<std::string, std::function<ScenePtr()>> scenes_;
 };

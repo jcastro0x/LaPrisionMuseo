@@ -1,52 +1,13 @@
 #include <SFML/Graphics.hpp>
-#include <SFML/System/Clock.hpp>
 
-
-#include <iostream>
 #include <imgui.h>
 #include <imgui-SFML.h>
 
-#include <widgets/QuadAspectRatio.h>
-#include <widgets/Cursor.h>
-
-
-#include <network/DebugNetwork.h>
-
-#include <scene/Scene.h>
 #include <scene/SceneFactory.h>
+#include <login/LoginScene.h>
 
-#include <login/LoginSceneNode.h>
+#include <Engine.h>
 
-#include <memory>
-
-#define DEFAULT_WINDOW_SIZE_X 740u
-#define DEFAULT_WINDOW_SIZE_Y 480u
-#define DEFAULT_WINDOW_TITLE "La Prision - Museo"
-
-
-class Engine
-{
-public:
-    Engine();
-
-    void run();
-    void destroy();
-
-private:
-    void processEvents();
-
-    #ifndef NDEBUG
-    void drawFPS(float deltaSeconds);
-    #endif
-
-private:
-    std::unique_ptr<INetwork> network_  { std::make_unique<DebugNetwork>() };
-    int binaryReader_                   { 0 };
-    Cursor cursor_;
-    std::unique_ptr<Scene> scene_       { std::make_unique<Scene>() };
-    sf::RenderWindow window_            { sf::VideoMode(DEFAULT_WINDOW_SIZE_X, DEFAULT_WINDOW_SIZE_Y), DEFAULT_WINDOW_TITLE };
-    std::unique_ptr<sf::Clock> clock_   { std::make_unique<sf::Clock>() };
-};
 
 Engine::Engine()
 {
@@ -59,8 +20,7 @@ Engine::Engine()
 
 void Engine::run()
 {
-    auto loginSceneNode = SceneFactory::createScene<LoginSceneNode>(scene_.get());
-    scene_->addSceneNode(std::move(loginSceneNode));
+    createScene<LoginScene>();
 
     clock_->restart();
     while (window_.isOpen())
@@ -83,12 +43,10 @@ void Engine::run()
         window_.draw(*scene_);
         ImGui::SFML::Render(window_);
         window_.draw(cursor_);
+
         window_.display();
     }
 
-    if(scene_)
-        scene_->destroy();
-    
     ImGui::SFML::Shutdown();
 }
 
@@ -108,12 +66,6 @@ void Engine::processEvents()
                 break;
 
             case sf::Event::Resized:
-                //event.size.width = std::max(DEFAULT_WINDOW_SIZE_X, event.size.width);
-                //event.size.height = std::max(DEFAULT_WINDOW_SIZE_X, event.size.height);
-                //window_.setSize({event.size.width, event.size.height});
-
-                // Take account that some desktop envs don't resize as requested
-                // for example tilled envs like i3.
                 window_.setView(sf::View({
                     0.f,
                     0.f,
@@ -121,7 +73,6 @@ void Engine::processEvents()
                     static_cast<float>(event.size.height)
                 }));
                 break;
-
         }
     }
 }

@@ -22,21 +22,44 @@
 #pragma once
 
 #include <memory>
-#include <type_traits>
-#include <scene/SceneNode.h>
 
+#include <widgets/Cursor.h>
+#include <network/DebugNetwork.h>
+#include <scene/Scene.h>
 
-class SceneFactory
+#include <SFML/System/Clock.hpp>
+#include <SFML/Graphics/RenderWindow.hpp>
+
+#define DEFAULT_WINDOW_SIZE_X 740u
+#define DEFAULT_WINDOW_SIZE_Y 480u
+#define DEFAULT_WINDOW_TITLE "La Prision - Museo"
+
+class Engine
 {
 public:
-    
-    template<typename T, typename... Args> requires std::is_base_of_v<SceneNode, T>
-    static std::unique_ptr<T> createSceneNode(Scene* const scene, Args... args)
+    Engine();
+
+    void run();
+    void destroy();
+
+private:
+    void processEvents();
+
+    template<typename T> requires std::is_base_of_v<class Scene, T>
+    void createScene()
     {
-        std::unique_ptr<T> node(std::make_unique<T>(args...));
-        node->setSceneOwner(scene);
-        return node;
+        scene_ = std::make_unique<T>(this);
     }
 
+#ifndef NDEBUG
+    void drawFPS(float deltaSeconds);
+#endif
 
+private:
+    std::unique_ptr<INetwork> network_  { std::make_unique<DebugNetwork>() };
+    int binaryReader_                   { 0 };
+    Cursor cursor_;
+    std::unique_ptr<Scene> scene_;
+    sf::RenderWindow window_            { sf::VideoMode(DEFAULT_WINDOW_SIZE_X, DEFAULT_WINDOW_SIZE_Y), DEFAULT_WINDOW_TITLE };
+    std::unique_ptr<sf::Clock> clock_   { std::make_unique<sf::Clock>() };
 };

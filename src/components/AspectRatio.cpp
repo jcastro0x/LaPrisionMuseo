@@ -21,7 +21,7 @@
 
 #include "AspectRatio.h"
 
-sf::View AspectRatio::getViewportAspetRatio(const sf::Vector2u& textureSize, const sf::Vector2u& targetSize, EAspectRatioRule rule)
+sf::View AspectRatio::getViewportAspectRatio(const sf::Vector2u& textureSize, const sf::Vector2u& targetSize, EAspectRatioRule rule)
 {
     QuadSize quadSize {};
     const auto aspectRatioTexture = textureSize.x / static_cast<float>(textureSize.y);
@@ -50,10 +50,10 @@ sf::View AspectRatio::getViewportAspetRatio(const sf::Vector2u& textureSize, con
         0, 0, static_cast<float>(textureSize.x), static_cast<float>(textureSize.y)
     });
     view.setViewport({
-        quadSize.widthGap  / targetSize.x,
-        quadSize.heightGap / targetSize.y,
-        quadSize.texWidth  / targetSize.x,
-        quadSize.texHeight / targetSize.y
+        quadSize.widthGap  / static_cast<float>(targetSize.x),
+        quadSize.heightGap / static_cast<float>(targetSize.y),
+        quadSize.texWidth  / static_cast<float>(targetSize.x),
+        quadSize.texHeight / static_cast<float>(targetSize.y)
     });
 
     return view;

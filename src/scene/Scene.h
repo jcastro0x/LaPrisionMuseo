@@ -32,36 +32,20 @@
  */
 class Scene : public sf::Drawable
 {
+    using SceneNodePtr = std::unique_ptr<class SceneNode>;
+
 public:
+    Scene(class Engine* engine);
+    ~Scene() override;
 
-    Scene() = default;
-    ~Scene();
+    virtual void tick(float deltaTime);
 
-    /**
-     * 
-     * Initialize the current scene. Adquiring resouces mostly
-     */
-    void init();
-
-    /**
-     * Update elements of the scene according to deltaTime 
-     * @param deltaTime seconds passed since last update
-     */
-    void tick(float deltaTime);
-
-    /**
-     * Des-initialize the current scene. Releasing resources mostly 
-     */
-    void destroy();
-
-    
-    void addSceneNode(std::unique_ptr<class SceneNode> node);
-
-    static void loadScene();
+    void addSceneNode(SceneNodePtr node);
 
 protected:
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 private:
-    std::vector<std::unique_ptr<class SceneNode>> nodes_;
+    class Engine* engine_ = nullptr;
+    std::vector<SceneNodePtr> nodes_;
 };

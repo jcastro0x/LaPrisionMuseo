@@ -34,12 +34,10 @@ public:
     void setSceneOwner(const class Scene* owner);
 
 protected:
-    virtual void init() = 0;
-    virtual void tick(float deltaTime) = 0;
-    virtual void destroy() = 0;
-
-    void draw(sf::RenderTarget& target, sf::RenderStates states) const = 0;
+    virtual void init() {};
+    virtual void tick(float /*deltaTime*/) {};
+    virtual void destroy() {};
 
 private:
-    const class Scene* owner_ = nullptr;
+    const class Scene*  owner_ = nullptr;
 };

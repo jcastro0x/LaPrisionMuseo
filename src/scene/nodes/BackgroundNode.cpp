@@ -19,24 +19,24 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-#pragma once
+#include "BackgroundNode.h"
 
-#include <memory>
-#include <type_traits>
-#include <scene/SceneNode.h>
+#include <SFML/Graphics/Sprite.hpp>
+#include <SFML/Graphics/Texture.hpp>
+#include <SFML/Graphics/RenderTarget.hpp>
 
-
-class SceneFactory
+BackgroundNode::BackgroundNode(std::string_view textureName)
+: texture_(std::make_unique<sf::Texture>())
+, sprite_(std::make_unique<sf::Sprite>())
 {
-public:
-    
-    template<typename T, typename... Args> requires std::is_base_of_v<SceneNode, T>
-    static std::unique_ptr<T> createSceneNode(Scene* const scene, Args... args)
-    {
-        std::unique_ptr<T> node(std::make_unique<T>(args...));
-        node->setSceneOwner(scene);
-        return node;
-    }
+    texture_->loadFromFile(textureName.data());
+    sprite_->setTexture(*texture_);
+}
+
+BackgroundNode::~BackgroundNode() = default;
 
 
-};
+void BackgroundNode::draw(sf::RenderTarget& target, sf::RenderStates states) const
+{
+    target.draw(*sprite_, states);
+}

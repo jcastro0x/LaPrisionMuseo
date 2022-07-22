@@ -12,7 +12,7 @@ set(SRC_FILES
     src/components/AspectRatio.cpp
     src/components/Internationalization.cpp
 
-    src/login/LoginSceneNode.cpp
+    src/login/LoginScene.cpp
 
     src/network/DebugNetwork.cpp
     src/network/NullNetwork.cpp
@@ -22,7 +22,9 @@ set(SRC_FILES
     src/room/RoomSceneNode.cpp
 
     src/scene/Scene.cpp
+    src/scene/SceneManager.cpp
     src/scene/SceneNode.cpp
+    src/scene/nodes/BackgroundNode.cpp
 
     src/widgets/QuadAspectRatio.cpp
     src/widgets/Cursor.cpp

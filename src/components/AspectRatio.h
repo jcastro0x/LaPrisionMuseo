@@ -22,6 +22,8 @@
 #pragma once
 
 #include <cstdint>
+#include <optional>
+
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Graphics/View.hpp>
 
@@ -34,7 +36,7 @@ public:
         FitToParent
     };
 
-    static sf::View getViewportAspetRatio(const sf::Vector2u& textureSize, const sf::Vector2u& targetSize, EAspectRatioRule rule);
+    static sf::View getViewportAspectRatio(const sf::Vector2u& textureSize, const sf::Vector2u& targetSize, EAspectRatioRule rule);
 
 private:
     struct QuadSize
