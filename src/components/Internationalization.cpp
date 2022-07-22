@@ -19,35 +19,9 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-#pragma once
+#include "Internationalization.h"
 
-#include <scene/SceneNode.h>
-
-#include <memory>
-
-#include <SFML/Graphics/Sprite.hpp>
-#include <SFML/Graphics/Texture.hpp>
-#include <SFML/Graphics/Font.hpp>
-#include <SFML/Graphics/Text.hpp>
-
-
-class LoginSceneNode : public SceneNode
+sf::String Internationalization::getString(std::string /*ns*/, std::string key)
 {
-public:
-    LoginSceneNode();
-    ~LoginSceneNode() override;
-    
-protected:
-    void init() override;
-    void tick(float deltaTime) override;
-    void destroy() override;
-
-    void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
-
-
-private:
-    sf::Sprite sprite;
-    sf::Texture texture;
-    sf::Font font;
-    mutable sf::Text text;
-};
+    return key;
+}

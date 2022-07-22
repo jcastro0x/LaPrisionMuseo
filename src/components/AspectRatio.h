@@ -21,33 +21,27 @@
 
 #pragma once
 
-#include <scene/SceneNode.h>
+#include <cstdint>
+#include <SFML/System/Vector2.hpp>
+#include <SFML/Graphics/View.hpp>
 
-#include <memory>
-
-#include <SFML/Graphics/Sprite.hpp>
-#include <SFML/Graphics/Texture.hpp>
-#include <SFML/Graphics/Font.hpp>
-#include <SFML/Graphics/Text.hpp>
-
-
-class LoginSceneNode : public SceneNode
+class AspectRatio
 {
 public:
-    LoginSceneNode();
-    ~LoginSceneNode() override;
-    
-protected:
-    void init() override;
-    void tick(float deltaTime) override;
-    void destroy() override;
+    enum class EAspectRatioRule : uint8_t
+    {
+        Width,
+        FitToParent
+    };
 
-    void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
-
+    static sf::View getViewportAspetRatio(const sf::Vector2u& textureSize, const sf::Vector2u& targetSize, EAspectRatioRule rule);
 
 private:
-    sf::Sprite sprite;
-    sf::Texture texture;
-    sf::Font font;
-    mutable sf::Text text;
+    struct QuadSize
+    {
+        float texWidth;
+        float texHeight;
+        float heightGap;
+        float widthGap;
+    };
 };

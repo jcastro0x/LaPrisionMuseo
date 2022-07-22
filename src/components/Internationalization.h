@@ -20,34 +20,12 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #pragma once
+#include <SFML/System/String.hpp>
 
-#include <scene/SceneNode.h>
-
-#include <memory>
-
-#include <SFML/Graphics/Sprite.hpp>
-#include <SFML/Graphics/Texture.hpp>
-#include <SFML/Graphics/Font.hpp>
-#include <SFML/Graphics/Text.hpp>
-
-
-class LoginSceneNode : public SceneNode
+class Internationalization
 {
 public:
-    LoginSceneNode();
-    ~LoginSceneNode() override;
-    
-protected:
-    void init() override;
-    void tick(float deltaTime) override;
-    void destroy() override;
-
-    void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
-
-
-private:
-    sf::Sprite sprite;
-    sf::Texture texture;
-    sf::Font font;
-    mutable sf::Text text;
+    static sf::String getString(std::string ns, std::string key);
 };
+
+using i18n = Internationalization;

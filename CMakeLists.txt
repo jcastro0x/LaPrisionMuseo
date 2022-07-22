@@ -9,6 +9,8 @@ set(SRC_FILES
     src/Program.cpp
 
     src/components/Animator.cpp
+    src/components/AspectRatio.cpp
+    src/components/Internationalization.cpp
 
     src/login/LoginSceneNode.cpp
 
