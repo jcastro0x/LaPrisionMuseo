@@ -22,22 +22,21 @@
 #pragma once
 
 #include <SFML/Graphics/Drawable.hpp>
+#include <SFML/Graphics/Transformable.hpp>
 
-class SceneNode : public sf::Drawable
+class SceneNode : public sf::Drawable, public sf::Transformable
 {
     friend class Scene;
 
 public:
+    explicit SceneNode(class Scene* owner);
     virtual ~SceneNode() = default;
-
-public:
-    void setSceneOwner(const class Scene* owner);
 
 protected:
     virtual void init() {};
     virtual void tick(float /*deltaTime*/) {};
     virtual void destroy() {};
 
-private:
-    const class Scene*  owner_ = nullptr;
+protected:
+    const class Scene* owner_ = nullptr;
 };

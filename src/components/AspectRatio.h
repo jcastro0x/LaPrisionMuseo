@@ -38,6 +38,8 @@ public:
 
     static sf::View getViewportAspectRatio(const sf::Vector2u& textureSize, const sf::Vector2u& targetSize, EAspectRatioRule rule);
 
+    [[nodiscard]] static std::optional<sf::Vector2i> transformPointToTextureCoords(const sf::Vector2u& textureSize, const sf::Vector2u& targetSize, EAspectRatioRule rule, sf::Vector2i point);
+
 private:
     struct QuadSize
     {
@@ -46,4 +48,5 @@ private:
         float heightGap;
         float widthGap;
     };
+    static QuadSize getQuadSize(const sf::Vector2u& textureSize, const sf::Vector2u& targetSize, EAspectRatioRule rule);
 };

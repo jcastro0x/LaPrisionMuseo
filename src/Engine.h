@@ -29,6 +29,7 @@
 
 #include <SFML/System/Clock.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/Graphics/Font.hpp>
 
 #define DEFAULT_WINDOW_SIZE_X 740u
 #define DEFAULT_WINDOW_SIZE_Y 480u
@@ -38,9 +39,14 @@ class Engine
 {
 public:
     Engine();
-
     void run();
-    void destroy();
+
+public:
+    [[nodiscard]] const sf::Font& getEntryFont() const  { return fontEntry_; }
+    [[nodiscard]] const sf::Font& getLogoFont() const   { return fontLogo_;  }
+    [[nodiscard]] Cursor& getCursor()       { return cursor_;    }
+
+    [[nodiscard]] sf::Vector2i getMousePosition() const;
 
 private:
     void processEvents();
@@ -62,4 +68,7 @@ private:
     std::unique_ptr<Scene> scene_;
     sf::RenderWindow window_            { sf::VideoMode(DEFAULT_WINDOW_SIZE_X, DEFAULT_WINDOW_SIZE_Y), DEFAULT_WINDOW_TITLE };
     std::unique_ptr<sf::Clock> clock_   { std::make_unique<sf::Clock>() };
+
+    sf::Font fontEntry_;
+    sf::Font fontLogo_;
 };

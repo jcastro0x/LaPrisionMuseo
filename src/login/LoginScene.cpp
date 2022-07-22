@@ -24,16 +24,28 @@
 #include <widgets/QuadAspectRatio.h>
 #include <components/Internationalization.h>
 #include <scene/nodes/BackgroundNode.h>
+#include <scene/nodes/ClickableText.h>
+
 
 #include <imgui.h>
 
 LoginScene::LoginScene(class Engine* engine) : Scene(engine)
 {
-    // font.loadFromFile("FontEntry.ttf");
-    // text.setStyle(sf::Text::Style::Bold);
-    // text.setFont(font);
+    addSceneNode(std::make_unique<BackgroundNode>("loginScreen.png", this));
 
-    addSceneNode(std::make_unique<BackgroundNode>("loginScreen.png"));
+    auto addButton = [&](sf::String string, sf::Vector2f pos){
+        auto button = std::make_unique<ClickableText>(string, this);
+        button->setPosition(pos);
+        addSceneNode(std::move(button));
+    };
+
+    addButton(i18n::getString("ui", "Play Online"), {320.f, 227.f});
+    addButton(i18n::getString("ui", "Play Offline"), {320.f, 268.f});
+    addButton(i18n::getString("ui", "Settings"), {320.f, 307.f});
+    addButton(i18n::getString("ui", "Credits"), {320.f, 346.f});
+    addButton(i18n::getString("ui", "Colaborate"), {320.f, 385.f});
+    addButton(i18n::getString("ui", "Exit"), {320.f, 424.f});
+
 }
 
 LoginScene::~LoginScene() = default;

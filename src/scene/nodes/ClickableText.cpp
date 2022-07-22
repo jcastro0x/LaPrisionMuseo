@@ -19,10 +19,46 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-#include "SceneNode.h"
-#include <scene/Scene.h>
+#include "ClickableText.h"
 
-SceneNode::SceneNode(Scene* owner)
-: owner_(owner)
+#include <SFML/Graphics/Text.hpp>
+
+#include <scene/Scene.h>
+#include <Engine.h>
+
+#include <imgui.h>
+
+
+ClickableText::ClickableText(sf::String string, Scene* owner)
+: SceneNode(owner)
+, text_(std::make_unique<sf::Text>())
 {
+    text_->setFont(owner_->getEngine()->getEntryFont());
+    text_->setString(string);
+    text_->setOrigin(text_->getGlobalBounds().width / 2.f, text_->getGlobalBounds().height / 2.f);
+}
+
+ClickableText::~ClickableText() = default;
+
+void ClickableText::draw(sf::RenderTarget& target, sf::RenderStates states) const
+{
+    const auto mousePos = owner_->getSceneMousePos(target);
+
+    auto clickableGlobalRect = text_->getGlobalBounds();
+    clickableGlobalRect.left += getPosition().x;
+    clickableGlobalRect.top += getPosition().y;
+
+    if(clickableGlobalRect.contains((float)mousePos.x, (float)mousePos.y))
+    {
+        text_->setFillColor(sf::Color::Yellow);
+        owner_->getEngine()->getCursor().setCursor("arrow_rotate");
+    }
+    else
+    {
+        text_->setFillColor(sf::Color::White);
+        owner_->getEngine()->getCursor().setCursor("default");
+    }
+
+    states.transform *= getTransform();
+    target.draw(*text_, states);
 }

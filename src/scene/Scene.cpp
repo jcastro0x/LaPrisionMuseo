@@ -21,6 +21,7 @@
 
 #include "Scene.h"
 
+#include <Engine.h>
 #include <scene/SceneNode.h>
 #include <components/AspectRatio.h>
 #include <SFML/Graphics/RenderTarget.hpp>
@@ -67,4 +68,17 @@ void Scene::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
     // Restore original view
     target.setView(originalView);
+}
+
+sf::Vector2i Scene::getSceneMousePos(sf::RenderTarget& target) const
+{
+    auto pos = AspectRatio::transformPointToTextureCoords(
+        {640, 480},
+        target.getSize(),
+        AspectRatio::EAspectRatioRule::FitToParent,
+        getEngine()->getMousePosition()
+    );
+
+    if(pos) return pos.value();
+    else return {0, 0};
 }

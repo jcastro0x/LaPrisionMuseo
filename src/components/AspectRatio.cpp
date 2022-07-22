@@ -23,7 +23,45 @@
 
 sf::View AspectRatio::getViewportAspectRatio(const sf::Vector2u& textureSize, const sf::Vector2u& targetSize, EAspectRatioRule rule)
 {
-    QuadSize quadSize {};
+    QuadSize quadSize = getQuadSize(textureSize, targetSize, rule);
+
+    auto view = sf::View({
+        0, 0, static_cast<float>(textureSize.x), static_cast<float>(textureSize.y)
+    });
+    view.setViewport({
+        quadSize.widthGap  / static_cast<float>(targetSize.x),
+        quadSize.heightGap / static_cast<float>(targetSize.y),
+        quadSize.texWidth  / static_cast<float>(targetSize.x),
+        quadSize.texHeight / static_cast<float>(targetSize.y)
+    });
+
+    return view;
+}
+
+std::optional<sf::Vector2i> AspectRatio::transformPointToTextureCoords(const sf::Vector2u& textureSize, const sf::Vector2u& targetSize, EAspectRatioRule rule, sf::Vector2i point)
+{
+    sf::Vector2i transform;
+
+    QuadSize quadSize = getQuadSize(textureSize, targetSize, rule);
+
+    auto diffHeight = static_cast<float>(textureSize.y) / quadSize.texHeight;
+    auto diffWidth  = static_cast<float>(textureSize.x) / quadSize.texWidth;
+
+    transform.y = int(point.y * diffHeight - quadSize.heightGap * diffHeight);
+    transform.x = int(point.x * diffWidth  - quadSize.widthGap  * diffWidth);
+
+    if(transform.y > static_cast<int>(textureSize.y) - 1
+    || transform.x > static_cast<int>(textureSize.x) - 1)
+    {
+        return {};
+    }
+
+    return transform;
+}
+
+AspectRatio::QuadSize AspectRatio::getQuadSize(const sf::Vector2u& textureSize, const sf::Vector2u& targetSize, EAspectRatioRule rule)
+{
+    QuadSize quadSize;
     const auto aspectRatioTexture = textureSize.x / static_cast<float>(textureSize.y);
 
     sf::Vector2f tarSizeF = { static_cast<float>(targetSize.x),   static_cast<float>(targetSize.y) };
@@ -46,15 +84,5 @@ sf::View AspectRatio::getViewportAspectRatio(const sf::Vector2u& textureSize, co
     // Right and left gap to horizontally center de image
     quadSize.widthGap  = (tarSizeF.x - quadSize.texWidth) / 2;
 
-    auto view = sf::View({
-        0, 0, static_cast<float>(textureSize.x), static_cast<float>(textureSize.y)
-    });
-    view.setViewport({
-        quadSize.widthGap  / static_cast<float>(targetSize.x),
-        quadSize.heightGap / static_cast<float>(targetSize.y),
-        quadSize.texWidth  / static_cast<float>(targetSize.x),
-        quadSize.texHeight / static_cast<float>(targetSize.y)
-    });
-
-    return view;
+    return quadSize;
 }

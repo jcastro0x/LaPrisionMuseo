@@ -14,6 +14,9 @@ Engine::Engine()
     window_.setFramerateLimit(30);
     window_.setMouseCursorVisible(false);
 
+    fontEntry_.loadFromFile("FontEntry.ttf");
+    fontLogo_.loadFromFile("FontLogo.ttf");
+
     ImGui::SFML::Init(window_);
     ImGui::GetIO().ConfigFlags ^= ImGuiConfigFlags_::ImGuiConfigFlags_NoMouseCursorChange;
 }
@@ -85,6 +88,11 @@ void Engine::drawFPS(float deltaSeconds)
     ImGui::End();
 }
 #endif
+
+sf::Vector2i Engine::getMousePosition() const
+{
+    return sf::Mouse::getPosition(window_);
+}
 
 int main(const int, const char**)
 {

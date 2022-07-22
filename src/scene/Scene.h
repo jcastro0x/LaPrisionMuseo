@@ -41,9 +41,13 @@ public:
     virtual void tick(float deltaTime);
 
     void addSceneNode(SceneNodePtr node);
+    [[nodiscard]] class Engine* getEngine() const { return engine_; }
+
+    sf::Vector2i getSceneMousePos(sf::RenderTarget& target) const;
 
 protected:
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+
 
 private:
     class Engine* engine_ = nullptr;

@@ -34,7 +34,7 @@ namespace sf
 class BackgroundNode final : public SceneNode
 {
 public:
-    BackgroundNode(std::string_view textureName);
+    BackgroundNode(std::string_view textureName, class Scene* owner);
     ~BackgroundNode();
 
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;

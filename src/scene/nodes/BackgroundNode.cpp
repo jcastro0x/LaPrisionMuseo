@@ -25,8 +25,9 @@
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
 
-BackgroundNode::BackgroundNode(std::string_view textureName)
-: texture_(std::make_unique<sf::Texture>())
+BackgroundNode::BackgroundNode(std::string_view textureName, Scene* owner)
+: SceneNode(owner)
+, texture_(std::make_unique<sf::Texture>())
 , sprite_(std::make_unique<sf::Sprite>())
 {
     texture_->loadFromFile(textureName.data());

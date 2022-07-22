@@ -19,10 +19,29 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-#include "SceneNode.h"
-#include <scene/Scene.h>
+#pragma once
 
-SceneNode::SceneNode(Scene* owner)
-: owner_(owner)
+#include <scene/SceneNode.h>
+#include <memory>
+
+#include <SFML/System/String.hpp>
+
+namespace sf
 {
+    class Text;
 }
+
+
+class ClickableText final : public SceneNode
+{
+public:
+    ClickableText(sf::String string, class Scene* owner);
+    ~ClickableText() override;
+
+public:
+    void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+
+private:
+    std::unique_ptr<sf::Text> text_;
+    sf::FloatRect bounds;
+};
