@@ -23,6 +23,7 @@
 
 #include <scene/SceneNode.h>
 #include <memory>
+#include <functional>
 
 #include <SFML/System/String.hpp>
 
@@ -40,6 +41,9 @@ public:
 
 public:
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+    void tick(float deltaTime) override;
+
+    void bindOnClick(const std::function<void()>& onClicked);
 
 protected:
     void onMouseEnter() const;
@@ -54,4 +58,6 @@ private:
 
     mutable bool bMouseEnter_     = false;
     mutable bool bMouseClickDown_ = false;
+
+    std::function<void()> onClicked_;
 };

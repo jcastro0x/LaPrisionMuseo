@@ -19,5 +19,16 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-#include "RoomSceneNode.h"
+#pragma once
 
+#include <scene/Scene.h>
+
+class RoomScene : public Scene
+{
+public:
+    RoomScene(class Engine* engine);
+    ~RoomScene() override;
+
+protected:
+    void tick(float deltaTime) override;
+};

@@ -41,17 +41,10 @@ class Engine
 {
 public:
     Engine();
-    void run();
 
 public:
-    [[nodiscard]] const Resources& getResources() const  { return *resources_; }
-    [[nodiscard]] const Internationalization& getI18N() const  { return internationalization_; }
-    [[nodiscard]] Cursor& getCursor()                    { return cursor_;    }
-
-    [[nodiscard]] sf::Vector2i getMousePosition() const;
-
-private:
-    void processEvents();
+    void run();
+    void stop();
 
     template<typename T> requires std::is_base_of_v<class Scene, T>
     void createScene()
@@ -59,9 +52,19 @@ private:
         scene_ = std::make_unique<T>(this);
     }
 
-#ifndef NDEBUG
+public:
+    [[nodiscard]] const Resources& getResources() const;
+    [[nodiscard]] const Internationalization& getI18N() const;
+    [[nodiscard]] Cursor& getCursor();
+    [[nodiscard]] sf::Vector2i getMousePosition() const;
+    [[nodiscard]] sf::Vector2u getWindowSize() const;
+
+private:
+    void processEvents();
+
+    #ifndef NDEBUG
     void drawFPS(float deltaSeconds);
-#endif
+    #endif
 
 private:
     std::unique_ptr<INetwork> network_  { std::make_unique<DebugNetwork>() };

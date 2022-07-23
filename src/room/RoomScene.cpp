@@ -19,9 +19,15 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-#pragma once
+#include "RoomScene.h"
 
-class Room
+RoomScene::RoomScene(class Engine* engine) : Scene(engine)
 {
+}
 
-};
+RoomScene::~RoomScene() = default;
+
+void RoomScene::tick(float deltaTime)
+{
+    deltaTime++;
+}

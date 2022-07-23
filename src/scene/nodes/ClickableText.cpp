@@ -74,7 +74,15 @@ ClickableText::~ClickableText() = default;
 
 void ClickableText::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-    const auto mousePos = owner_->getSceneMousePos(target);
+    states.transform *= getTransform();
+    target.draw(*text_, states);
+}
+
+void ClickableText::tick(float deltaTime)
+{
+    SceneNode::tick(deltaTime);
+
+    const auto mousePos = owner_->getSceneMousePos();
 
     auto clickableGlobalRect = text_->getGlobalBounds();
     clickableGlobalRect.left += getPosition().x;
@@ -113,9 +121,11 @@ void ClickableText::draw(sf::RenderTarget& target, sf::RenderStates states) cons
             onMouseExit();
         }
     }
+}
 
-    states.transform *= getTransform();
-    target.draw(*text_, states);
+void ClickableText::bindOnClick(const std::function<void()>& onClicked)
+{
+    onClicked_ = onClicked;
 }
 
 void ClickableText::onMouseEnter() const
@@ -137,4 +147,8 @@ void ClickableText::onMouseClickDown() const
 void ClickableText::onMouseClickUp() const
 {
     soundClick_->play();
+    if(onClicked_)
+    {
+        onClicked_();
+    }
 }

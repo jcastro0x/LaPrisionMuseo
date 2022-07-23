@@ -41,7 +41,7 @@ Scene::~Scene()
 
 void Scene::tick(float deltaTime)
 {
-    for(auto& node : nodes_)
+    for(auto const& node : nodes_)
     {
         node->tick(deltaTime);
     }
@@ -55,7 +55,7 @@ void Scene::addSceneNode(SceneNodePtr node)
 void Scene::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
     // Store original view to restore it later
-    const sf::View originalView = target.getView();
+    sf::View const originalView = target.getView();
 
     // Calculate viewport needed to fit to a aspet ratio of 1.333333
     target.setView(AspectRatio::getViewportAspectRatio({640, 480}, target.getSize(),
@@ -70,11 +70,11 @@ void Scene::draw(sf::RenderTarget& target, sf::RenderStates states) const
     target.setView(originalView);
 }
 
-sf::Vector2i Scene::getSceneMousePos(sf::RenderTarget& target) const
+sf::Vector2i Scene::getSceneMousePos() const
 {
     auto pos = AspectRatio::transformPointToTextureCoords(
         {640, 480},
-        target.getSize(),
+        getEngine()->getWindowSize(),
         AspectRatio::EAspectRatioRule::FitToParent,
         getEngine()->getMousePosition()
     );

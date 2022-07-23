@@ -4,7 +4,9 @@
 #include <imgui-SFML.h>
 
 #include <scene/SceneFactory.h>
+
 #include <login/LoginScene.h>
+#include <room/RoomScene.h>
 
 #include <Engine.h>
 
@@ -62,6 +64,11 @@ void Engine::run()
     ImGui::SFML::Shutdown();
 }
 
+void Engine::stop()
+{
+    window_.close();
+}
+
 void Engine::processEvents()
 {
     sf::Event event {};
@@ -98,13 +105,72 @@ void Engine::drawFPS(float deltaSeconds)
 }
 #endif
 
+const Resources& Engine::getResources() const
+{
+    return *resources_;
+}
+
+const Internationalization& Engine::getI18N() const
+{
+    return internationalization_;
+}
+
+Cursor& Engine::getCursor()
+{
+    return cursor_;
+}
+
 sf::Vector2i Engine::getMousePosition() const
 {
     return sf::Mouse::getPosition(window_);
 }
 
+sf::Vector2u Engine::getWindowSize() const
+{
+    return window_.getSize();
+}
+
+
+
+
+
+
+
+#include <csignal>
+
+extern "C" void handle_aborts(int signal_number)
+{
+    std::string signType;
+    switch (signal_number) {
+        case SIGILL:   signType = "SIGILL: illegal instruction - invalid function image ";  break;
+        case SIGFPE:   signType = "SIGFPE: floating point exception ";                      break;
+        case SIGSEGV:  signType = "SIGSEGV: segment violation ";                            break;
+        case SIGTERM:  signType = "SIGTERM: Software termination signal from kill ";        break;
+        case SIGABRT:  signType = "SIGABRT: abnormal termination triggered by abort call "; break;
+
+        #ifdef _WIN32
+        case SIGBREAK: signType = "SIGBREAK: Ctrl-Break sequence ";                         break;
+        #endif
+
+        default:       signType = "UNKNOWN";                                                break;
+    }
+
+    std::cerr << "Ungracefully exit: " << signType << '(' << signal_number << ')' << '\n';
+}
+
 int main(const int, const char**)
 {
+    signal(SIGILL,   &handle_aborts);
+    signal(SIGFPE,   &handle_aborts);
+    signal(SIGSEGV,  &handle_aborts);
+    signal(SIGTERM,  &handle_aborts);
+    signal(SIGABRT,  &handle_aborts);
+
+    #ifdef _WIN32
+    signal(SIGBREAK, &handle_aborts);
+    #endif
+
+
     Engine engine;
     engine.run();
 

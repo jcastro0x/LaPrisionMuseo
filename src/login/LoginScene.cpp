@@ -26,6 +26,8 @@
 #include <scene/nodes/BackgroundNode.h>
 #include <scene/nodes/ClickableText.h>
 
+#include <room/RoomScene.h>
+
 #include <Engine.h>
 
 #include <imgui.h>
@@ -34,18 +36,31 @@ LoginScene::LoginScene(class Engine* engine) : Scene(engine)
 {
     addSceneNode(std::make_unique<BackgroundNode>("loginScreen.png", this));
 
-    auto addButton = [&](sf::String string, sf::Vector2f pos){
+    auto addButton = [&](sf::String string, sf::Vector2f pos, const std::function<void()>& onClicked){
         auto button = std::make_unique<ClickableText>(string, this);
         button->setPosition(pos);
+        button->bindOnClick(onClicked);
         addSceneNode(std::move(button));
     };
 
-    addButton(getEngine()->getI18N().getString("ui", "play_online"),  {320.f, 227.f});
-    addButton(getEngine()->getI18N().getString("ui", "play_offline"), {320.f, 268.f});
-    addButton(getEngine()->getI18N().getString("ui", "settings"),     {320.f, 307.f});
-    addButton(getEngine()->getI18N().getString("ui", "credits"),      {320.f, 346.f});
-    addButton(getEngine()->getI18N().getString("ui", "colaborate"),   {320.f, 385.f});
-    addButton(getEngine()->getI18N().getString("ui", "quit"),         {320.f, 424.f});
+    addButton(getEngine()->getI18N().getString("ui", "play_online"),  {320.f, 227.f}, [this](){
+        getEngine()->createScene<RoomScene>();
+    });
+    addButton(getEngine()->getI18N().getString("ui", "play_offline"), {320.f, 268.f}, [&](){
+
+    });
+    addButton(getEngine()->getI18N().getString("ui", "settings"),     {320.f, 307.f}, [&](){
+
+    });
+    addButton(getEngine()->getI18N().getString("ui", "credits"),      {320.f, 346.f}, [&](){
+
+    });
+    addButton(getEngine()->getI18N().getString("ui", "colaborate"),   {320.f, 385.f}, [&](){
+
+    });
+    addButton(getEngine()->getI18N().getString("ui", "quit"),         {320.f, 424.f}, [this](){
+        getEngine()->stop();
+    });
 }
 
 LoginScene::~LoginScene() = default;

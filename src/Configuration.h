@@ -21,3 +21,13 @@
 
 #pragma once
 
+#include <cstdint>
+
+struct Configuration
+{
+    inline static unsigned WINDOW_SIZE_X = 640;
+    inline static unsigned WINDOW_SIZE_Y = 480;
+
+    inline static unsigned BACKGROUND_TEX_SIZE_X = 640;
+    inline static unsigned BACKGROUND_TEX_SIZE_Y = 480;
+};

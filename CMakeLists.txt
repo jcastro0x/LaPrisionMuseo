@@ -19,7 +19,7 @@ set(SRC_FILES
     src/network/SocketIONetwork.cpp
 
     src/room/RoomCamera.cpp
-    src/room/RoomSceneNode.cpp
+    src/room/RoomScene.cpp
 
     src/scene/Scene.cpp
     src/scene/SceneManager.cpp

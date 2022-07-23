@@ -43,7 +43,11 @@ public:
     void addSceneNode(SceneNodePtr node);
     [[nodiscard]] class Engine* getEngine() const { return engine_; }
 
-    sf::Vector2i getSceneMousePos(sf::RenderTarget& target) const;
+    /**
+     * Get mouse coords transformed to aspect ratio used in the scene
+     * @return Mouse coord in scene's aspect ratio
+     */
+    sf::Vector2i getSceneMousePos() const;
 
 protected:
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
