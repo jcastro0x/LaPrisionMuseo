@@ -4,6 +4,9 @@
 #include <imgui-SFML.h>
 
 #include <scene/SceneFactory.h>
+#include <scene/SceneManager.h>
+
+#include <Configuration.h>
 
 #include <login/LoginScene.h>
 #include <room/RoomScene.h>
@@ -14,9 +17,15 @@
 
 
 Engine::Engine()
+: window_(sf::VideoMode(Configuration::WINDOW_SIZE_X, Configuration::WINDOW_SIZE_Y), Configuration::WINWDOW_TITLE)
+, sceneManager_(std::make_unique<SceneManager>())
 {
-    window_.setFramerateLimit(30);
+    window_.setFramerateLimit(Configuration::FRAME_RATE);
     window_.setMouseCursorVisible(false);
+
+    // TODO: Create macro to automatize this
+    sceneManager_->registerScene<LoginScene>("LoginScene", this);
+    sceneManager_->registerScene<RoomScene>("RoomScene", this);
 
     try
     {
@@ -34,7 +43,8 @@ Engine::Engine()
 
 void Engine::run()
 {
-    createScene<LoginScene>();
+    //createScene<LoginScene>();
+    loadScene("LoginScene");
 
     clock_->restart();
     while (window_.isOpen())
@@ -59,6 +69,23 @@ void Engine::run()
         window_.draw(cursor_);
 
         window_.display();
+
+        if(scene_->isPendingToDestroy())
+        {
+            scene_.release();
+            if(!scenePendingToLoad_.empty())
+            {
+                try
+                {
+                    scene_ = sceneManager_->findScene(scenePendingToLoad_);
+                    scenePendingToLoad_.clear();
+                }
+                catch(const scene_exception&)
+                {
+                    std::cerr << "Can't load scene \042" << scenePendingToLoad_ << "\042\n";
+                }
+            }
+        }
     }
 
     ImGui::SFML::Shutdown();
@@ -67,6 +94,26 @@ void Engine::run()
 void Engine::stop()
 {
     window_.close();
+}
+
+void Engine::loadScene(std::string_view name)
+{
+    if(scene_)
+    {
+        scene_->destroy();
+        scenePendingToLoad_ = name.data();
+    }
+    else
+    {
+        try
+        {
+            scene_ = sceneManager_->findScene(name);
+        }
+        catch(const scene_exception&)
+        {
+            std::cerr << "Can't load scene \042" << name << "\042\n";
+        }
+    }
 }
 
 void Engine::processEvents()

@@ -36,11 +36,11 @@ class SceneManager
 
 public:
     template<typename SceneType> requires std::is_base_of_v<class Scene, SceneType>
-    void registerScene(std::string_view name)
+    void registerScene(std::string_view name, class Engine* engine)
     {
-        scenes_.insert({name, []() -> ScenePtr {
-            return std::make_unique<SceneType>();
-        }});
+        scenes_.try_emplace(name.data(), [engine](){
+            return std::make_unique<SceneType>(engine);
+        });
     }
 
     ScenePtr findScene(std::string_view name)

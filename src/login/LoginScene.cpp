@@ -44,7 +44,7 @@ LoginScene::LoginScene(class Engine* engine) : Scene(engine)
     };
 
     addButton(getEngine()->getI18N().getString("ui", "play_online"),  {320.f, 227.f}, [this](){
-        getEngine()->createScene<RoomScene>();
+        getEngine()->loadScene("RoomScene");
     });
     addButton(getEngine()->getI18N().getString("ui", "play_offline"), {320.f, 268.f}, [&](){
 

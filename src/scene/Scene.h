@@ -49,6 +49,10 @@ public:
      */
     sf::Vector2i getSceneMousePos() const;
 
+    void destroy();
+
+    [[nodiscard]] bool isPendingToDestroy() const;
+
 protected:
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
@@ -56,4 +60,5 @@ protected:
 private:
     class Engine* engine_ = nullptr;
     std::vector<SceneNodePtr> nodes_;
+    bool bPendingToDestroy_ = false;
 };

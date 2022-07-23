@@ -58,6 +58,7 @@ void Scene::draw(sf::RenderTarget& target, sf::RenderStates states) const
     sf::View const originalView = target.getView();
 
     // Calculate viewport needed to fit to a aspet ratio of 1.333333
+    // TODO: Replace 640,480 for 1.3333
     target.setView(AspectRatio::getViewportAspectRatio({640, 480}, target.getSize(),
                                                        AspectRatio::EAspectRatioRule::FitToParent));
 
@@ -72,6 +73,7 @@ void Scene::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
 sf::Vector2i Scene::getSceneMousePos() const
 {
+    // TODO: Replace 640,480 for 1.3333
     auto pos = AspectRatio::transformPointToTextureCoords(
         {640, 480},
         getEngine()->getWindowSize(),
@@ -81,4 +83,14 @@ sf::Vector2i Scene::getSceneMousePos() const
 
     if(pos) return pos.value();
     else return {0, 0};
+}
+
+void Scene::destroy()
+{
+    bPendingToDestroy_ = true;
+}
+
+bool Scene::isPendingToDestroy() const
+{
+    return bPendingToDestroy_;
 }

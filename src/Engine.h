@@ -33,10 +33,6 @@
 #include <Resources.h>
 #include <components/Internationalization.h>
 
-#define DEFAULT_WINDOW_SIZE_X 740u
-#define DEFAULT_WINDOW_SIZE_Y 480u
-#define DEFAULT_WINDOW_TITLE "La Prision - Museo"
-
 class Engine
 {
 public:
@@ -46,11 +42,13 @@ public:
     void run();
     void stop();
 
-    template<typename T> requires std::is_base_of_v<class Scene, T>
-    void createScene()
-    {
-        scene_ = std::make_unique<T>(this);
-    }
+    // template<typename T> requires std::is_base_of_v<class Scene, T>
+    // void createScene()
+    // {
+    //     scene_ = std::make_unique<T>(this);
+    // }
+
+    void loadScene(std::string_view name);
 
 public:
     [[nodiscard]] const Resources& getResources() const;
@@ -69,11 +67,13 @@ private:
 private:
     std::unique_ptr<INetwork> network_  { std::make_unique<DebugNetwork>() };
     std::unique_ptr<Scene> scene_;
-    sf::RenderWindow window_            { sf::VideoMode(DEFAULT_WINDOW_SIZE_X, DEFAULT_WINDOW_SIZE_Y), DEFAULT_WINDOW_TITLE };
+    sf::RenderWindow window_;
     std::unique_ptr<sf::Clock> clock_   { std::make_unique<sf::Clock>() };
 
-    int binaryReader_                   { 0 };
     Cursor cursor_;
     std::unique_ptr<Resources> resources_;
     Internationalization internationalization_;
+    std::unique_ptr<class SceneManager> sceneManager_;
+
+    std::string scenePendingToLoad_;
 };
