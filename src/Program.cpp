@@ -9,7 +9,7 @@
 #include <Configuration.h>
 
 #include <login/LoginScene.h>
-#include <room/RoomScene.h>
+#include <world/WorldScene.h>
 
 #include <Engine.h>
 
@@ -25,7 +25,7 @@ Engine::Engine()
 
     // TODO: Create macro to automatize this
     sceneManager_->registerScene<LoginScene>("LoginScene", this);
-    sceneManager_->registerScene<RoomScene>("RoomScene", this);
+    sceneManager_->registerScene<WorldScene>("WorldScene", this);
 
     try
     {

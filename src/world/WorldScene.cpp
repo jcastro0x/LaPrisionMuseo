@@ -19,15 +19,20 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-#include "RoomScene.h"
+#include "WorldScene.h"
 
-RoomScene::RoomScene(class Engine* engine) : Scene(engine)
+#include <room/RoomSceneNode.h>
+
+WorldScene::WorldScene(class Engine* engine) : Scene(engine)
 {
 }
 
-RoomScene::~RoomScene() = default;
+WorldScene::~WorldScene()
+{
 
-void RoomScene::tick(float deltaTime)
+}
+
+void WorldScene::tick(float deltaTime)
 {
     deltaTime++;
 }

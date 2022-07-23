@@ -19,7 +19,7 @@ set(SRC_FILES
     src/network/SocketIONetwork.cpp
 
     src/room/RoomCamera.cpp
-    src/room/RoomScene.cpp
+    src/room/RoomSceneNode.cpp
 
     src/scene/Scene.cpp
     src/scene/SceneManager.cpp
@@ -31,6 +31,8 @@ set(SRC_FILES
 
     src/widgets/QuadAspectRatio.cpp
     src/widgets/Cursor.cpp
+
+    src/world/WorldScene.cpp
 )
 
 set(SRC_IMGUI

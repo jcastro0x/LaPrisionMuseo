@@ -23,12 +23,15 @@
 
 #include <scene/Scene.h>
 
-class RoomScene : public Scene
+class WorldScene : public Scene
 {
 public:
-    RoomScene(class Engine* engine);
-    ~RoomScene() override;
+    WorldScene(class Engine* engine);
+    ~WorldScene() override;
 
 protected:
     void tick(float deltaTime) override;
+
+private:
+    std::unique_ptr<class RoomSceneNode> room_;
 };

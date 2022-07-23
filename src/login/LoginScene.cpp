@@ -26,7 +26,7 @@
 #include <scene/nodes/BackgroundNode.h>
 #include <scene/nodes/ClickableText.h>
 
-#include <room/RoomScene.h>
+#include <world/WorldScene.h>
 
 #include <Engine.h>
 
@@ -44,7 +44,7 @@ LoginScene::LoginScene(class Engine* engine) : Scene(engine)
     };
 
     addButton(getEngine()->getI18N().getString("ui", "play_online"),  {320.f, 227.f}, [this](){
-        getEngine()->loadScene("RoomScene");
+        getEngine()->loadScene("WorldScene");
     });
     addButton(getEngine()->getI18N().getString("ui", "play_offline"), {320.f, 268.f}, [&](){
 
