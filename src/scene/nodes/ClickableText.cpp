@@ -19,14 +19,14 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-#include "ClickableText.h"
+#include "ClickableText.hpp"
 
 #include <SFML/Graphics/Text.hpp>
 #include <SFML/Window/Mouse.hpp>
 #include <SFML/Audio/Sound.hpp>
 
-#include <scene/Scene.h>
-#include <Engine.h>
+#include <scene/Scene.hpp>
+#include <Engine.hpp>
 
 #include <imgui.h>
 

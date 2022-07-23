@@ -19,9 +19,9 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-#include "WorldScene.h"
+#include "WorldScene.hpp"
 
-#include <room/RoomSceneNode.h>
+#include <room/RoomSceneNode.hpp>
 
 WorldScene::WorldScene(class Engine* engine) : Scene(engine)
 {

@@ -20,10 +20,10 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 
-#include "SocketIONetwork.h"
+#include "SocketIONetwork.hpp"
 
 #include <sio_client.h>
-#include <player/Player.h>
+#include <player/Player.hpp>
 
 
 //    sio::client client;

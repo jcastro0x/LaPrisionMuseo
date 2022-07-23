@@ -21,36 +21,28 @@
 
 #pragma once
 
-#include <unordered_map>
-#include <string>
-#include <functional>
-#include "Scene.h"
+#include <scene/SceneNode.hpp>
+#include <memory>
+#include <vector>
 
-class scene_exception final : public std::exception
+namespace sf
 {
-};
+    class Sound;
+}
 
-class SceneManager
+class RoomSceneNode : public SceneNode
 {
-    using ScenePtr = std::unique_ptr<Scene>;
+    using RoomCameraPtr = std::unique_ptr<class RoomCamera>;
 
 public:
-    template<typename SceneType> requires std::is_base_of_v<class Scene, SceneType>
-    void registerScene(std::string_view name, class Engine* engine)
-    {
-        scenes_.try_emplace(name.data(), [engine](){
-            return std::make_unique<SceneType>(engine);
-        });
-    }
+    RoomSceneNode(class Scene* scene);
+    ~RoomSceneNode() override;
 
-    ScenePtr findScene(std::string_view name)
-    {
-        if(!scenes_.contains(name.data()))
-            throw scene_exception();
-
-        return scenes_[name.data()]();
-    }
+protected:
+    void tick(float deltaTime) override;
 
 private:
-    std::unordered_map<std::string, std::function<ScenePtr()>> scenes_;
+    std::string roomName_;
+    std::vector<RoomCameraPtr> cameras_;
+    std::unique_ptr<sf::Sound> soundPlayer_;
 };

@@ -21,13 +21,22 @@
 
 #pragma once
 
-#include <network/INetwork.h>
+#include <scene/Scene.hpp>
 
-class DebugNetwork : public INetwork
+#include <memory>
+
+// #include <SFML/Graphics/Sprite.hpp>
+// #include <SFML/Graphics/Texture.hpp>
+// #include <SFML/Graphics/Font.hpp>
+// #include <SFML/Graphics/Text.hpp>
+
+
+class LoginScene : public Scene
 {
 public:
-    void init() override;
-    void changeRoom(class RoomSceneNode* room) override;
-    void sendMessage(class Player* player, const char* message) override;
-    void sendMessage(const char* message) override;
+    LoginScene(class Engine* engine);
+    ~LoginScene() override;
+    
+protected:
+    void tick(float deltaTime) override;
 };

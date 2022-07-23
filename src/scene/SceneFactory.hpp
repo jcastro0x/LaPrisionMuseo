@@ -23,7 +23,7 @@
 
 #include <memory>
 #include <type_traits>
-#include <scene/SceneNode.h>
+#include <scene/SceneNode.hpp>
 
 
 class SceneFactory

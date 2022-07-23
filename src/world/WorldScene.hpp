@@ -21,25 +21,17 @@
 
 #pragma once
 
-#include <scene/SceneNode.h>
-#include <memory>
-#include <string_view>
+#include <scene/Scene.hpp>
 
-namespace sf
-{
-    class Sprite;
-    class Texture;    
-}
-
-class BackgroundNode final : public SceneNode
+class WorldScene : public Scene
 {
 public:
-    BackgroundNode(std::string_view textureName, class Scene* owner);
-    ~BackgroundNode();
+    WorldScene(class Engine* engine);
+    ~WorldScene() override;
 
-    void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+protected:
+    void tick(float deltaTime) override;
 
 private:
-    std::unique_ptr<sf::Texture> texture_;
-    std::unique_ptr<sf::Sprite> sprite_;
+    std::unique_ptr<class RoomSceneNode> room_;
 };

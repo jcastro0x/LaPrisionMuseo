@@ -21,28 +21,25 @@
 
 #pragma once
 
-#include <scene/SceneNode.h>
+#include <scene/SceneNode.hpp>
 #include <memory>
-#include <vector>
+#include <string_view>
 
 namespace sf
 {
-    class Sound;
+    class Sprite;
+    class Texture;    
 }
 
-class RoomSceneNode : public SceneNode
+class BackgroundNode final : public SceneNode
 {
-    using RoomCameraPtr = std::unique_ptr<class RoomCamera>;
-
 public:
-    RoomSceneNode(class Scene* scene);
-    ~RoomSceneNode() override;
+    BackgroundNode(std::string_view textureName, class Scene* owner);
+    ~BackgroundNode();
 
-protected:
-    void tick(float deltaTime) override;
+    void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 private:
-    std::string roomName_;
-    std::vector<RoomCameraPtr> cameras_;
-    std::unique_ptr<sf::Sound> soundPlayer_;
+    std::unique_ptr<sf::Texture> texture_;
+    std::unique_ptr<sf::Sprite> sprite_;
 };

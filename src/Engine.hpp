@@ -23,15 +23,15 @@
 
 #include <memory>
 
-#include <widgets/Cursor.h>
-#include <network/DebugNetwork.h>
-#include <scene/Scene.h>
+#include <widgets/Cursor.hpp>
+#include <network/DebugNetwork.hpp>
+#include <scene/Scene.hpp>
 
 #include <SFML/System/Clock.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 
-#include <Resources.h>
-#include <components/Internationalization.h>
+#include <Resources.hpp>
+#include <components/Internationalization.hpp>
 
 class Engine
 {

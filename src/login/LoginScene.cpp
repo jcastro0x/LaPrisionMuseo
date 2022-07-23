@@ -19,16 +19,16 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-#include "LoginScene.h"
+#include "LoginScene.hpp"
 
-#include <widgets/QuadAspectRatio.h>
-#include <components/Internationalization.h>
-#include <scene/nodes/BackgroundNode.h>
-#include <scene/nodes/ClickableText.h>
+#include <widgets/QuadAspectRatio.hpp>
+#include <components/Internationalization.hpp>
+#include <scene/nodes/BackgroundNode.hpp>
+#include <scene/nodes/ClickableText.hpp>
 
-#include <world/WorldScene.h>
+#include <world/WorldScene.hpp>
 
-#include <Engine.h>
+#include <Engine.hpp>
 
 #include <imgui.h>
 

@@ -21,17 +21,36 @@
 
 #pragma once
 
-#include <scene/Scene.h>
+#include <unordered_map>
+#include <string>
+#include <functional>
+#include "Scene.hpp"
 
-class WorldScene : public Scene
+class scene_exception final : public std::exception
 {
-public:
-    WorldScene(class Engine* engine);
-    ~WorldScene() override;
+};
 
-protected:
-    void tick(float deltaTime) override;
+class SceneManager
+{
+    using ScenePtr = std::unique_ptr<Scene>;
+
+public:
+    template<typename SceneType> requires std::is_base_of_v<class Scene, SceneType>
+    void registerScene(std::string_view name, class Engine* engine)
+    {
+        scenes_.try_emplace(name.data(), [engine](){
+            return std::make_unique<SceneType>(engine);
+        });
+    }
+
+    ScenePtr findScene(std::string_view name)
+    {
+        if(!scenes_.contains(name.data()))
+            throw scene_exception();
+
+        return scenes_[name.data()]();
+    }
 
 private:
-    std::unique_ptr<class RoomSceneNode> room_;
+    std::unordered_map<std::string, std::function<ScenePtr()>> scenes_;
 };

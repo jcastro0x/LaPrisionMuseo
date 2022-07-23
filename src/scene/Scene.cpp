@@ -19,11 +19,11 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-#include "Scene.h"
+#include "Scene.hpp"
 
-#include <Engine.h>
-#include <scene/SceneNode.h>
-#include <components/AspectRatio.h>
+#include <Engine.hpp>
+#include <scene/SceneNode.hpp>
+#include <components/AspectRatio.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
 
 Scene::Scene(Engine* engine)

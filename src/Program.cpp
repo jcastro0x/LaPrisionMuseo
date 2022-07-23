@@ -3,15 +3,15 @@
 #include <imgui.h>
 #include <imgui-SFML.h>
 
-#include <scene/SceneFactory.h>
-#include <scene/SceneManager.h>
+#include <scene/SceneFactory.hpp>
+#include <scene/SceneManager.hpp>
 
-#include <Configuration.h>
+#include <Configuration.hpp>
 
-#include <login/LoginScene.h>
-#include <world/WorldScene.h>
+#include <login/LoginScene.hpp>
+#include <world/WorldScene.hpp>
 
-#include <Engine.h>
+#include <Engine.hpp>
 
 #include <iostream>
 

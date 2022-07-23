@@ -21,7 +21,7 @@
 
 #pragma once
 
-#include <scene/SceneNode.h>
+#include <scene/SceneNode.hpp>
 #include <memory>
 #include <functional>
 
