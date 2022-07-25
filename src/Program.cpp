@@ -21,12 +21,14 @@
 Engine::Engine()
 : window_(sf::VideoMode(Configuration::WINDOW_SIZE_X, Configuration::WINDOW_SIZE_Y), Configuration::WINWDOW_TITLE)
 , sceneManager_(std::make_unique<SceneManager>())
+, gui_(std::make_unique<tgui::Gui>())
+
 {
     window_.setFramerateLimit(Configuration::FRAME_RATE);
     window_.setMouseCursorVisible(false);
 
-    gui_ = std::make_unique<tgui::Gui>(window_);
-
+    auto p = std::bit_cast<tgui::Gui*>(gui_.get());
+    p->setWindow(window_);
 
     // TODO: Create macro to automatize this
     sceneManager_->registerScene<LoginScene>("LoginScene", this);
@@ -46,10 +48,26 @@ Engine::Engine()
     ImGui::GetIO().ConfigFlags ^= ImGuiConfigFlags_::ImGuiConfigFlags_NoMouseCursorChange;
 }
 
+
+
 void Engine::run()
 {
     //createScene<LoginScene>();
     loadScene("LoginScene");
+
+    auto menu = tgui::MenuBar::create();
+    //menu->setRenderer(theme.getRenderer("MenuBar"));
+    menu->setHeight(22.f);
+    menu->addMenu("File");
+    menu->addMenuItem("Load");
+    menu->addMenuItem("Save");
+    menu->addMenuItem("Exit");
+    menu->addMenu("Edit");
+    menu->addMenuItem("Copy");
+    menu->addMenuItem("Paste");
+    menu->addMenu("Help");
+    menu->addMenuItem("About");
+    gui_->add(menu);
 
     sf::Event event {};
 
@@ -59,7 +77,8 @@ void Engine::run()
         const auto time = clock_->restart();
         
         processEvents(event);
-        gui_->handleEvent(event);
+        std::bit_cast<tgui::Gui*>(gui_.get())->handleEvent(event);
+
         ImGui::SFML::Update(window_, time);
 
         scene_->tick(time.asSeconds());
