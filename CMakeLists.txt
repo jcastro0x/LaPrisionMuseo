@@ -46,20 +46,34 @@ set(SRC_IMGUI
 
 add_executable(${PROJECT_NAME} ${SRC_FILES} ${SRC_IMGUI})
 
+# LIBRARY - SFML
 set(SFML_STATIC_LIBRARIES TRUE)
 find_package(SFML 2.5 COMPONENTS graphics audio system window REQUIRED)
 
-
+# LIBRARY - SOCKET.IO
 find_package(OpenSSL REQUIRED)
 add_subdirectory(libs/socket.io-client-cpp)
 include_directories(libs/socket.io-client-cpp/src)
 
+# LIBRARY - IMGUI AND IMGUI-SFML
 set(IMGUI_DIR ${CMAKE_SOURCE_DIR}/libs/imgui)
 add_subdirectory(libs/imgui-sfml)
 include_directories(libs/imgui libs/imgui-sfml)
 
-target_link_libraries(${PROJECT_NAME} sfml-graphics sfml-audio sfml-system sioclient_tls ImGui-SFML::ImGui-SFML)
+# LIBRARY TGUI
+find_package(TGUI 0.10 REQUIRED)
 
+find_package(Threads REQUIRED)
+
+target_link_libraries(${PROJECT_NAME} 
+    sfml-graphics
+    sfml-audio
+    sfml-system
+    sioclient_tls
+    ImGui-SFML::ImGui-SFML
+    TGUI::TGUI
+    ${CMAKE_THREAD_LIBS_INIT}
+)
 
 target_compile_options(${PROJECT_NAME} BEFORE PRIVATE
     $<$<CXX_COMPILER_ID:MSVC>:/W4 /WX>

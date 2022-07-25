@@ -33,6 +33,11 @@
 #include <Resources.hpp>
 #include <components/Internationalization.hpp>
 
+namespace tgui
+{
+    class BackendGui;
+}
+
 class Engine
 {
 public:
@@ -58,7 +63,7 @@ public:
     [[nodiscard]] sf::Vector2u getWindowSize() const;
 
 private:
-    void processEvents();
+    void processEvents(sf::Event& event);
 
     #ifndef NDEBUG
     void drawFPS(float deltaSeconds);
@@ -76,4 +81,6 @@ private:
     std::unique_ptr<class SceneManager> sceneManager_;
 
     std::string scenePendingToLoad_;
+
+    std::unique_ptr<tgui::BackendGui> gui_;
 };

@@ -39,6 +39,7 @@ public:
     ~RoomSceneNode() override;
 
 protected:
+    void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
     void tick(float deltaTime) override;
 
 private:

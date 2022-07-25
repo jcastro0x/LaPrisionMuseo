@@ -37,3 +37,8 @@ void RoomSceneNode::tick(float deltaTime)
 {
     deltaTime++;
 }
+
+void RoomSceneNode::draw([[maybe_unused]]sf::RenderTarget& target, [[maybe_unused]]sf::RenderStates states) const
+{
+    
+}

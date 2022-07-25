@@ -1,0 +1,38 @@
+[
+  {
+    "name": "Almacen",
+    "music": null,
+    "cameras":
+    [
+      {
+        "name": "AL_Almacen1.jpg",
+        "animations":
+        [
+          {
+            "name": "default",
+            "rate": 1.0,
+            "frames":
+            [
+              {
+                "x": 2,
+                "y": 4,
+                "w": 23,
+                "h": 23
+              }
+            ] 
+          }
+        ],
+        "areas":
+        [
+          {
+            "x": 0,
+            "y": 0,
+            "w": 10,
+            "h": 10,
+            "goto": "AL_Almacen2.jpg"
+          }
+        ]
+      }
+    ]
+  }
+]

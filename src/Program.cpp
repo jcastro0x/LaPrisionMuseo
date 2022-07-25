@@ -15,6 +15,8 @@
 
 #include <iostream>
 
+#include <TGUI/TGUI.hpp>
+#include <TGUI/Backend/SFML-Graphics.hpp>
 
 Engine::Engine()
 : window_(sf::VideoMode(Configuration::WINDOW_SIZE_X, Configuration::WINDOW_SIZE_Y), Configuration::WINWDOW_TITLE)
@@ -22,6 +24,9 @@ Engine::Engine()
 {
     window_.setFramerateLimit(Configuration::FRAME_RATE);
     window_.setMouseCursorVisible(false);
+
+    gui_ = std::make_unique<tgui::Gui>(window_);
+
 
     // TODO: Create macro to automatize this
     sceneManager_->registerScene<LoginScene>("LoginScene", this);
@@ -46,12 +51,15 @@ void Engine::run()
     //createScene<LoginScene>();
     loadScene("LoginScene");
 
+    sf::Event event {};
+
     clock_->restart();
     while (window_.isOpen())
     {
         const auto time = clock_->restart();
         
-        processEvents();
+        processEvents(event);
+        gui_->handleEvent(event);
         ImGui::SFML::Update(window_, time);
 
         scene_->tick(time.asSeconds());
@@ -65,6 +73,7 @@ void Engine::run()
 
         window_.clear();
         window_.draw(*scene_);
+        gui_->draw();
         ImGui::SFML::Render(window_);
         window_.draw(cursor_);
 
@@ -116,9 +125,8 @@ void Engine::loadScene(std::string_view name)
     }
 }
 
-void Engine::processEvents()
+void Engine::processEvents(sf::Event& event)
 {
-    sf::Event event {};
     while (window_.pollEvent(event))
     {
         ImGui::SFML::ProcessEvent(window_, event);

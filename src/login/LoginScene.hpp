@@ -22,14 +22,7 @@
 #pragma once
 
 #include <scene/Scene.hpp>
-
 #include <memory>
-
-// #include <SFML/Graphics/Sprite.hpp>
-// #include <SFML/Graphics/Texture.hpp>
-// #include <SFML/Graphics/Font.hpp>
-// #include <SFML/Graphics/Text.hpp>
-
 
 class LoginScene : public Scene
 {
