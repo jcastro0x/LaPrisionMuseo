@@ -67,6 +67,11 @@ void Engine::run()
     menu->addMenuItem("About");
     gui_->add(menu);
 
+    menu->connectMenuItem("File", "Exit", [&](){
+        window_.close();
+    });
+
+
     sf::Event event {};
 
     clock_->restart();

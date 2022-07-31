@@ -52,6 +52,10 @@ class RoomCamera
         } debug_;
     };
 
+public:
+    RoomCamera();
+    ~RoomCamera();
+
 private:
     void changeCamera(std::string_view name);
     void changeRoom(std::string_view name);

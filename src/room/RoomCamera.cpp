@@ -20,3 +20,15 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "RoomCamera.hpp"
+
+#include <SFML/Audio/SoundBuffer.hpp>
+
+RoomCamera::RoomCamera()
+{
+
+}
+
+RoomCamera::~RoomCamera()
+{
+
+}
