@@ -52,11 +52,9 @@ Engine::Engine()
 
 void Engine::run()
 {
-    //createScene<LoginScene>();
     loadScene("LoginScene");
 
     auto menu = tgui::MenuBar::create();
-    //menu->setRenderer(theme.getRenderer("MenuBar"));
     menu->setHeight(22.f);
     menu->addMenu("File");
     menu->addMenuItem("Load");

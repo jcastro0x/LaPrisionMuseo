@@ -26,7 +26,16 @@ Obten más información en https://forum.prisonserver.net/
 - Disfruta del recorrido tu sólo con la opción offline
 - Cada 24 horas un objeto único aparecerá en algún lugar oculto de La Prisión. Encuéntralo para obtener ventajas cuando salga La Prisión - Reloaded
 
-## Tecnologias usadas
+## Requisitos
+Las siguientes librerias deben estar instaladas en el equipo con el fin de compilar el proyecto:
 - SFML 2.5.1
-- Socket.io
-- OpenSSL
+- TGUI 0.10
+- OpenSSL 3.X.X
+
+Puedes consultar los workflow (~/.github/workflows) para obtener una lista detallada de la instalación. Windows y Linux
+requieren diferentes dependencias, las cuales pueden ser consultadas en estos scripts.
+
+El resto de librerias se incluyen en el proyecto y se compilan junto a él:
+- ImGui
+- ImGui-SFML
+- Socket.io-client-cpp

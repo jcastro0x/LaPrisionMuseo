@@ -2,15 +2,26 @@
   {
     "name": "Almacen",
     "music": null,
+    "obj": "AL_Almacen.r3d",
     "cameras":
     [
       {
         "name": "AL_Almacen1.jpg",
+        "3d": 
+        {
+          "pos": { "x": 0, "y": 0, "z": 0 },
+          "quat" : { "x": 0, "y": 0, "z": 0, "w": 0 },
+          "fov": 60
+        },
+        "source": { "w": 640, "h": 480 },
+        "background_sfx": null,
         "animations":
         [
           {
             "name": "default",
+            "source": "animation.jpg",
             "rate": 1.0,
+            "position": { "x": 0, "y": 0 },
             "frames":
             [
               {
@@ -25,11 +36,24 @@
         "areas":
         [
           {
-            "x": 0,
-            "y": 0,
-            "w": 10,
-            "h": 10,
-            "goto": "AL_Almacen2.jpg"
+            "cursor": "east",
+            "vertices":
+            [
+              { "x": 0, "y": 0 },
+              { "x": 0, "y": 0 },
+              { "x": 0, "y": 0 },
+              { "x": 0, "y": 0 }
+            ],
+            "script":
+            {
+              "name" : "change_camera",
+              "params": [ "AL_Almacen2.jpg" ]
+            },
+            "debug":
+            {
+              "color": 4278190216,
+              "comment": "4278190216 = 0xFF000088"
+            }
           }
         ]
       }
