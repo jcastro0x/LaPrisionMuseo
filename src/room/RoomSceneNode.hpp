@@ -24,6 +24,7 @@
 #include <scene/SceneNode.hpp>
 #include <memory>
 #include <vector>
+#include <string>
 
 namespace sf
 {
