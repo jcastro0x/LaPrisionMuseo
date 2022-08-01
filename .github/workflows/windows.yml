@@ -44,6 +44,12 @@ jobs:
         git clone --branch 2.5.x https://github.com/SFML/SFML.git
         cmake -B SFML/_b -S SFML -DBUILD_SHARED_LIBS=false -DSFML_USE_STATIC_STD_LIBS=true -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
         cmake --build SFML/_b --config ${{env.BUILD_TYPE}} --target install
+
+    - name: Install TGUI
+      run: |
+        git clone -b0.10 https://github.com/texus/TGUI.git
+        sudo cmake -B TGUI/_b -S TGUI -DTGUI_BACKEND=SFML_GRAPHICS -DTGUI_SHARED_LIBS=false -DTGUI_USE_STATIC_STD_LIBS=true -DTGUI_BUILD_GUI_BUILDER=false -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+        sudo cmake --build TGUI/_b --config ${{env.BUILD_TYPE}} --target install        
     
     - name: Add Submodules
       run: git submodule update --init --recursive        
