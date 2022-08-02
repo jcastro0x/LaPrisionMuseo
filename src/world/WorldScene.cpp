@@ -31,8 +31,11 @@ using namespace lpm;
 
 WorldScene::WorldScene(Engine* engine) : Scene(engine)
 {
-    addSceneNode(std::make_unique<BackgroundNode>("AL_Almacen1.jpg", this));
-    addSceneNode(std::make_unique<RoomSceneNode>(this));
+    addSceneNode<BackgroundNode>("AL_Almacen1.jpg")
+    .setName("Background")
+    .setDrawOrder(CommonDepths::BACKGROUND);
+
+    addSceneNode<RoomSceneNode>();
 
     getEngine()->getCursor().setCursor("default");
 }

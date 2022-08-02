@@ -51,6 +51,7 @@ namespace lpm
             return scenes_[name.data()]();
         }
 
+
     private:
         std::unordered_map<std::string, std::function<ScenePtr()>> scenes_;
     };

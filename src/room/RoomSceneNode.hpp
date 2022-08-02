@@ -38,7 +38,7 @@ namespace lpm
         using RoomCameraPtr = std::unique_ptr<class RoomCamera>;
 
     public:
-        RoomSceneNode(class Scene* scene);
+        RoomSceneNode();
         ~RoomSceneNode() override;
 
     protected:

@@ -38,14 +38,20 @@ namespace lpm
     class ClickableText final : public SceneNode
     {
     public:
-        ClickableText(const sf::String& string, class Scene* owner);
+        ClickableText();
         ~ClickableText() override;
+
+    public:
+        void setTextString(const sf::String& string);
 
     public:
         void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
         void tick(float deltaTime) override;
 
         void bindOnClick(const std::function<void()>& onClicked);
+
+    protected:
+        void init() override;
 
     protected:
         void onMouseEnter() const;

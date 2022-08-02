@@ -26,9 +26,8 @@
 
 using namespace lpm;
 
-RoomSceneNode::RoomSceneNode(class Scene* scene) 
-: SceneNode(scene)
-, roomName_("Default Room")
+RoomSceneNode::RoomSceneNode()
+: roomName_("Default Room")
 , soundPlayer_(std::make_unique<sf::Sound>())
 {
 }

@@ -25,7 +25,7 @@
 #include <scene/nodes/BackgroundNode.hpp>
 #include <scene/nodes/ClickableText.hpp>
 
-#include <world/WorldScene.hpp>
+#include <scene/SceneManager.hpp>
 
 #include <Engine.hpp>
 
@@ -35,13 +35,17 @@ using namespace lpm;
 
 LoginScene::LoginScene(class Engine* engine) : Scene(engine)
 {
-    addSceneNode(std::make_unique<BackgroundNode>("loginScreen.png", this));
+    addSceneNode<BackgroundNode>("loginScreen.png")
+    .setName("Background")
+    .setDrawOrder(CommonDepths::BACKGROUND);
+
 
     auto addButton = [&](sf::String string, sf::Vector2f pos, const std::function<void()>& onClicked){
-        auto button = std::make_unique<ClickableText>(string, this);
-        button->setPosition(pos);
-        button->bindOnClick(onClicked);
-        addSceneNode(std::move(button));
+        auto& button = addSceneNode<ClickableText>();
+        button.setTextString(string);
+        button.setDrawOrder(CommonDepths::MIDDLE);
+        button.setPosition(pos);
+        button.bindOnClick(onClicked);
     };
 
     addButton(getEngine()->getI18N().getString("ui", "play_online"),  {320.f, 227.f}, [this](){

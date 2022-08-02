@@ -22,24 +22,39 @@
 #pragma once
 
 #include <memory>
-#include <unordered_map>
+#include <list>
 
 #include <SFML/Graphics/Drawable.hpp>
 
 namespace lpm
 {
     class Engine;
+    class SceneNode;
 
     /**
+     * @brief Represent the current whole of elements to be draw by Engine.
+     *
      * Engine can draw one scene at a time. Scenes represents the whole "world" at these moment.
-     * In Unity3D Scene represents his homologue concept "scene" and in Unreal represent an UWorld.
+     * In Unity3D, Scene represents his homologue concept "scene", and in Unreal represents an "UWorld".
      *
      * Scene can contains many SceneNodes (aka GameObjects in Unity or Actors in Unreal)
+     *
+     * SceneNode has an order divided in two sections, both treated as unsigned integer values.
+     * Lower values are drawn before higher values:
+     * - Group
+     * - Internal Z-Depth
+     *
+     * The first value used by Scene is the node's group, and then, internal z-depth.
+     *
+     * @example:
+     * If NodeA lies in Group 1 and internal 1, and NodeB lies in Group2 and internal 0, then NodeA are drawn BEFORE
+     * NodeB, regardless NodeB has lower internal value than NodeA.
+     *
      */
     class Scene : public sf::Drawable
     {
         using SceneNodePtr  = std::unique_ptr<class SceneNode>;
-        using SceneNodesPtr = std::unordered_map<std::string, SceneNodePtr>;
+        using SceneNodesPtr = std::list<SceneNodePtr>;
 
     public:
         explicit Scene(Engine* engine);
@@ -47,8 +62,14 @@ namespace lpm
 
         virtual void tick(float deltaTime) = 0;
 
-        void addSceneNode(SceneNodePtr node);
-        void addSceneNode(std::string_view name, SceneNodePtr node);
+        template<typename SceneNodeType, typename... Args> requires std::is_base_of_v<SceneNode, SceneNodeType>
+        SceneNodeType& addSceneNode(Args... args)
+        {
+            //return static_cast<SceneNodeType&>(*addSceneNode_Internal(std::make_unique<SceneNodeType>(args...)));
+
+            auto* node = addSceneNode_Internal(std::make_unique<SceneNodeType>(args...));
+            return *static_cast<SceneNodeType*>(node);
+        }
 
         void destroy();
 
@@ -75,11 +96,13 @@ namespace lpm
     protected:
         void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
+    private:
+        SceneNode* addSceneNode_Internal(SceneNodePtr node);
 
     private:
         Engine* const engine_   = nullptr;
         bool bPendingToDestroy_ = false;
 
-        SceneNodesPtr nodes_;
+        mutable SceneNodesPtr nodes_;
     };
 }

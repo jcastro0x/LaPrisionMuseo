@@ -250,7 +250,7 @@ sf::Vector2u Engine::getWindowSize() const
 
 #include <csignal>
 
-extern "C" void handle_aborts(int signal_number)
+extern "C" void handle_signals(int signal_number)
 {
     std::string signType;
     switch (signal_number) {
@@ -272,11 +272,11 @@ extern "C" void handle_aborts(int signal_number)
 
 int main(const int, const char**)
 {
-    signal(SIGILL,   &handle_aborts);
-    signal(SIGFPE,   &handle_aborts);
-    signal(SIGSEGV,  &handle_aborts);
-    signal(SIGTERM,  &handle_aborts);
-    signal(SIGABRT,  &handle_aborts);
+    signal(SIGILL,   &handle_signals);
+    signal(SIGFPE,   &handle_signals);
+    signal(SIGSEGV,  &handle_signals);
+    signal(SIGTERM,  &handle_signals);
+    signal(SIGABRT,  &handle_signals);
 
     #ifdef _WIN32
     signal(SIGBREAK, &handle_aborts);

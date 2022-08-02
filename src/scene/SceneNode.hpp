@@ -21,18 +21,57 @@
 
 #pragma once
 
+#include <string>
+#include <limits>
+
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/Transformable.hpp>
 
+
 namespace lpm
 {
+    class Scene;
+
+    /**
+     * @brief Child element of a lpm::Scene.
+     *
+     */
     class SceneNode : public sf::Drawable, public sf::Transformable
     {
-        friend class Scene;
+    public:
+        struct SceneNodeID
+        {
+            uint16_t group;
+            uint16_t depth;
+
+            /**
+             * Returns the depth value of this SceneNode to sort it before draw by lpm::Scene
+             * @return Depth value
+             */
+            [[nodiscard]] size_t calculateDepth() const;
+        };
+
+        friend Scene;
+
+        using groupType = decltype(SceneNodeID::group);
+        using depthType = decltype(SceneNodeID::depth);
 
     public:
-        explicit SceneNode(class Scene* owner);
-        virtual ~SceneNode() = default;
+        explicit SceneNode();
+        ~SceneNode() override = default;
+
+        bool operator<(SceneNode const& other) const
+        {
+            return id_.calculateDepth() < other.id_.calculateDepth();
+        }
+
+    public:
+        SceneNode& setSceneOwner(Scene* owner);
+        SceneNode& setName(std::string_view name);
+        SceneNode& setDrawOrder(groupType group, depthType depth = {});
+
+    private:
+        void generateAutomaticNodeName();
 
     protected:
         virtual void init() {};
@@ -40,6 +79,21 @@ namespace lpm
         virtual void destroy() {};
 
     protected:
-        const class Scene* owner_ = nullptr;
+        Scene* getSceneOwner() const;
+        std::string getName() const;
+        const SceneNodeID& getSceneNodeID() const;
+        SceneNodeID& getSceneNodeID();
+
+    private:
+        Scene* owner_ = nullptr;
+        std::string name_;
+        SceneNodeID id_;
+    };
+
+    struct CommonDepths
+    {
+        static constexpr SceneNode::groupType BACKGROUND = 0;
+        static constexpr SceneNode::groupType MIDDLE     = 0;
+        static constexpr SceneNode::groupType FOREGROUND = 0;
     };
 }

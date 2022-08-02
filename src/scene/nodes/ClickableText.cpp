@@ -35,18 +35,27 @@
 using namespace lpm;
 
 
-ClickableText::ClickableText(const sf::String& string, Scene* owner)
-: SceneNode(owner)
-, text_(std::make_unique<sf::Text>())
+ClickableText::ClickableText()
+: text_(std::make_unique<sf::Text>())
 , soundHover_(std::make_unique<sf::Sound>())
 , soundClick_(std::make_unique<sf::Sound>())
 {
-    const auto& resources = owner_->getEngine()->getResources();
+}
+
+ClickableText::~ClickableText() = default;
+
+void ClickableText::setTextString(const sf::String& string)
+{
+    text_->setString(string);
+}
+
+void ClickableText::init()
+{
+    const auto& resources = getSceneOwner()->getEngine()->getResources();
 
     if(auto font = resources.getFont("FontEntry"))
     {
         text_->setFont(**font);
-        text_->setString(string);
         text_->setOrigin(text_->getGlobalBounds().width / 2.f, text_->getGlobalBounds().height / 2.f);
     }
     else
@@ -71,10 +80,7 @@ ClickableText::ClickableText(const sf::String& string, Scene* owner)
     {
         throw resource_exception();
     }
-
 }
-
-ClickableText::~ClickableText() = default;
 
 void ClickableText::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
@@ -86,7 +92,7 @@ void ClickableText::tick(float deltaTime)
 {
     SceneNode::tick(deltaTime);
 
-    const auto mousePos = owner_->getSceneMousePos();
+    const auto mousePos = getSceneOwner()->getSceneMousePos();
 
     auto clickableGlobalRect = text_->getGlobalBounds();
     clickableGlobalRect.left += getPosition().x;
@@ -134,13 +140,13 @@ void ClickableText::bindOnClick(const std::function<void()>& onClicked)
 
 void ClickableText::onMouseEnter() const
 {
-    owner_->getEngine()->getCursor().setCursor("arrow_rotate");
+    getSceneOwner()->getEngine()->getCursor().setCursor("arrow_rotate");
     soundHover_->play();
 }
 
 void ClickableText::onMouseExit() const
 {
-    owner_->getEngine()->getCursor().setCursor("default");
+    getSceneOwner()->getEngine()->getCursor().setCursor("default");
 }
 
 void ClickableText::onMouseClickDown() const
