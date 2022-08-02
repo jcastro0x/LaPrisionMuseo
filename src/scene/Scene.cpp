@@ -21,13 +21,12 @@
 
 #include "Scene.hpp"
 
-#include <iostream>
+#include <SFML/Graphics/RenderTarget.hpp>
 
 #include <Engine.hpp>
 #include <scene/SceneNode.hpp>
 #include <components/AspectRatio.hpp>
-#include <SFML/Graphics/RenderTarget.hpp>
-
+#include <Configuration.hpp>
 
 using namespace lpm;
 
@@ -57,10 +56,12 @@ void Scene::draw(sf::RenderTarget& target, const sf::RenderStates states) const
     // Store original view to restore it later
     sf::View const originalView = target.getView();
 
-    // Calculate viewport needed to fit to a aspet ratio of 1.333333
-    // TODO: Replace 640,480 for 1.3333
-    target.setView(AspectRatio::getViewportAspectRatio({640, 480}, target.getSize(),
-                                                       AspectRatio::EAspectRatioRule::FitToParent));
+    target.setView(AspectRatio::getViewportAspectRatio({
+        Configuration::BACKGROUND_TEX_SIZE_X,
+        Configuration::BACKGROUND_TEX_SIZE_Y},
+        target.getSize(),
+        AspectRatio::EAspectRatioRule::FitToParent
+    ));
 
     // Before draw, sort all SceneNodes based on his SceneNode::SceneNodeID
     nodes_.sort([](auto& a, auto& b){ return *a < *b; });
@@ -84,9 +85,8 @@ class SceneNode* Scene::addSceneNode_Internal(SceneNodePtr node)
 
 sf::Vector2i Scene::getSceneMousePos() const
 {
-    // TODO: Replace 640,480 for 1.3333
     auto pos = AspectRatio::transformPointToTextureCoords(
-        {640, 480},
+        {Configuration::BACKGROUND_TEX_SIZE_X, Configuration::BACKGROUND_TEX_SIZE_Y},
         getEngine()->getWindowSize(),
         AspectRatio::EAspectRatioRule::FitToParent,
         getEngine()->getMousePosition()
