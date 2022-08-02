@@ -41,6 +41,19 @@ class Scene
     + {static} loadScene(data)
 }
 
+class LoginScene
+{
+    - menuItems : ClickableText[]
+    + newGame()
+    + settings()
+    + exit()
+}
+
+class WorldScene
+{
+    - room : RoomSceneNode
+}
+
 class SceneNode
 {
     - nodes : ref SceneNode[]
@@ -153,9 +166,19 @@ RoomCamera *-- RoomNote
 RoomCamera *-- BackgroundAnim
 
 Scene *-- SceneNode
+Scene <|-- LoginScene
+Scene <|-- WorldScene
 
-Program *-- Scene
-Program *-- INetwork
+WorldScene *-- RoomSceneNode
+
+
+Engine *-- Scene
+Engine *-- INetwork
+Engine *-- SceneManager
+Engine *-- Configuration
+
+Program *-- Engine
+
 
 
 @enduml
