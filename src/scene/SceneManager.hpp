@@ -26,6 +26,8 @@
 #include <functional>
 #include "Scene.hpp"
 
+#include <cassert>
+
 namespace lpm
 {
     class scene_exception final : public std::exception { };
@@ -38,17 +40,19 @@ namespace lpm
         template<typename SceneType> requires std::is_base_of_v<class Scene, SceneType>
         void registerScene(std::string_view name, class Engine* engine)
         {
+            assert(!std::ranges::any_of(name.begin(), name.end(), ::isupper) && "registerScene only accepts lower strings");
             scenes_.try_emplace(name.data(), [engine](){
                 return std::make_unique<SceneType>(engine);
             });
         }
 
-        ScenePtr findScene(std::string_view name)
+        std::function<ScenePtr()> findScene(std::string_view name)
         {
+            assert(!std::ranges::any_of(name.begin(), name.end(), ::isupper) && "findScene only accepts lower strings");
             if(!scenes_.contains(name.data()))
                 throw scene_exception();
 
-            return scenes_[name.data()]();
+            return scenes_[name.data()];
         }
 
 

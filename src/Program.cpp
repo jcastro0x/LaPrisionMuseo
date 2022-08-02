@@ -66,8 +66,8 @@ Engine::Engine()
     p->setWindow(window_);
 
     // TODO: Create macro to automatize this
-    sceneManager_->registerScene<LoginScene>("LoginScene", this);
-    sceneManager_->registerScene<WorldScene>("WorldScene", this);
+    sceneManager_->registerScene<LoginScene>("login", this);
+    sceneManager_->registerScene<WorldScene>("world", this);
 
     try
     {
@@ -87,7 +87,7 @@ Engine::Engine()
 
 void Engine::run()
 {
-    loadScene("LoginScene");
+    loadScene("login");
 
     auto menu = tgui::MenuBar::create();
     menu->setHeight(22.f);
@@ -143,7 +143,7 @@ void Engine::run()
             {
                 try
                 {
-                    scene_ = sceneManager_->findScene(scenePendingToLoad_);
+                    scene_ = sceneManager_->findScene(scenePendingToLoad_)();
                     scenePendingToLoad_.clear();
                 }
                 catch(const scene_exception&)
@@ -173,7 +173,7 @@ void Engine::loadScene(std::string_view name)
     {
         try
         {
-            scene_ = sceneManager_->findScene(name);
+            scene_ = sceneManager_->findScene(name)();
         }
         catch(const scene_exception&)
         {
