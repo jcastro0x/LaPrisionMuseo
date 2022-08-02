@@ -60,10 +60,7 @@ namespace lpm
         explicit SceneNode();
         ~SceneNode() override = default;
 
-        bool operator<(SceneNode const& other) const
-        {
-            return id_.calculateDepth() < other.id_.calculateDepth();
-        }
+        bool operator<(SceneNode const& other) const;
 
     public:
         SceneNode& setSceneOwner(Scene* owner);
@@ -93,7 +90,7 @@ namespace lpm
     struct CommonDepths
     {
         static constexpr SceneNode::groupType BACKGROUND = 0;
-        static constexpr SceneNode::groupType MIDDLE     = 0;
-        static constexpr SceneNode::groupType FOREGROUND = 0;
+        static constexpr SceneNode::groupType MIDDLE     = 1;
+        static constexpr SceneNode::groupType FOREGROUND = 2;
     };
 }

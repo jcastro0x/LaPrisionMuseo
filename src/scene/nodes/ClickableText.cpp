@@ -47,6 +47,7 @@ ClickableText::~ClickableText() = default;
 void ClickableText::setTextString(const sf::String& string)
 {
     text_->setString(string);
+    text_->setOrigin(text_->getGlobalBounds().width / 2.f, text_->getGlobalBounds().height / 2.f);
 }
 
 void ClickableText::init()
@@ -56,7 +57,6 @@ void ClickableText::init()
     if(auto font = resources.getFont("FontEntry"))
     {
         text_->setFont(**font);
-        text_->setOrigin(text_->getGlobalBounds().width / 2.f, text_->getGlobalBounds().height / 2.f);
     }
     else
     {

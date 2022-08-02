@@ -39,8 +39,7 @@ LoginScene::LoginScene(class Engine* engine) : Scene(engine)
     .setName("Background")
     .setDrawOrder(CommonDepths::BACKGROUND);
 
-
-    auto addButton = [&](sf::String string, sf::Vector2f pos, const std::function<void()>& onClicked){
+    auto addButton = [&](sf::String const& string, sf::Vector2f pos, const std::function<void()>& onClicked){
         auto& button = addSceneNode<ClickableText>();
         button.setTextString(string);
         button.setDrawOrder(CommonDepths::MIDDLE);

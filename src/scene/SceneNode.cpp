@@ -53,6 +53,11 @@ SceneNode::SceneNode()
     generateAutomaticNodeName();
 }
 
+bool SceneNode::operator<(SceneNode const& other) const
+{
+    return id_.calculateDepth() < other.id_.calculateDepth();
+}
+
 SceneNode& SceneNode::setSceneOwner(Scene* owner)
 {
     owner_ = owner;

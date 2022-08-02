@@ -62,13 +62,14 @@ void Scene::draw(sf::RenderTarget& target, const sf::RenderStates states) const
     target.setView(AspectRatio::getViewportAspectRatio({640, 480}, target.getSize(),
                                                        AspectRatio::EAspectRatioRule::FitToParent));
 
-    nodes_.sort();
+    // Before draw, sort all SceneNodes based on his SceneNode::SceneNodeID
+    nodes_.sort([](auto& a, auto& b){ return *a < *b; });
+
+    // Then, draw all of them
     for(auto const& node : nodes_)
     {
         node->draw(target, states);
     }
-
-    std::cout << "Drawn " << nodes_.size() << " nodes\n";
 
     // Restore original view
     target.setView(originalView);
