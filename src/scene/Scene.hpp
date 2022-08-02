@@ -22,12 +22,14 @@
 #pragma once
 
 #include <memory>
-#include <vector>
+#include <unordered_map>
 
 #include <SFML/Graphics/Drawable.hpp>
 
 namespace lpm
 {
+    class Engine;
+
     /**
      * Engine can draw one scene at a time. Scenes represents the whole "world" at these moment.
      * In Unity3D Scene represents his homologue concept "scene" and in Unreal represent an UWorld.
@@ -36,15 +38,17 @@ namespace lpm
      */
     class Scene : public sf::Drawable
     {
-        using SceneNodePtr = std::unique_ptr<class SceneNode>;
+        using SceneNodePtr  = std::unique_ptr<class SceneNode>;
+        using SceneNodesPtr = std::unordered_map<std::string, SceneNodePtr>;
 
     public:
-        explicit Scene(class Engine* engine);
+        explicit Scene(Engine* engine);
         ~Scene() override;
 
         virtual void tick(float deltaTime) = 0;
 
         void addSceneNode(SceneNodePtr node);
+        void addSceneNode(std::string_view name, SceneNodePtr node);
 
         void destroy();
 
@@ -73,8 +77,9 @@ namespace lpm
 
 
     private:
-        class Engine* engine_ = nullptr;
-        std::vector<SceneNodePtr> nodes_;
+        Engine* const engine_   = nullptr;
         bool bPendingToDestroy_ = false;
+
+        SceneNodesPtr nodes_;
     };
 }

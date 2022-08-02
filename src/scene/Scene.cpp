@@ -21,10 +21,14 @@
 
 #include "Scene.hpp"
 
+#include <limits>
+#include <iostream>
+
 #include <Engine.hpp>
 #include <scene/SceneNode.hpp>
 #include <components/AspectRatio.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
+
 
 using namespace lpm;
 
@@ -35,7 +39,7 @@ Scene::Scene(Engine* engine)
 
 Scene::~Scene()
 {
-    for(auto& node : nodes_)
+    for(auto const&[name, node] : nodes_)
     {
         node->destroy();
     } 
@@ -43,7 +47,7 @@ Scene::~Scene()
 
 void Scene::tick(float deltaTime)
 {
-    for(auto const& node : nodes_)
+    for(auto const&[name, node] : nodes_)
     {
         node->tick(deltaTime);
     }
@@ -51,7 +55,22 @@ void Scene::tick(float deltaTime)
 
 void Scene::addSceneNode(SceneNodePtr node)
 {
-    nodes_.emplace_back(std::move(node));
+    static size_t counter = std::numeric_limits<size_t>::max();
+
+    ++counter;
+    std::string name = std::to_string(counter) + "_node";
+    nodes_.try_emplace(name, std::move(node));
+}
+
+void Scene::addSceneNode(std::string_view name, SceneNodePtr node)
+{
+    const auto&[it, success] = nodes_.try_emplace(name.data(), std::move(node));
+    if(!success)
+    {
+        std::cerr << "Can't add repeated node \042" << name << "\042\n"
+                  << "Added as auto-generated named node";
+        addSceneNode(std::move(node));
+    }
 }
 
 void Scene::draw(sf::RenderTarget& target, sf::RenderStates states) const
@@ -64,7 +83,7 @@ void Scene::draw(sf::RenderTarget& target, sf::RenderStates states) const
     target.setView(AspectRatio::getViewportAspectRatio({640, 480}, target.getSize(),
                                                        AspectRatio::EAspectRatioRule::FitToParent));
 
-    for(auto& node : nodes_)
+    for(auto&[name, node] : nodes_)
     {
         node->draw(target, states);
     }
