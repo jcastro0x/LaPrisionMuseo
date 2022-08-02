@@ -29,31 +29,44 @@
 namespace lpm
 {
     /**
-     * @brief Holds elements to be processes (draw, update, ...) in current context.
+     * Engine can draw one scene at a time. Scenes represents the whole "world" at these moment.
+     * In Unity3D Scene represents his homologue concept "scene" and in Unreal represent an UWorld.
      *
+     * Scene can contains many SceneNodes (aka GameObjects in Unity or Actors in Unreal)
      */
     class Scene : public sf::Drawable
     {
         using SceneNodePtr = std::unique_ptr<class SceneNode>;
 
     public:
-        Scene(class Engine* engine);
+        explicit Scene(class Engine* engine);
         ~Scene() override;
 
-        virtual void tick(float deltaTime);
+        virtual void tick(float deltaTime) = 0;
 
         void addSceneNode(SceneNodePtr node);
-        [[nodiscard]] class Engine* getEngine() const { return engine_; }
 
+        void destroy();
+
+    public:
         /**
          * Get mouse coords transformed to aspect ratio used in the scene
          * @return Mouse coord in scene's aspect ratio
          */
-        sf::Vector2i getSceneMousePos() const;
+        [[nodiscard]] sf::Vector2i getSceneMousePos() const;
 
-        void destroy();
+        /**
+         * Get pointer to engine
+         * @return Engine pointer
+         */
+        [[nodiscard]] class Engine* getEngine() const { return engine_; }
 
+        /**
+         * Check if this scene is pending to be destroyed
+         * @return True if is pending to destroy, false otherwise.
+         */
         [[nodiscard]] bool isPendingToDestroy() const;
+
 
     protected:
         void draw(sf::RenderTarget& target, sf::RenderStates states) const override;

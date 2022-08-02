@@ -28,9 +28,7 @@
 
 namespace lpm
 {
-    class scene_exception final : public std::exception
-    {
-    };
+    class scene_exception final : public std::exception { };
 
     class SceneManager
     {

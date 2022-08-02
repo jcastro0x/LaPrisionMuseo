@@ -32,7 +32,6 @@
 #include <imgui.h>
 #include <imgui-SFML.h>
 
-#include <scene/SceneFactory.hpp>
 #include <scene/SceneManager.hpp>
 #include <scene/Scene.hpp>
 
