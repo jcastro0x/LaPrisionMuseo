@@ -28,7 +28,7 @@
 #include <widgets/Cursor.hpp>
 
 
-WorldScene::WorldScene(class Engine* engine) : Scene(engine)
+WorldScene::WorldScene(Engine* engine) : Scene(engine)
 {
     addSceneNode(std::make_unique<BackgroundNode>("AL_Almacen1.jpg", this));
     addSceneNode(std::make_unique<RoomSceneNode>(this));

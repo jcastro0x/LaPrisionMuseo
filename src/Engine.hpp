@@ -22,36 +22,29 @@
 #pragma once
 
 #include <memory>
-
-#include <widgets/Cursor.hpp>
-#include <network/DebugNetwork.hpp>
-#include <scene/Scene.hpp>
-
-#include <SFML/System/Clock.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 
-#include <Resources.hpp>
-#include <components/Internationalization.hpp>
+namespace tgui  { class BackendGui; }
+namespace sf    { class Clock;      }
 
-namespace tgui
-{
-    class BackendGui;
-}
+class Resources;
+class Internationalization;
+class Cursor;
+class SceneManager;
+class INetwork;
+class Scene;
 
 class Engine
 {
+    template<typename T>
+    using Pointer = std::unique_ptr<T>;
+
 public:
     Engine();
 
 public:
     void run();
     void stop();
-
-    // template<typename T> requires std::is_base_of_v<class Scene, T>
-    // void createScene()
-    // {
-    //     scene_ = std::make_unique<T>(this);
-    // }
 
     void loadScene(std::string_view name);
 
@@ -70,17 +63,16 @@ private:
     #endif
 
 private:
-    std::unique_ptr<INetwork> network_  { std::make_unique<DebugNetwork>() };
-    std::unique_ptr<Scene> scene_;
-    sf::RenderWindow window_;
-    std::unique_ptr<sf::Clock> clock_   { std::make_unique<sf::Clock>() };
+    sf::RenderWindow window_;                               //< SFML class to draw OS window
 
-    Cursor cursor_;
-    std::unique_ptr<Resources> resources_;
-    Internationalization internationalization_;
-    std::unique_ptr<class SceneManager> sceneManager_;
+    Pointer<INetwork> network_;                             //< Network interface
+    Pointer<sf::Clock> clock_;                              //< SFML clock
+    Pointer<Cursor> cursor_;                                //< Cursor class
+    Pointer<Internationalization> internationalization_;    //< i18n pointer
+    Pointer<SceneManager> sceneManager_;                    //< SceneManager pointer
+    Pointer<tgui::BackendGui> gui_;                         //< TGUI pointer
+    Pointer<Scene> scene_;                                  //< Current scene drawn
+    Pointer<Resources> resources_;                          //< Resources game pointer
 
-    std::string scenePendingToLoad_;
-
-    std::unique_ptr<tgui::BackendGui> gui_;
+    std::string scenePendingToLoad_;                        //< Pending scene to load
 };

@@ -1,25 +1,61 @@
+// Copyright (c) 2022 Javier Castro - jcastro0x@gmail.com
+//
+// Permission is hereby granted, free of charge, to any person obtaining
+// a copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to
+// permit persons to whom the Software is furnished to do so, subject to
+// the following conditions:
+//
+// The above copyright notice and this permission notice shall be
+// included in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+// NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+// LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+// WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+#include <Engine.hpp>
+
+#include <iostream>
+
 #include <SFML/Graphics.hpp>
+#include <SFML/System/Clock.hpp>
+
+#include <TGUI/TGUI.hpp>
+#include <TGUI/Backend/SFML-Graphics.hpp>
 
 #include <imgui.h>
 #include <imgui-SFML.h>
 
 #include <scene/SceneFactory.hpp>
 #include <scene/SceneManager.hpp>
+#include <scene/Scene.hpp>
 
 #include <Configuration.hpp>
 
 #include <login/LoginScene.hpp>
 #include <world/WorldScene.hpp>
+#include <widgets/Cursor.hpp>
 
-#include <Engine.hpp>
+#include <network/DebugNetwork.hpp>
+#include <components/Internationalization.hpp>
+#include <Resources.hpp>
 
-#include <iostream>
 
-#include <TGUI/TGUI.hpp>
-#include <TGUI/Backend/SFML-Graphics.hpp>
+
+
 
 Engine::Engine()
 : window_(sf::VideoMode(Configuration::WINDOW_SIZE_X, Configuration::WINDOW_SIZE_Y), Configuration::WINWDOW_TITLE)
+, network_(std::make_unique<DebugNetwork>())
+, clock_(std::make_unique<sf::Clock>())
+, cursor_(std::make_unique<Cursor>())
+, internationalization_(std::make_unique<Internationalization>())
 , sceneManager_(std::make_unique<SceneManager>())
 , gui_(std::make_unique<tgui::Gui>())
 
@@ -85,7 +121,7 @@ void Engine::run()
         ImGui::SFML::Update(window_, time);
 
         scene_->tick(time.asSeconds());
-        cursor_.tick(time.asSeconds(), window_);
+        getCursor().tick(time.asSeconds(), window_);
 
         #ifndef NDEBUG
         drawFPS(time.asSeconds());
@@ -97,13 +133,13 @@ void Engine::run()
         window_.draw(*scene_);
         gui_->draw();
         ImGui::SFML::Render(window_);
-        window_.draw(cursor_);
+        window_.draw(getCursor());
 
         window_.display();
 
         if(scene_->isPendingToDestroy())
         {
-            scene_.release();
+            (void)scene_.release();
             if(!scenePendingToLoad_.empty())
             {
                 try
@@ -132,7 +168,7 @@ void Engine::loadScene(std::string_view name)
     if(scene_)
     {
         scene_->destroy();
-        scenePendingToLoad_ = name.data();
+        scenePendingToLoad_ = std::string(name.data());
     }
     else
     {
@@ -189,12 +225,12 @@ const Resources& Engine::getResources() const
 
 const Internationalization& Engine::getI18N() const
 {
-    return internationalization_;
+    return *internationalization_;
 }
 
 Cursor& Engine::getCursor()
 {
-    return cursor_;
+    return *cursor_;
 }
 
 sf::Vector2i Engine::getMousePosition() const

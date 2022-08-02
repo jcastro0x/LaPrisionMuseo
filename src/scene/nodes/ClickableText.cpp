@@ -29,6 +29,9 @@
 #include <Engine.hpp>
 
 #include <imgui.h>
+#include <widgets/Cursor.hpp>
+#include <Resources.hpp>
+
 
 
 ClickableText::ClickableText(const sf::String& string, Scene* owner)
