@@ -21,7 +21,6 @@
 
 #include "LoginScene.hpp"
 
-#include <widgets/QuadAspectRatio.hpp>
 #include <components/Internationalization.hpp>
 #include <scene/nodes/BackgroundNode.hpp>
 #include <scene/nodes/ClickableText.hpp>
@@ -31,6 +30,8 @@
 #include <Engine.hpp>
 
 #include <imgui.h>
+
+using namespace lpm;
 
 LoginScene::LoginScene(class Engine* engine) : Scene(engine)
 {

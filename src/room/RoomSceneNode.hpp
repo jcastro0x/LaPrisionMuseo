@@ -31,20 +31,23 @@ namespace sf
     class Sound;
 }
 
-class RoomSceneNode : public SceneNode
+namespace lpm
 {
-    using RoomCameraPtr = std::unique_ptr<class RoomCamera>;
+    class RoomSceneNode : public SceneNode
+    {
+        using RoomCameraPtr = std::unique_ptr<class RoomCamera>;
 
-public:
-    RoomSceneNode(class Scene* scene);
-    ~RoomSceneNode() override;
+    public:
+        RoomSceneNode(class Scene* scene);
+        ~RoomSceneNode() override;
 
-protected:
-    void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
-    void tick(float deltaTime) override;
+    protected:
+        void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+        void tick(float deltaTime) override;
 
-private:
-    std::string roomName_;
-    std::vector<RoomCameraPtr> cameras_;
-    std::unique_ptr<sf::Sound> soundPlayer_;
-};
+    private:
+        std::string roomName_;
+        std::vector<RoomCameraPtr> cameras_;
+        std::unique_ptr<sf::Sound> soundPlayer_;
+    };
+}

@@ -25,26 +25,29 @@
 #include <vector>
 #include <SFML/Graphics/Rect.hpp>
 
-class Animator
+namespace lpm
 {
-public:
-    struct Animation
+    class Animator
     {
-        std::string name;
-        float rate = 0;
-        std::vector<sf::IntRect> frames;
+    public:
+        struct Animation
+        {
+            std::string name;
+            float rate = 0;
+            std::vector<sf::IntRect> frames;
+        };
+
+    public:
+        void tick(float deltaTime);
+        void loadAnimations(std::string_view fileName);
+
+        sf::IntRect getCurrentRect(std::string_view animation) const;
+
+
+        const std::vector<Animation>& getAnimations() const;
+
+    private:
+        float currentTime_ = 0;
+        std::vector<Animation> animations_;
     };
-
-public:
-    void tick(float deltaTime);
-    void loadAnimations(std::string_view fileName);
-
-    sf::IntRect getCurrentRect(std::string_view animation) const;
-
-
-    const std::vector<Animation>& getAnimations() const;
-
-private:
-    float currentTime_ = 0;
-    std::vector<Animation> animations_;
-};
+}

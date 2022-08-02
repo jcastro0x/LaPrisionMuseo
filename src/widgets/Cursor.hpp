@@ -26,18 +26,21 @@
 
 #include <memory>
 
-class Cursor : public sf::Sprite
+namespace lpm
 {
-public:
-    Cursor();
-    ~Cursor() override;
+    class Cursor : public sf::Sprite
+    {
+    public:
+        Cursor();
+        ~Cursor() override;
 
-    void tick(float deltaTime, const sf::Window& window);
+        void tick(float deltaTime, const sf::Window& window);
 
-    void setCursor(std::string_view name);
+        void setCursor(std::string_view name);
 
-private:
-    sf::Texture texture_;
-    std::unique_ptr<class Animator> animator_;
-    std::string_view currentAnimation_;
-};
+    private:
+        sf::Texture texture_;
+        std::unique_ptr<class Animator> animator_;
+        std::string_view currentAnimation_;
+    };
+}

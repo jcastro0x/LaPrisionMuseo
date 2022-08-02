@@ -27,52 +27,55 @@
 namespace tgui  { class BackendGui; }
 namespace sf    { class Clock;      }
 
-class Resources;
-class Internationalization;
-class Cursor;
-class SceneManager;
-class INetwork;
-class Scene;
-
-class Engine
+namespace lpm
 {
-    template<typename T>
-    using Pointer = std::unique_ptr<T>;
+    class Resources;
+    class Internationalization;
+    class Cursor;
+    class SceneManager;
+    class INetwork;
+    class Scene;
 
-public:
-    Engine();
+    class Engine
+    {
+        template<typename T>
+        using Pointer = std::unique_ptr<T>;
 
-public:
-    void run();
-    void stop();
+    public:
+        Engine();
 
-    void loadScene(std::string_view name);
+    public:
+        void run();
+        void stop();
 
-public:
-    [[nodiscard]] const Resources& getResources() const;
-    [[nodiscard]] const Internationalization& getI18N() const;
-    [[nodiscard]] Cursor& getCursor();
-    [[nodiscard]] sf::Vector2i getMousePosition() const;
-    [[nodiscard]] sf::Vector2u getWindowSize() const;
+        void loadScene(std::string_view name);
 
-private:
-    void processEvents(sf::Event& event);
+    public:
+        [[nodiscard]] const Resources& getResources() const;
+        [[nodiscard]] const Internationalization& getI18N() const;
+        [[nodiscard]] Cursor& getCursor();
+        [[nodiscard]] sf::Vector2i getMousePosition() const;
+        [[nodiscard]] sf::Vector2u getWindowSize() const;
 
-    #ifndef NDEBUG
-    void drawFPS(float deltaSeconds);
-    #endif
+    private:
+        void processEvents(sf::Event& event);
 
-private:
-    sf::RenderWindow window_;                               //< SFML class to draw OS window
+        #ifndef NDEBUG
+        void drawFPS(float deltaSeconds);
+        #endif
 
-    Pointer<INetwork> network_;                             //< Network interface
-    Pointer<sf::Clock> clock_;                              //< SFML clock
-    Pointer<Cursor> cursor_;                                //< Cursor class
-    Pointer<Internationalization> internationalization_;    //< i18n pointer
-    Pointer<SceneManager> sceneManager_;                    //< SceneManager pointer
-    Pointer<tgui::BackendGui> gui_;                         //< TGUI pointer
-    Pointer<Scene> scene_;                                  //< Current scene drawn
-    Pointer<Resources> resources_;                          //< Resources game pointer
+    private:
+        sf::RenderWindow window_;                               //< SFML class to draw OS window
 
-    std::string scenePendingToLoad_;                        //< Pending scene to load
-};
+        Pointer<INetwork> network_;                             //< Network interface
+        Pointer<sf::Clock> clock_;                              //< SFML clock
+        Pointer<Cursor> cursor_;                                //< Cursor class
+        Pointer<Internationalization> internationalization_;    //< i18n pointer
+        Pointer<SceneManager> sceneManager_;                    //< SceneManager pointer
+        Pointer<tgui::BackendGui> gui_;                         //< TGUI pointer
+        Pointer<Scene> scene_;                                  //< Current scene drawn
+        Pointer<Resources> resources_;                          //< Resources game pointer
+
+        std::string scenePendingToLoad_;                        //< Pending scene to load
+    };
+}

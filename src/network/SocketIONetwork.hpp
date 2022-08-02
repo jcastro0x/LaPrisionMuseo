@@ -21,7 +21,10 @@
 
 #pragma once
 
-class SocketIONetwork
+namespace lpm
 {
+    class SocketIONetwork
+    {
 
-};
+    };
+}

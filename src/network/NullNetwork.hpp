@@ -21,7 +21,10 @@
 
 #pragma once
 
-class NullNetwork
+namespace lpm
 {
+    class NullNetwork
+    {
 
-};
+    };
+}

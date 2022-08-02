@@ -27,6 +27,7 @@
 #include <Engine.hpp>
 #include <widgets/Cursor.hpp>
 
+using namespace lpm;
 
 WorldScene::WorldScene(Engine* engine) : Scene(engine)
 {

@@ -23,15 +23,18 @@
 
 #include <scene/Scene.hpp>
 
-class WorldScene : public Scene
+namespace lpm
 {
-public:
-    WorldScene(class Engine* engine);
-    ~WorldScene() override;
+    class WorldScene : public Scene
+    {
+    public:
+        WorldScene(class Engine* engine);
+        ~WorldScene() override;
 
-protected:
-    void tick(float deltaTime) override;
+    protected:
+        void tick(float deltaTime) override;
 
-private:
-    std::unique_ptr<class RoomSceneNode> room_;
-};
+    private:
+        std::unique_ptr<class RoomSceneNode> room_;
+    };
+}

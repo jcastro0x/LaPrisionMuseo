@@ -22,6 +22,8 @@
 #include "SceneNode.hpp"
 #include <scene/Scene.hpp>
 
+using namespace lpm;
+
 SceneNode::SceneNode(Scene* owner)
 : owner_(owner)
 {

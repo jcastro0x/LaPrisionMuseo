@@ -23,6 +23,8 @@
 
 #include <SFML/Audio/SoundBuffer.hpp>
 
+using namespace lpm;
+
 RoomCamera::RoomCamera()
 {
 

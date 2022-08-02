@@ -21,4 +21,6 @@
 
 #include "Player.hpp"
 
+using namespace lpm;
+
 

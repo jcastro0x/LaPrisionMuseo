@@ -23,6 +23,8 @@
 
 #include <fstream>
 
+using namespace lpm;
+
 Internationalization::Internationalization()
 {
     std::ifstream f("i18n.json");

@@ -21,3 +21,5 @@
 
 
 #include "SceneManager.hpp"
+
+using namespace lpm;

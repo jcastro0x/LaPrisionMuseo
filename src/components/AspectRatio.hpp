@@ -27,26 +27,29 @@
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Graphics/View.hpp>
 
-class AspectRatio
+namespace lpm
 {
-public:
-    enum class EAspectRatioRule : uint8_t
+    class AspectRatio
     {
-        Width,
-        FitToParent
+    public:
+        enum class EAspectRatioRule : uint8_t
+        {
+            Width,
+            FitToParent
+        };
+
+        static sf::View getViewportAspectRatio(const sf::Vector2u& textureSize, const sf::Vector2u& targetSize, EAspectRatioRule rule);
+
+        [[nodiscard]] static std::optional<sf::Vector2i> transformPointToTextureCoords(const sf::Vector2u& textureSize, const sf::Vector2u& targetSize, EAspectRatioRule rule, sf::Vector2i point);
+
+    private:
+        struct QuadSize
+        {
+            float texWidth;
+            float texHeight;
+            float heightGap;
+            float widthGap;
+        };
+        static QuadSize getQuadSize(const sf::Vector2u& textureSize, const sf::Vector2u& targetSize, EAspectRatioRule rule);
     };
-
-    static sf::View getViewportAspectRatio(const sf::Vector2u& textureSize, const sf::Vector2u& targetSize, EAspectRatioRule rule);
-
-    [[nodiscard]] static std::optional<sf::Vector2i> transformPointToTextureCoords(const sf::Vector2u& textureSize, const sf::Vector2u& targetSize, EAspectRatioRule rule, sf::Vector2i point);
-
-private:
-    struct QuadSize
-    {
-        float texWidth;
-        float texHeight;
-        float heightGap;
-        float widthGap;
-    };
-    static QuadSize getQuadSize(const sf::Vector2u& textureSize, const sf::Vector2u& targetSize, EAspectRatioRule rule);
-};
+}

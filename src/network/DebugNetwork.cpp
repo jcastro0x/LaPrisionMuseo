@@ -21,6 +21,8 @@
 
 #include "DebugNetwork.hpp"
 
+using namespace lpm;
+
 void DebugNetwork::init()
 {
 

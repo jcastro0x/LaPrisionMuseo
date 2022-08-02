@@ -24,6 +24,8 @@
 #include <fstream>
 #include <nlohmann/json.hpp>
 
+using namespace lpm;
+
 void Animator::tick(float deltaTime)
 {
     currentTime_ += deltaTime;

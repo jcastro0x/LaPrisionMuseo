@@ -46,7 +46,7 @@
 #include <components/Internationalization.hpp>
 #include <Resources.hpp>
 
-
+using namespace lpm;
 
 
 

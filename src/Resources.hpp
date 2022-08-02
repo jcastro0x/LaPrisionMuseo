@@ -33,27 +33,30 @@ namespace sf
     class Font;
 }
 
-class resource_exception final : public std::exception
+namespace lpm
 {
-};
+    class resource_exception final : public std::exception
+    {
+    };
 
-class Resources
-{
-    template<typename Type>
-    using Resource = std::unordered_map<std::string, std::unique_ptr<Type>>;
+    class Resources
+    {
+        template<typename Type>
+        using Resource = std::unordered_map<std::string, std::unique_ptr<Type>>;
 
-public:
-    Resources();
-    ~Resources();
+    public:
+        Resources();
+        ~Resources();
 
-public:
-    [[nodiscard]] std::optional<const sf::Texture*> getTexture(std::string_view key) const;
-    [[nodiscard]] std::optional<const sf::SoundBuffer*> getSoundBuffer(std::string_view key) const;
-    [[nodiscard]] std::optional<const sf::Font*> getFont(std::string_view key) const;
+    public:
+        [[nodiscard]] std::optional<const sf::Texture*> getTexture(std::string_view key) const;
+        [[nodiscard]] std::optional<const sf::SoundBuffer*> getSoundBuffer(std::string_view key) const;
+        [[nodiscard]] std::optional<const sf::Font*> getFont(std::string_view key) const;
 
 
-private:
-    Resource<sf::Texture> textures_;
-    Resource<sf::SoundBuffer> sounds_;
-    Resource<sf::Font> fonts_;
-};
+    private:
+        Resource<sf::Texture> textures_;
+        Resource<sf::SoundBuffer> sounds_;
+        Resource<sf::Font> fonts_;
+    };
+}

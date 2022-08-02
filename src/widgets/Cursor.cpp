@@ -26,6 +26,7 @@
 #include <imgui.h>
 #include <SFML/Window/Mouse.hpp>
 
+using namespace lpm;
 
 Cursor::Cursor()
 : animator_(std::make_unique<Animator>())

@@ -32,6 +32,7 @@
 #include <widgets/Cursor.hpp>
 #include <Resources.hpp>
 
+using namespace lpm;
 
 
 ClickableText::ClickableText(const sf::String& string, Scene* owner)

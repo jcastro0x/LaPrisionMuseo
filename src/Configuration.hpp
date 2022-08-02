@@ -23,15 +23,18 @@
 
 #include <cstdint>
 
-struct Configuration
+namespace lpm
 {
-    inline static unsigned WINDOW_SIZE_X = 740;
-    inline static unsigned WINDOW_SIZE_Y = 480;
-    inline static const char* WINWDOW_TITLE = "La Prision - Museo";
+    struct Configuration
+    {
+        inline static unsigned WINDOW_SIZE_X = 740;
+        inline static unsigned WINDOW_SIZE_Y = 480;
+        inline static const char* WINWDOW_TITLE = "La Prision - Museo";
 
-    inline static unsigned FRAME_RATE = 30;
+        inline static unsigned FRAME_RATE = 30;
 
-    inline static unsigned BACKGROUND_TEX_SIZE_X = 640;
-    inline static unsigned BACKGROUND_TEX_SIZE_Y = 480;
+        inline static unsigned BACKGROUND_TEX_SIZE_X = 640;
+        inline static unsigned BACKGROUND_TEX_SIZE_Y = 480;
 
-};
+    };
+}

@@ -21,6 +21,8 @@
 
 #include "AspectRatio.hpp"
 
+using namespace lpm;
+
 sf::View AspectRatio::getViewportAspectRatio(const sf::Vector2u& textureSize, const sf::Vector2u& targetSize, EAspectRatioRule rule)
 {
     QuadSize quadSize = getQuadSize(textureSize, targetSize, rule);

@@ -24,6 +24,8 @@
 
 #include <SFML/Audio/Sound.hpp>
 
+using namespace lpm;
+
 RoomSceneNode::RoomSceneNode(class Scene* scene) 
 : SceneNode(scene)
 , roomName_("Default Room")

@@ -23,11 +23,14 @@
 
 #include <network/INetwork.hpp>
 
-class DebugNetwork : public INetwork
+namespace lpm
 {
-public:
-    void init() override;
-    void changeRoom(class RoomSceneNode* room) override;
-    void sendMessage(class Player* player, const char* message) override;
-    void sendMessage(const char* message) override;
-};
+    class DebugNetwork : public INetwork
+    {
+    public:
+        void init() override;
+        void changeRoom(class RoomSceneNode* room) override;
+        void sendMessage(class Player* player, const char* message) override;
+        void sendMessage(const char* message) override;
+    };
+}

@@ -26,39 +26,42 @@
 
 #include <SFML/Graphics/Drawable.hpp>
 
-/**
- * @brief Holds elements to be processes (draw, update, ...) in current context.
- *  
- */
-class Scene : public sf::Drawable
+namespace lpm
 {
-    using SceneNodePtr = std::unique_ptr<class SceneNode>;
-
-public:
-    Scene(class Engine* engine);
-    ~Scene() override;
-
-    virtual void tick(float deltaTime);
-
-    void addSceneNode(SceneNodePtr node);
-    [[nodiscard]] class Engine* getEngine() const { return engine_; }
-
     /**
-     * Get mouse coords transformed to aspect ratio used in the scene
-     * @return Mouse coord in scene's aspect ratio
+     * @brief Holds elements to be processes (draw, update, ...) in current context.
+     *
      */
-    sf::Vector2i getSceneMousePos() const;
+    class Scene : public sf::Drawable
+    {
+        using SceneNodePtr = std::unique_ptr<class SceneNode>;
 
-    void destroy();
+    public:
+        Scene(class Engine* engine);
+        ~Scene() override;
 
-    [[nodiscard]] bool isPendingToDestroy() const;
+        virtual void tick(float deltaTime);
 
-protected:
-    void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+        void addSceneNode(SceneNodePtr node);
+        [[nodiscard]] class Engine* getEngine() const { return engine_; }
+
+        /**
+         * Get mouse coords transformed to aspect ratio used in the scene
+         * @return Mouse coord in scene's aspect ratio
+         */
+        sf::Vector2i getSceneMousePos() const;
+
+        void destroy();
+
+        [[nodiscard]] bool isPendingToDestroy() const;
+
+    protected:
+        void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 
-private:
-    class Engine* engine_ = nullptr;
-    std::vector<SceneNodePtr> nodes_;
-    bool bPendingToDestroy_ = false;
-};
+    private:
+        class Engine* engine_ = nullptr;
+        std::vector<SceneNodePtr> nodes_;
+        bool bPendingToDestroy_ = false;
+    };
+}

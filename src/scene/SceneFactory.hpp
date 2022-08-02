@@ -25,18 +25,20 @@
 #include <type_traits>
 #include <scene/SceneNode.hpp>
 
-
-class SceneFactory
+namespace lpm
 {
-public:
-    
-    template<typename T, typename... Args> requires std::is_base_of_v<SceneNode, T>
-    static std::unique_ptr<T> createSceneNode(Scene* const scene, Args... args)
+    class SceneFactory
     {
-        std::unique_ptr<T> node(std::make_unique<T>(args...));
-        node->setSceneOwner(scene);
-        return node;
-    }
+    public:
+
+        template<typename T, typename... Args> requires std::is_base_of_v<SceneNode, T>
+        static std::unique_ptr<T> createSceneNode(Scene* const scene, Args... args)
+        {
+            std::unique_ptr<T> node(std::make_unique<T>(args...));
+            node->setSceneOwner(scene);
+            return node;
+        }
 
 
-};
+    };
+}

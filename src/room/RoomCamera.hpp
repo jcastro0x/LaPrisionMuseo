@@ -33,36 +33,39 @@ namespace sf
     class SoundBuffer;
 }
 
-class RoomCamera
+namespace lpm
 {
-    using Anim = std::pair<sf::Vector2u, Animator::Animation>;
-
-    struct Area
+    class RoomCamera
     {
-        using Script = void(*)(size_t /*argc*/, void** /**argv*/);
+        using Anim = std::pair<sf::Vector2u, Animator::Animation>;
 
-        std::string cursorName_;
-        std::vector<sf::Vector2u> vertices;
-        Script script_;
-
-        struct Debug
+        struct Area
         {
-            uint32_t color;
-            std::string comment;
-        } debug_;
+            using Script = void(*)(size_t /*argc*/, void** /**argv*/);
+
+            std::string cursorName_;
+            std::vector<sf::Vector2u> vertices;
+            Script script_;
+
+            struct Debug
+            {
+                uint32_t color;
+                std::string comment;
+            } debug_;
+        };
+
+    public:
+        RoomCamera();
+        ~RoomCamera();
+
+    private:
+        void changeCamera(std::string_view name);
+        void changeRoom(std::string_view name);
+        void showInfo(std::string_view comment);
+
+    private:
+        std::string name_;
+        std::unique_ptr<sf::SoundBuffer> backgroundSfx_;
+        std::vector<Anim> animations_;
     };
-
-public:
-    RoomCamera();
-    ~RoomCamera();
-
-private:
-    void changeCamera(std::string_view name);
-    void changeRoom(std::string_view name);
-    void showInfo(std::string_view comment);
-
-private:
-    std::string name_;
-    std::unique_ptr<sf::SoundBuffer> backgroundSfx_;
-    std::vector<Anim> animations_;
-};
+}

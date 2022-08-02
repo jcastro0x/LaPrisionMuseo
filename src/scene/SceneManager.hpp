@@ -26,31 +26,34 @@
 #include <functional>
 #include "Scene.hpp"
 
-class scene_exception final : public std::exception
+namespace lpm
 {
-};
-
-class SceneManager
-{
-    using ScenePtr = std::unique_ptr<Scene>;
-
-public:
-    template<typename SceneType> requires std::is_base_of_v<class Scene, SceneType>
-    void registerScene(std::string_view name, class Engine* engine)
+    class scene_exception final : public std::exception
     {
-        scenes_.try_emplace(name.data(), [engine](){
-            return std::make_unique<SceneType>(engine);
-        });
-    }
+    };
 
-    ScenePtr findScene(std::string_view name)
+    class SceneManager
     {
-        if(!scenes_.contains(name.data()))
-            throw scene_exception();
+        using ScenePtr = std::unique_ptr<Scene>;
 
-        return scenes_[name.data()]();
-    }
+    public:
+        template<typename SceneType> requires std::is_base_of_v<class Scene, SceneType>
+        void registerScene(std::string_view name, class Engine* engine)
+        {
+            scenes_.try_emplace(name.data(), [engine](){
+                return std::make_unique<SceneType>(engine);
+            });
+        }
 
-private:
-    std::unordered_map<std::string, std::function<ScenePtr()>> scenes_;
-};
+        ScenePtr findScene(std::string_view name)
+        {
+            if(!scenes_.contains(name.data()))
+                throw scene_exception();
+
+            return scenes_[name.data()]();
+        }
+
+    private:
+        std::unordered_map<std::string, std::function<ScenePtr()>> scenes_;
+    };
+}

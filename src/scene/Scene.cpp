@@ -26,6 +26,8 @@
 #include <components/AspectRatio.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
 
+using namespace lpm;
+
 Scene::Scene(Engine* engine)
 : engine_(engine)
 {

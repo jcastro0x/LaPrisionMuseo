@@ -29,8 +29,7 @@ set(SRC_FILES
 
     src/Resources.cpp
 
-    src/widgets/QuadAspectRatio.cpp
-    src/widgets/Cursor.cpp
+        src/widgets/Cursor.cpp
 
     src/world/WorldScene.cpp
 )

@@ -25,6 +25,8 @@
 #include <SFML/Graphics/Font.hpp>
 #include <SFML/Audio/SoundBuffer.hpp>
 
+using namespace lpm;
+
 Resources::Resources()
 {
     auto createTexture = [&](std::string_view key, std::string_view fileName){

@@ -24,12 +24,15 @@
 #include <scene/Scene.hpp>
 #include <memory>
 
-class LoginScene : public Scene
+namespace lpm
 {
-public:
-    LoginScene(class Engine* engine);
-    ~LoginScene() override;
-    
-protected:
-    void tick(float deltaTime) override;
-};
+    class LoginScene : public Scene
+    {
+    public:
+        LoginScene(class Engine* engine);
+        ~LoginScene() override;
+
+    protected:
+        void tick(float deltaTime) override;
+    };
+}

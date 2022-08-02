@@ -23,23 +23,25 @@
 
 #include <cstdint>
 
-/**
- * @brief Compass directions.
- */
-enum class EDirection : uint8_t
+namespace lpm
 {
-    None    = 0,
+    /**
+     * @brief Compass directions.
+     */
+    enum class EDirection : uint8_t
+    {
+        None    = 0,
 
-    North   = 0 << 1,
-    East    = 1 << 2,
-    South   = 1 << 3,
-    West    = 1 << 4,
+        North   = 0 << 1,
+        East    = 1 << 2,
+        South   = 1 << 3,
+        West    = 1 << 4,
 
-    Door    = 1 << 5,
+        Door    = 1 << 5,
 
-    NorthEast = North | East,
-    SouthEast = South | East,
-    SouthWest = South | West,
-    NorthWest = North | West
-};
-
+        NorthEast = North | East,
+        SouthEast = South | East,
+        SouthWest = South | West,
+        NorthWest = North | West
+    };
+}

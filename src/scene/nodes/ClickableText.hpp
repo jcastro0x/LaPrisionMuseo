@@ -33,31 +33,34 @@ namespace sf
     class Sound;
 }
 
-class ClickableText final : public SceneNode
+namespace lpm
 {
-public:
-    ClickableText(const sf::String& string, class Scene* owner);
-    ~ClickableText() override;
+    class ClickableText final : public SceneNode
+    {
+    public:
+        ClickableText(const sf::String& string, class Scene* owner);
+        ~ClickableText() override;
 
-public:
-    void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
-    void tick(float deltaTime) override;
+    public:
+        void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+        void tick(float deltaTime) override;
 
-    void bindOnClick(const std::function<void()>& onClicked);
+        void bindOnClick(const std::function<void()>& onClicked);
 
-protected:
-    void onMouseEnter() const;
-    void onMouseExit() const;
-    void onMouseClickDown() const;
-    void onMouseClickUp() const;
+    protected:
+        void onMouseEnter() const;
+        void onMouseExit() const;
+        void onMouseClickDown() const;
+        void onMouseClickUp() const;
 
-private:
-    std::unique_ptr<sf::Text> text_;
-    std::unique_ptr<sf::Sound> soundHover_;
-    std::unique_ptr<sf::Sound> soundClick_;
+    private:
+        std::unique_ptr<sf::Text> text_;
+        std::unique_ptr<sf::Sound> soundHover_;
+        std::unique_ptr<sf::Sound> soundClick_;
 
-    mutable bool bMouseEnter_     = false;
-    mutable bool bMouseClickDown_ = false;
+        mutable bool bMouseEnter_     = false;
+        mutable bool bMouseClickDown_ = false;
 
-    std::function<void()> onClicked_;
-};
+        std::function<void()> onClicked_;
+    };
+}

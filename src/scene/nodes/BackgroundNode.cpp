@@ -25,6 +25,8 @@
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
 
+using namespace lpm;
+
 BackgroundNode::BackgroundNode(std::string_view textureName, Scene* owner)
 : SceneNode(owner)
 , texture_(std::make_unique<sf::Texture>())

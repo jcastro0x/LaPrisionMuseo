@@ -23,7 +23,10 @@
 
 #include <string>
 
-class Player
+namespace lpm
 {
-    std::string name_;
-};
+    class Player
+    {
+        std::string name_;
+    };
+}

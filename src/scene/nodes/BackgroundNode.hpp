@@ -31,15 +31,18 @@ namespace sf
     class Texture;    
 }
 
-class BackgroundNode final : public SceneNode
+namespace lpm
 {
-public:
-    BackgroundNode(std::string_view textureName, class Scene* owner);
-    ~BackgroundNode();
+    class BackgroundNode final : public SceneNode
+    {
+    public:
+        BackgroundNode(std::string_view textureName, class Scene* owner);
+        ~BackgroundNode();
 
-    void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+        void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
-private:
-    std::unique_ptr<sf::Texture> texture_;
-    std::unique_ptr<sf::Sprite> sprite_;
-};
+    private:
+        std::unique_ptr<sf::Texture> texture_;
+        std::unique_ptr<sf::Sprite> sprite_;
+    };
+}

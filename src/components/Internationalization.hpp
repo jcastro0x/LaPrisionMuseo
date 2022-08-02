@@ -24,15 +24,18 @@
 #include <SFML/System/String.hpp>
 #include <nlohmann/json.hpp>
 
-class Internationalization
+namespace lpm
 {
-public:
-    Internationalization();
-    sf::String getString(std::string ns, std::string key) const;
+    class Internationalization
+    {
+    public:
+        Internationalization();
+        sf::String getString(std::string ns, std::string key) const;
 
-private:
-    nlohmann::json json_;
-    std::string currentLanguageName_ = "en";
-};
+    private:
+        nlohmann::json json_;
+        std::string currentLanguageName_ = "en";
+    };
 
-using i18n = Internationalization;
+    using i18n = Internationalization;
+}

@@ -25,6 +25,9 @@
 #include <sio_client.h>
 #include <player/Player.hpp>
 
+using namespace lpm;
+
+
 
 //    sio::client client;
 //

@@ -24,19 +24,22 @@
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/Transformable.hpp>
 
-class SceneNode : public sf::Drawable, public sf::Transformable
+namespace lpm
 {
-    friend class Scene;
+    class SceneNode : public sf::Drawable, public sf::Transformable
+    {
+        friend class Scene;
 
-public:
-    explicit SceneNode(class Scene* owner);
-    virtual ~SceneNode() = default;
+    public:
+        explicit SceneNode(class Scene* owner);
+        virtual ~SceneNode() = default;
 
-protected:
-    virtual void init() {};
-    virtual void tick(float /*deltaTime*/) {};
-    virtual void destroy() {};
+    protected:
+        virtual void init() {};
+        virtual void tick(float /*deltaTime*/) {};
+        virtual void destroy() {};
 
-protected:
-    const class Scene* owner_ = nullptr;
-};
+    protected:
+        const class Scene* owner_ = nullptr;
+    };
+}
