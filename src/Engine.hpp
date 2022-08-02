@@ -71,7 +71,6 @@ namespace lpm
         Pointer<sf::Clock> clock_;                              //< SFML clock
         Pointer<Cursor> cursor_;                                //< Cursor class
         Pointer<Internationalization> internationalization_;    //< i18n pointer
-        Pointer<SceneManager> sceneManager_;                    //< SceneManager pointer
         Pointer<tgui::BackendGui> gui_;                         //< TGUI pointer
         Pointer<Scene> scene_;                                  //< Current scene drawn
         Pointer<Resources> resources_;                          //< Resources game pointer

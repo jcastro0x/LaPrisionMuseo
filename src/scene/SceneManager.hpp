@@ -34,11 +34,12 @@ namespace lpm
 
     class SceneManager
     {
-        using ScenePtr = std::unique_ptr<Scene>;
+        using ScenePtr      = std::unique_ptr<Scene>;
+        using SceneRegister = std::unordered_map<std::string, std::function<ScenePtr()>>;
 
     public:
         template<typename SceneType> requires std::is_base_of_v<class Scene, SceneType>
-        void registerScene(std::string_view name, class Engine* engine)
+        static void registerScene(std::string_view name, class Engine* engine)
         {
             assert(!std::ranges::any_of(name.begin(), name.end(), ::isupper) && "registerScene only accepts lower strings");
             scenes_.try_emplace(name.data(), [engine](){
@@ -46,7 +47,7 @@ namespace lpm
             });
         }
 
-        std::function<ScenePtr()> findScene(std::string_view name)
+        static std::function<ScenePtr()> findScene(std::string_view name)
         {
             assert(!std::ranges::any_of(name.begin(), name.end(), ::isupper) && "findScene only accepts lower strings");
             if(!scenes_.contains(name.data()))
@@ -55,8 +56,7 @@ namespace lpm
             return scenes_[name.data()];
         }
 
-
     private:
-        std::unordered_map<std::string, std::function<ScenePtr()>> scenes_;
+        inline static SceneRegister scenes_;
     };
 }

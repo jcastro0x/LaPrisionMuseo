@@ -33,7 +33,6 @@
 #include <imgui-SFML.h>
 
 #include <scene/SceneManager.hpp>
-#include <scene/Scene.hpp>
 
 #include <Configuration.hpp>
 
@@ -55,7 +54,6 @@ Engine::Engine()
 , clock_(std::make_unique<sf::Clock>())
 , cursor_(std::make_unique<Cursor>())
 , internationalization_(std::make_unique<Internationalization>())
-, sceneManager_(std::make_unique<SceneManager>())
 , gui_(std::make_unique<tgui::Gui>())
 
 {
@@ -65,9 +63,13 @@ Engine::Engine()
     auto p = std::bit_cast<tgui::Gui*>(gui_.get());
     p->setWindow(window_);
 
-    // TODO: Create macro to automatize this
-    sceneManager_->registerScene<LoginScene>("login", this);
-    sceneManager_->registerScene<WorldScene>("world", this);
+    //~===================================================================
+    // REGISTER SCENES
+    SceneManager::registerScene<LoginScene>("login", this);
+    SceneManager::registerScene<WorldScene>("world", this);
+    //~===================================================================
+
+
 
     try
     {
@@ -143,7 +145,7 @@ void Engine::run()
             {
                 try
                 {
-                    scene_ = sceneManager_->findScene(scenePendingToLoad_)();
+                    scene_ = SceneManager::findScene(scenePendingToLoad_)();
                     scenePendingToLoad_.clear();
                 }
                 catch(const scene_exception&)
@@ -173,7 +175,7 @@ void Engine::loadScene(std::string_view name)
     {
         try
         {
-            scene_ = sceneManager_->findScene(name)();
+            scene_ = SceneManager::findScene(name)();
         }
         catch(const scene_exception&)
         {

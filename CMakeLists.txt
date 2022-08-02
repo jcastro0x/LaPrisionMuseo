@@ -22,14 +22,13 @@ set(SRC_FILES
     src/room/RoomSceneNode.cpp
 
     src/scene/Scene.cpp
-    src/scene/SceneManager.cpp
     src/scene/SceneNode.cpp
     src/scene/nodes/BackgroundNode.cpp
     src/scene/nodes/ClickableText.cpp
 
     src/Resources.cpp
 
-        src/widgets/Cursor.cpp
+    src/widgets/Cursor.cpp
 
     src/world/WorldScene.cpp
 )
