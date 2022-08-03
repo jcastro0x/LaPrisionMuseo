@@ -68,7 +68,7 @@ void SplashNode::tick(float deltaTime)
 {
     SceneNode::tick(deltaTime);
 
-    static float totalTime = 0;
+    static float totalTime = 1988;
     totalTime += deltaTime;
     shader_->setUniform("time", totalTime);
 

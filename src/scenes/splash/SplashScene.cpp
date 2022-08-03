@@ -26,10 +26,12 @@
 
 #include <SFML/Graphics/Text.hpp>
 #include <SFML/Window/Keyboard.hpp>
+#include <SFML/Window/Mouse.hpp>
 #include <imgui.h>
 
 #include <Engine.hpp>
 #include <Resources.hpp>
+#include <components/Internationalization.hpp>
 #include <Configuration.hpp>
 
 #include <scene/nodes/Text.hpp>
@@ -43,8 +45,9 @@ SplashScene::SplashScene(Engine* engine)
     splash = &addSceneNode<SplashNode>();
     splash->setDrawOrder(CommonDepths::BACKGROUND);
 
+    //TODO: Get textures from Resouces instead "loadFromFile"
     splash->changeTexture(SplashNode::TEXTURE_0, "splash/splash00.jpg");
-    splash->changeTexture(SplashNode::TEXTURE_1, "splash/splash01.jpg");
+    splash->changeTexture(SplashNode::TEXTURE_1, "splash/splash04.jpg");
     splash->changeTexture(SplashNode::TEXTURE_2, "splash/splash02.jpg");
     splash->changeTexture(SplashNode::TEXTURE_3, "splash/splash03.jpg");
 
@@ -75,7 +78,7 @@ SplashScene::SplashScene(Engine* engine)
 
     pressAnyKeyText = &addSceneNode<lpm::Text>("FontEntry", 25);
     pressAnyKeyText->setTextFillColor(sf::Color::White);
-    pressAnyKeyText->setTextString("Press any key to continue");
+    pressAnyKeyText->setTextString(getEngine()->getI18N().getString("ui", "press_any_key"));
     pressAnyKeyText->setDrawOrder(CommonDepths::MIDDLE, 0);
     pressAnyKeyText->setPosition(Configuration::BACKGROUND_TEX_SIZE_X / 2.f, Configuration::BACKGROUND_TEX_SIZE_Y - 85.f);
 }
@@ -116,8 +119,11 @@ void SplashScene::tick(float deltaTime)
 //    ImGui::EndTable();
 //    ImGui::End();
 
+    //TODO: Detect any key instead this
     bool bLoadLoginScene = sf::Keyboard::isKeyPressed(sf::Keyboard::Space)
-                        || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape);
+                        || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)
+                        || sf::Mouse::isButtonPressed(sf::Mouse::Left)
+                        || sf::Mouse::isButtonPressed(sf::Mouse::Right);
     if(bLoadLoginScene)
     {
         getEngine()->loadScene("login");

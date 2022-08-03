@@ -30,6 +30,10 @@
           {
             "key" : "quit",
             "value" : "Exit"
+          },
+          {
+            "key" : "press_any_key",
+            "value" : "Press any key to continue"
           }
         ]
       }
@@ -68,6 +72,10 @@
           {
             "key" : "quit",
             "value" : "Salir"
+          },
+          {
+            "key" : "press_any_key",
+            "value" : "Pulsa cualquier tecla para continuar"
           }
         ]
       }
