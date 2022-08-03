@@ -29,10 +29,10 @@ SplashScene::SplashScene(Engine* engine)
 {
     splash = &addSceneNode<SplashNode>();
 
-    splash->changeTexture(SplashNode::TEXTURE_0, "splash/splash00.jpg");
-    splash->changeTexture(SplashNode::TEXTURE_1, "splash/splash01.jpg");
-    splash->changeTexture(SplashNode::TEXTURE_2, "splash/splash02.jpg");
-    splash->changeTexture(SplashNode::TEXTURE_3, "splash/splash03.jpg");
+    // splash->changeTexture(SplashNode::TEXTURE_0, "splash/splash00.jpg");
+    // splash->changeTexture(SplashNode::TEXTURE_1, "splash/splash01.jpg");
+    // splash->changeTexture(SplashNode::TEXTURE_2, "splash/splash02.jpg");
+    // splash->changeTexture(SplashNode::TEXTURE_3, "splash/splash03.jpg");
 }
 
 void SplashScene::tick(float deltaTime)

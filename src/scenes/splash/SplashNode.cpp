@@ -45,17 +45,17 @@ SplashNode::SplashNode()
     initializeTextures();
     initializeShader();
 
-    rectangleShape_->setSize({640, 480});
+    rectangleShape_->setSize({Configuration::BACKGROUND_TEX_SIZE_X, Configuration::BACKGROUND_TEX_SIZE_Y});
     rectangleShape_->setPosition(0,0);
-    rectangleShape_->setTexture(textures_[0].get());
+    rectangleShape_->setTexture(textures_[TEXTURE_0].get());
 }
 
 SplashNode::~SplashNode() = default;
 
-void SplashNode::changeTexture(size_t index, std::string_view textureName)
+void SplashNode::changeTexture(size_t index, std::string_view /*textureName*/)
 {
     assert(index <= 5 && "SplashNode::changeTexture called with value bigger than 5");
-    initializeTexture(texturesBackBuffer_[index].get(), textureName.data());
+    //initializeTexture(texturesBackBuffer_[index].get(), textureName.data());
 }
 
 //float texture0_intensity = 1;
