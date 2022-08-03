@@ -45,7 +45,7 @@ SplashScene::SplashScene(Engine* engine)
     initializeTextures();
     initializeShader();
 
-    rectangleShape_->setSize({640, 450});
+    rectangleShape_->setSize({640, 480});
     rectangleShape_->setPosition(0,0);
     rectangleShape_->setTexture(textures_[0].get());
 }
@@ -68,27 +68,24 @@ void SplashScene::tick(float deltaTime)
     shader_->setUniform("time", totalTime);
 
     ImGui::Begin("SplashScreen");
-    ImGui::DragFloat("texture0_intensity", &texture0_intensity, 0.1f);
-    ImGui::DragFloat("texture1_intensity", &texture1_intensity, 0.1f);
-    ImGui::DragFloat("texture2_intensity", &texture2_intensity, 0.1f);
-    ImGui::DragFloat("texture3_intensity", &texture3_intensity, 0.1f);
+    ImGui::DragFloat("textures_intensity[0]", &texture0_intensity, 0.1f);
+    ImGui::DragFloat("textures_intensity[1]", &texture1_intensity, 0.1f);
+    ImGui::DragFloat("textures_intensity[2]", &texture2_intensity, 0.1f);
+    ImGui::DragFloat("textures_intensity[3]", &texture3_intensity, 0.1f);
     ImGui::End();
 
-    shader_->setUniform("texture0_intensity", texture0_intensity);
-    shader_->setUniform("texture1_intensity", texture1_intensity);
-    shader_->setUniform("texture2_intensity", texture2_intensity);
-    shader_->setUniform("texture3_intensity", texture3_intensity);
+    shader_->setUniform("textures_intensity[0]", texture0_intensity);
+    shader_->setUniform("textures_intensity[1]", texture1_intensity);
+    shader_->setUniform("textures_intensity[2]", texture2_intensity);
+    shader_->setUniform("textures_intensity[3]", texture3_intensity);
 
 }
 
 void SplashScene::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-    Scene::draw(target, states);
-
     states.shader = shader_.get();
     target.draw(*rectangleShape_, states);
-
-
+    Scene::draw(target, states);
 }
 
 void SplashScene::initializeTextures()
@@ -119,15 +116,18 @@ void SplashScene::initializeShader()
 
     shader_->setUniform("mask_texture", *textures_[4]);
 
-    shader_->setUniform("texture0", *textures_[0]);
-    shader_->setUniform("texture1", *textures_[1]);
-    shader_->setUniform("texture2", *textures_[2]);
-    shader_->setUniform("texture3", *textures_[3]);
+    shader_->setUniform("textures[0]", *textures_[0]);
+    shader_->setUniform("textures[1]", *textures_[1]);
+    shader_->setUniform("textures[2]", *textures_[2]);
+    shader_->setUniform("textures[3]", *textures_[3]);
 
-    shader_->setUniform("texture0_intensity", 1.f);
-    shader_->setUniform("texture1_intensity", 1.f);
-    shader_->setUniform("texture2_intensity", 1.f);
-    shader_->setUniform("texture3_intensity", 1.f);
+    shader_->setUniform("textures_intensity[0]", 1.f);
+    shader_->setUniform("textures_intensity[1]", 1.f);
+    shader_->setUniform("textures_intensity[2]", 1.f);
+    shader_->setUniform("textures_intensity[3]", 1.f);
 
-    shader_->setUniform("pan_velocity", 0.5f);
+    shader_->setUniform("pan_velocity[0]", 0.05f);
+    shader_->setUniform("pan_velocity[1]", 0.025f);
+    shader_->setUniform("pan_velocity[2]", 0.07f);
+    shader_->setUniform("pan_velocity[3]", 0.065f);
 }
