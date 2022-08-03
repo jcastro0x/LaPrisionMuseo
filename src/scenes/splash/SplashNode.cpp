@@ -52,10 +52,10 @@ SplashNode::SplashNode()
 
 SplashNode::~SplashNode() = default;
 
-void SplashNode::changeTexture(size_t index, std::string_view /*textureName*/)
+void SplashNode::changeTexture(size_t index, std::string_view textureName)
 {
-    assert(index <= 5 && "SplashNode::changeTexture called with value bigger than 5");
-    //initializeTexture(texturesBackBuffer_[index].get(), textureName.data());
+    assert(index <= 4 && "SplashNode::changeTexture called with value bigger than 4");
+    initializeTexture(textures_[index].get(), textureName.data());
 }
 
 //float texture0_intensity = 1;
@@ -70,6 +70,21 @@ void SplashNode::tick(float deltaTime)
     static float totalTime = 0;
     totalTime += deltaTime;
     shader_->setUniform("time", totalTime);
+
+    for(size_t i = 0; i < texturesIntensities.size(); i++)
+    {
+        auto& intensity = texturesIntensities[i];
+        const auto direction = intensity > texturesIntensitiesTargets[i]
+                             ? -1.f
+                             : +1.f;
+
+        intensity = std::clamp(intensity + deltaTime * texturesIntensitiesVelocity * direction, 0.f, 1.f);
+    }
+
+    shader_->setUniform("textures_intensity[0]", texturesIntensities[0]);
+    shader_->setUniform("textures_intensity[1]", texturesIntensities[1]);
+    shader_->setUniform("textures_intensity[2]", texturesIntensities[2]);
+    shader_->setUniform("textures_intensity[3]", texturesIntensities[3]);
 
 //    ImGui::Begin("SplashNode");
 //    ImGui::DragFloat("textures_intensity[0]", &texture0_intensity, 0.1f);
@@ -93,9 +108,9 @@ void SplashNode::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
 void SplashNode::initializeTextures()
 {
-    // Fill default pixels to fill textures with black color
-    std::array<sf::Uint8, Configuration::BACKGROUND_TEX_SIZE_X * Configuration::BACKGROUND_TEX_SIZE_Y> pixels; 
-    std::fill(pixels.begin(), pixels.end(), 0 /*BLACK*/);
+    // Fill default pixels to fill textures with black color (RGBA32)
+    std::array<sf::Uint8, Configuration::BACKGROUND_TEX_SIZE_X * Configuration::BACKGROUND_TEX_SIZE_Y * 4> pixels{};
+    std::ranges::fill(pixels, 0 /*BLACK*/);
 
     // Create default black textures
     for(size_t i = 0; i < 4; i++)
@@ -107,6 +122,9 @@ void SplashNode::initializeTextures()
 
     // Load mask
     maskTexture_->loadFromFile("splash/splashMask.png");
+
+    std::ranges::fill(texturesIntensities, 0.f);
+    std::ranges::fill(texturesIntensitiesTargets, 1.f);
 
 
     // std::array<const char*, 5> files = {
@@ -145,16 +163,16 @@ void SplashNode::initializeShader()
     shader_->setUniform("textures_intensity[2]", 1.f);
     shader_->setUniform("textures_intensity[3]", 1.f);
 
-//     shader_->setUniform("textures[0]", *textures_[0]);
-//     shader_->setUniform("textures[1]", *textures_[1]);
-//     shader_->setUniform("textures[2]", *textures_[2]);
-//     shader_->setUniform("textures[3]", *textures_[3]);
+     shader_->setUniform("textures[0]", *textures_[0]);
+     shader_->setUniform("textures[1]", *textures_[1]);
+     shader_->setUniform("textures[2]", *textures_[2]);
+     shader_->setUniform("textures[3]", *textures_[3]);
 }
 
 void SplashNode::initializeTexture(sf::Texture* texture, std::string_view textureName)
 {
     texture->loadFromFile(textureName.data());
-    texture->setSrgb(true);
+    texture->setSrgb(false);
     texture->setRepeated(true);
     texture->setSmooth(true);
 }

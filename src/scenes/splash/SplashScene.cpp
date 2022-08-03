@@ -22,6 +22,8 @@
 #include "SplashScene.hpp"
 #include "SplashNode.hpp"
 
+#include <imgui.h>
+
 using namespace lpm;
 
 SplashScene::SplashScene(Engine* engine)
@@ -29,13 +31,37 @@ SplashScene::SplashScene(Engine* engine)
 {
     splash = &addSceneNode<SplashNode>();
 
-    // splash->changeTexture(SplashNode::TEXTURE_0, "splash/splash00.jpg");
-    // splash->changeTexture(SplashNode::TEXTURE_1, "splash/splash01.jpg");
-    // splash->changeTexture(SplashNode::TEXTURE_2, "splash/splash02.jpg");
-    // splash->changeTexture(SplashNode::TEXTURE_3, "splash/splash03.jpg");
+    splash->changeTexture(SplashNode::TEXTURE_0, "splash/splash00.jpg");
+    splash->changeTexture(SplashNode::TEXTURE_1, "splash/splash01.jpg");
+    splash->changeTexture(SplashNode::TEXTURE_2, "splash/splash02.jpg");
+    splash->changeTexture(SplashNode::TEXTURE_3, "splash/splash03.jpg");
 }
 
 void SplashScene::tick(float deltaTime)
 {
     Scene::tick(deltaTime);
+
+    ImGui::Begin("SplashScene");
+    if (ImGui::BeginTable("table1", 4, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg))
+    {
+        for (int row = 0; row < 8; row++)
+        {
+            ImGui::TableNextRow();
+            for (int column = 0; column < 4; column++)
+            {
+                ImGui::TableSetColumnIndex(column);
+
+                char buf[32];
+                sprintf(buf, "%d%d_%d", column, row, row);
+                if(ImGui::Button(buf, ImVec2(-FLT_MIN, 0.0f)))
+                {
+                    char fileName[64];
+                    sprintf(fileName, "splash/splash0%d.jpg", row);
+                    splash->changeTexture(column, fileName);
+                }
+            }
+        }
+    }
+    ImGui::EndTable();
+    ImGui::End();
 }

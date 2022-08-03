@@ -75,13 +75,9 @@ namespace lpm
 
         std::array<std::unique_ptr<sf::Texture>, 4> textures_;
         std::array<std::unique_ptr<sf::Texture>, 4> texturesBackBuffer_;
-        //std::array<float, 5> texturesIntensities;
 
-        struct TextureBuffer
-        {
-            sf::Texture* front = nullptr;
-            float intensity = 1.f;
-            float velocity  = 1.f;
-        };
+        float texturesIntensitiesVelocity = .25f;
+        std::array<float, 4> texturesIntensities;
+        std::array<float, 4> texturesIntensitiesTargets;
     };
 }
