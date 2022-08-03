@@ -75,6 +75,7 @@ namespace lpm
         std::unique_ptr<sf::Shader> shader_;
         std::unique_ptr<sf::RectangleShape> rectangleShape_;
         std::unique_ptr<sf::Texture> maskTexture_;
+        std::unique_ptr<sf::Texture> topMaskTexture_;
 
         float texturesIntensitiesVelocity = 1.95f;
         std::array<std::unique_ptr<sf::Texture>, 4> textures_;

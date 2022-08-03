@@ -41,6 +41,7 @@ SplashNode::SplashNode()
 : shader_(std::make_unique<sf::Shader>())
 , rectangleShape_(std::make_unique<sf::RectangleShape>())
 , maskTexture_(std::make_unique<sf::Texture>())
+, topMaskTexture_(std::make_unique<sf::Texture>())
 {
     initializeTextures();
     initializeShader();
@@ -60,6 +61,8 @@ void SplashNode::changeTexture(size_t index, std::string_view textureName)
         setTextureIntensityTarget(index, 1.f);
     });
 }
+
+
 
 void SplashNode::tick(float deltaTime)
 {
@@ -120,6 +123,8 @@ void SplashNode::initializeTextures()
     // Load mask
     maskTexture_->loadFromFile("splash/splashMask.png");
 
+    topMaskTexture_->loadFromFile("splash/topmask.png");
+
     std::ranges::fill(texturesIntensities, 0.f);
     std::ranges::fill(texturesIntensitiesTargets, 1.f);
 }
@@ -129,11 +134,12 @@ void SplashNode::initializeShader()
     shader_->loadFromFile("splash/splash.frag", sf::Shader::Fragment);
 
     shader_->setUniform("mask_texture", *maskTexture_);
-    
-    shader_->setUniform("pan_velocity[0]", 0.05f);
-    shader_->setUniform("pan_velocity[1]", 0.025f);
-    shader_->setUniform("pan_velocity[2]", 0.07f);
-    shader_->setUniform("pan_velocity[3]", 0.065f);
+    shader_->setUniform("top_mask_texture", *topMaskTexture_);
+
+    shader_->setUniform("displacement[0]", sf::Vector3f(0,       1 - 1/4.f,  .10f));
+    shader_->setUniform("displacement[1]", sf::Vector3f(-1/4.f,  1 - 1/4.f,  .07f));
+    shader_->setUniform("displacement[2]", sf::Vector3f(-2/4.f,  1 - 1/4.f,  .09f));
+    shader_->setUniform("displacement[3]", sf::Vector3f(-3/4.f,  1 - 1/4.f,  .06f));
 
     shader_->setUniform("textures_intensity[0]", 1.f);
     shader_->setUniform("textures_intensity[1]", 1.f);
