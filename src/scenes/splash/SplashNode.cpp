@@ -136,20 +136,16 @@ void SplashNode::initializeShader()
     shader_->setUniform("mask_texture", *maskTexture_);
     shader_->setUniform("top_mask_texture", *topMaskTexture_);
 
+    // Vector3(offset, limit, velocity)
     shader_->setUniform("displacement[0]", sf::Vector3f(0,       1 - 1/4.f,  .10f));
     shader_->setUniform("displacement[1]", sf::Vector3f(-1/4.f,  1 - 1/4.f,  .07f));
     shader_->setUniform("displacement[2]", sf::Vector3f(-2/4.f,  1 - 1/4.f,  .09f));
     shader_->setUniform("displacement[3]", sf::Vector3f(-3/4.f,  1 - 1/4.f,  .06f));
 
-    shader_->setUniform("textures_intensity[0]", 1.f);
-    shader_->setUniform("textures_intensity[1]", 1.f);
-    shader_->setUniform("textures_intensity[2]", 1.f);
-    shader_->setUniform("textures_intensity[3]", 1.f);
-
-     shader_->setUniform("textures[0]", *textures_[0]);
-     shader_->setUniform("textures[1]", *textures_[1]);
-     shader_->setUniform("textures[2]", *textures_[2]);
-     shader_->setUniform("textures[3]", *textures_[3]);
+    shader_->setUniform("textures[0]", *textures_[0]);
+    shader_->setUniform("textures[1]", *textures_[1]);
+    shader_->setUniform("textures[2]", *textures_[2]);
+    shader_->setUniform("textures[3]", *textures_[3]);
 }
 
 void SplashNode::initializeTexture(sf::Texture* texture, std::string_view textureName)

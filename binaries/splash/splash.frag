@@ -54,7 +54,7 @@ vec2 ping_pong(int index)
 
 void main()
 {
-    vec4 maskPixel     = texture2D(mask_texture, gl_TexCoord[0].xy);
+    vec4 maskPixel     = texture2D(mask_texture,     gl_TexCoord[0].xy);
     vec4 top_maskPixel = texture2D(top_mask_texture, gl_TexCoord[0].xy);
 
     vec4 t0 = maskPixel.r         * textures_intensity[0] * texture2D(textures[0], ping_pong(0)) * maskPixel.a;
@@ -62,5 +62,5 @@ void main()
     vec4 t2 = maskPixel.b         * textures_intensity[2] * texture2D(textures[2], ping_pong(2)) * maskPixel.a;
     vec4 t3 = (1.0 - maskPixel.a) * textures_intensity[3] * texture2D(textures[3], ping_pong(3));
 
-    gl_FragColor = (gl_Color * t0 + t1 + t2 + t3) * top_maskPixel.r;
+    gl_FragColor = (t0 + t1 + t2 + t3) * top_maskPixel.r * gl_Color;
 }
