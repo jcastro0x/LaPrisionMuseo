@@ -32,5 +32,8 @@ namespace lpm
 
     protected:
         void tick(float deltaTime) override;
+
+    private:
+        class SplashNode* splash = nullptr;
     };
 }

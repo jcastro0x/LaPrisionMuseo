@@ -37,9 +37,9 @@
 #include <Configuration.hpp>
 
 #include <scene/SceneManager.hpp>
-#include <login/LoginScene.hpp>
-#include <world/WorldScene.hpp>
-#include <splash/SplashScene.hpp>
+#include <scenes/login/LoginScene.hpp>
+#include <scenes/world/WorldScene.hpp>
+#include <scenes/splash/SplashScene.hpp>
 
 using namespace lpm;
 

@@ -19,50 +19,23 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-#pragma once
+#include "SplashScene.hpp"
+#include "SplashNode.hpp"
 
-#include <scene/SceneNode.hpp>
-#include <memory>
-#include <array>
+using namespace lpm;
 
-namespace sf
+SplashScene::SplashScene(Engine* engine)
+: Scene(engine)
 {
-    class Shader;
-    class Texture;
-    class RectangleShape;
+    splash = &addSceneNode<SplashNode>();
 
-    class RenderTarget;
-    class RenderStates;
+    splash->changeTexture(SplashNode::TEXTURE_0, "splash/splash00.jpg");
+    splash->changeTexture(SplashNode::TEXTURE_1, "splash/splash01.jpg");
+    splash->changeTexture(SplashNode::TEXTURE_2, "splash/splash02.jpg");
+    splash->changeTexture(SplashNode::TEXTURE_3, "splash/splash03.jpg");
 }
 
-namespace lpm
+void SplashScene::tick(float deltaTime)
 {
-    class SplashNode : public SceneNode
-    {
-    public:
-        SplashNode();
-        ~SplashNode();
-
-    public:
-        void changeTexture(size_t index, std::string_view textureName);
-
-    protected:
-        void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
-        void tick(float deltaTime) override;
-
-    private:
-        void initializeTextures();
-        void initializeShader();
-
-        void initializeTexture(sf::Texture* texture, std::string_view textureName);
-
-
-    private:
-        std::unique_ptr<sf::Shader> shader_;
-        std::unique_ptr<sf::RectangleShape> rectangleShape_;
-
-        std::array<std::unique_ptr<sf::Texture>, 5> textures_;
-        std::array<std::unique_ptr<sf::Texture>, 5> texturesBackBuffer_;
-        std::array<float, 5> texturesIntensities;
-    };
+    Scene::tick(deltaTime);
 }

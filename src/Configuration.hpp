@@ -33,8 +33,8 @@ namespace lpm
 
         inline static unsigned FRAME_RATE = 30;
 
-        inline static unsigned BACKGROUND_TEX_SIZE_X = 640;
-        inline static unsigned BACKGROUND_TEX_SIZE_Y = 480;
+        static constexpr unsigned BACKGROUND_TEX_SIZE_X = 640;
+        static constexpr unsigned BACKGROUND_TEX_SIZE_Y = 480;
 
     };
 }

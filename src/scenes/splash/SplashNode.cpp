@@ -31,6 +31,7 @@
 #include <SFML/Graphics/RenderTarget.hpp>
 
 #include <scene/nodes/BackgroundNode.hpp>
+#include <Configuration.hpp>
 
 
 
@@ -39,6 +40,7 @@ using namespace lpm;
 SplashNode::SplashNode()
 : shader_(std::make_unique<sf::Shader>())
 , rectangleShape_(std::make_unique<sf::RectangleShape>())
+, maskTexture_(std::make_unique<sf::Texture>())
 {
     initializeTextures();
     initializeShader();
@@ -91,46 +93,62 @@ void SplashNode::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
 void SplashNode::initializeTextures()
 {
-    std::array<const char*, 5> files = {
-        "splash/splash00.jpg",
-        "splash/splash01.jpg",
-        "splash/splash02.jpg",
-        "splash/splash03.jpg",
-        "splash/splashMask.png"
-    };
+    // Fill default pixels to fill textures with black color
+    std::array<sf::Uint8, Configuration::BACKGROUND_TEX_SIZE_X * Configuration::BACKGROUND_TEX_SIZE_Y> pixels; 
+    std::fill(pixels.begin(), pixels.end(), 0 /*BLACK*/);
 
-    for(size_t i = 0; i < files.size(); i++)
+    // Create default black textures
+    for(size_t i = 0; i < 4; i++)
     {
         textures_[i] = std::make_unique<sf::Texture>();
-        initializeTexture(textures_[i].get(), files[i]);
+        textures_[i]->create(Configuration::BACKGROUND_TEX_SIZE_X, Configuration::BACKGROUND_TEX_SIZE_Y);
+        textures_[i]->update(pixels.data());
     }
 
-    for(size_t i = 0; i < texturesBackBuffer_.size(); i++)
-    {
-        texturesBackBuffer_[i] = std::make_unique<sf::Texture>();
-    }
+    // Load mask
+    maskTexture_->loadFromFile("splash/splashMask.png");
+
+
+    // std::array<const char*, 5> files = {
+    //     "splash/splash00.jpg",
+    //     "splash/splash01.jpg",
+    //     "splash/splash02.jpg",
+    //     "splash/splash03.jpg",
+    //     "splash/splashMask.png"
+    // };
+
+    // for(size_t i = 0; i < files.size(); i++)
+    // {
+    //     textures_[i] = std::make_unique<sf::Texture>();
+    //     initializeTexture(textures_[i].get(), files[i]);
+    // }
+
+    // for(size_t i = 0; i < texturesBackBuffer_.size(); i++)
+    // {
+    //     texturesBackBuffer_[i] = std::make_unique<sf::Texture>();
+    // }
 }
 
 void SplashNode::initializeShader()
 {
     shader_->loadFromFile("splash/splash.frag", sf::Shader::Fragment);
 
-    shader_->setUniform("mask_texture", *textures_[4]);
-
-    shader_->setUniform("textures[0]", *textures_[0]);
-    shader_->setUniform("textures[1]", *textures_[1]);
-    shader_->setUniform("textures[2]", *textures_[2]);
-    shader_->setUniform("textures[3]", *textures_[3]);
+    shader_->setUniform("mask_texture", *maskTexture_);
+    
+    shader_->setUniform("pan_velocity[0]", 0.05f);
+    shader_->setUniform("pan_velocity[1]", 0.025f);
+    shader_->setUniform("pan_velocity[2]", 0.07f);
+    shader_->setUniform("pan_velocity[3]", 0.065f);
 
     shader_->setUniform("textures_intensity[0]", 1.f);
     shader_->setUniform("textures_intensity[1]", 1.f);
     shader_->setUniform("textures_intensity[2]", 1.f);
     shader_->setUniform("textures_intensity[3]", 1.f);
 
-    shader_->setUniform("pan_velocity[0]", 0.05f);
-    shader_->setUniform("pan_velocity[1]", 0.025f);
-    shader_->setUniform("pan_velocity[2]", 0.07f);
-    shader_->setUniform("pan_velocity[3]", 0.065f);
+//     shader_->setUniform("textures[0]", *textures_[0]);
+//     shader_->setUniform("textures[1]", *textures_[1]);
+//     shader_->setUniform("textures[2]", *textures_[2]);
+//     shader_->setUniform("textures[3]", *textures_[3]);
 }
 
 void SplashNode::initializeTexture(sf::Texture* texture, std::string_view textureName)

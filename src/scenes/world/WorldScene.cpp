@@ -19,18 +19,33 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-#include "SplashScene.hpp"
-#include "SplashNode.hpp"
+#include "WorldScene.hpp"
+
+#include <scene/nodes/BackgroundNode.hpp>
+#include <scenes/world/room/RoomSceneNode.hpp>
+
+#include <Engine.hpp>
+#include <widgets/Cursor.hpp>
 
 using namespace lpm;
 
-SplashScene::SplashScene(Engine* engine)
-: Scene(engine)
+WorldScene::WorldScene(Engine* engine) : Scene(engine)
 {
-    addSceneNode<SplashNode>();
+    addSceneNode<BackgroundNode>("AL_Almacen1.jpg")
+    .setName("Background")
+    .setDrawOrder(CommonDepths::BACKGROUND);
+
+    addSceneNode<RoomSceneNode>();
+
+    getEngine()->getCursor().setCursor("default");
 }
 
-void SplashScene::tick(float deltaTime)
+WorldScene::~WorldScene()
 {
-    Scene::tick(deltaTime);
+
+}
+
+void WorldScene::tick(float deltaTime)
+{
+    deltaTime++;
 }

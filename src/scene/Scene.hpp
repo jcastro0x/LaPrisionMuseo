@@ -62,11 +62,17 @@ namespace lpm
 
         virtual void tick(float deltaTime) = 0;
 
+        /**
+         * @brief Create SceneNode and add into Scene.
+         * 
+         * SceneNodes created thorugh this are memory automatic handled by the scene,
+         * for that, this function only returns a raw pointer. DONT DELETE IT YOURSELF. 
+         * 
+         * @return Pointer to created SceneNode casted to tparam SceneNodeType 
+         */
         template<typename SceneNodeType, typename... Args> requires std::is_base_of_v<SceneNode, SceneNodeType>
         SceneNodeType& addSceneNode(Args... args)
         {
-            //return static_cast<SceneNodeType&>(*addSceneNode_Internal(std::make_unique<SceneNodeType>(args...)));
-
             auto* node = addSceneNode_Internal(std::make_unique<SceneNodeType>(args...));
             return *static_cast<SceneNodeType*>(node);
         }

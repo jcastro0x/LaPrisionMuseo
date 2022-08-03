@@ -12,26 +12,27 @@ set(SRC_FILES
     src/components/AspectRatio.cpp
     src/components/Internationalization.cpp
 
-    src/login/LoginScene.cpp
-
     src/network/DebugNetwork.cpp
     src/network/NullNetwork.cpp
     src/network/SocketIONetwork.cpp
 
-    src/room/RoomCamera.cpp
-    src/room/RoomSceneNode.cpp
+    src/player/Player.cpp
 
     src/scene/Scene.cpp
     src/scene/SceneNode.cpp
     src/scene/nodes/BackgroundNode.cpp
     src/scene/nodes/ClickableText.cpp
 
+    src/scenes/login/LoginScene.cpp
+    src/scenes/splash/SplashScene.cpp 
+    src/scenes/splash/SplashNode.cpp 
+    src/scenes/world/WorldScene.cpp
+    src/scenes/world/room/RoomCamera.cpp
+    src/scenes/world/room/RoomSceneNode.cpp
+    
     src/Resources.cpp
-
     src/widgets/Cursor.cpp
-
-    src/world/WorldScene.cpp
-        src/splash/SplashScene.cpp src/splash/SplashScene.hpp src/splash/SplashNode.cpp src/splash/SplashNode.hpp)
+)
 
 set(SRC_IMGUI
     libs/imgui/imgui.cpp
