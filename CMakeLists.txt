@@ -22,6 +22,7 @@ set(SRC_FILES
     src/scene/SceneNode.cpp
     src/scene/nodes/BackgroundNode.cpp
     src/scene/nodes/ClickableText.cpp
+    src/scene/nodes/Text.cpp
 
     src/scenes/login/LoginScene.cpp
     src/scenes/splash/SplashScene.cpp 

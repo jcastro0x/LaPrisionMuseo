@@ -22,58 +22,104 @@
 #include "SplashScene.hpp"
 #include "SplashNode.hpp"
 
+#include <cmath>
+
 #include <SFML/Graphics/Text.hpp>
+#include <SFML/Window/Keyboard.hpp>
 #include <imgui.h>
 
 #include <Engine.hpp>
 #include <Resources.hpp>
 #include <Configuration.hpp>
 
+#include <scene/nodes/Text.hpp>
+
+
 using namespace lpm;
 
 SplashScene::SplashScene(Engine* engine)
 : Scene(engine)
-, logoText(std::make_unique<sf::Text>())
 {
     splash = &addSceneNode<SplashNode>();
+    splash->setDrawOrder(CommonDepths::BACKGROUND);
 
     splash->changeTexture(SplashNode::TEXTURE_0, "splash/splash00.jpg");
     splash->changeTexture(SplashNode::TEXTURE_1, "splash/splash01.jpg");
     splash->changeTexture(SplashNode::TEXTURE_2, "splash/splash02.jpg");
     splash->changeTexture(SplashNode::TEXTURE_3, "splash/splash03.jpg");
 
-    auto* font = *getEngine()->getResources().getFont("FontLogo");
-    logoText->setFont(*font);
-    logoText->setString("La Prision");
-    logoText->setOrigin(logoText->getGlobalBounds().width / 2.f, logoText->getGlobalBounds().height / 2.f);
-    logoText->setPosition(Configuration::BACKGROUND_TEX_SIZE_X / 2.f, Configuration::BACKGROUND_TEX_SIZE_Y - 100.f);
+    auto& logoTextShadow = addSceneNode<lpm::Text>("FontLogo", 150);
+    logoTextShadow.setTextFillColor(sf::Color::Black);
+    logoTextShadow.setTextString("La Prision");
+    logoTextShadow.setDrawOrder(CommonDepths::MIDDLE, 0);
+    logoTextShadow.setPosition(223 + 2, Configuration::BACKGROUND_TEX_SIZE_Y - 230.f - 2);
+
+    auto& logoText = addSceneNode<lpm::Text>("FontLogo", 150);
+    logoText.setTextString("La Prision");
+    logoText.setDrawOrder(CommonDepths::MIDDLE, 1);
+    logoText.setPosition(223, Configuration::BACKGROUND_TEX_SIZE_Y - 230.f);
+
+
+    auto& museoTextShadow = addSceneNode<lpm::Text>("FontEntry", 125);
+    museoTextShadow.setTextFillColor(sf::Color::Black);
+    museoTextShadow.setTextString("MUSEO");
+    museoTextShadow.setDrawOrder(CommonDepths::MIDDLE, 0);
+    museoTextShadow.setPosition(513 + 2, Configuration::BACKGROUND_TEX_SIZE_Y - 215.f - 2);
+
+    auto& museoText = addSceneNode<lpm::Text>("FontEntry", 125);
+    museoText.setTextFillColor(sf::Color::Red);
+    museoText.setTextString("MUSEO");
+    museoText.setDrawOrder(CommonDepths::MIDDLE, 1);
+    museoText.setPosition(513, Configuration::BACKGROUND_TEX_SIZE_Y - 215.f);
+
+
+    pressAnyKeyText = &addSceneNode<lpm::Text>("FontEntry", 25);
+    pressAnyKeyText->setTextFillColor(sf::Color::White);
+    pressAnyKeyText->setTextString("Press any key to continue");
+    pressAnyKeyText->setDrawOrder(CommonDepths::MIDDLE, 0);
+    pressAnyKeyText->setPosition(Configuration::BACKGROUND_TEX_SIZE_X / 2.f, Configuration::BACKGROUND_TEX_SIZE_Y - 85.f);
 }
 
 void SplashScene::tick(float deltaTime)
 {
     Scene::tick(deltaTime);
 
-    ImGui::Begin("SplashScene");
-    if (ImGui::BeginTable("table1", 4, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg))
-    {
-        for (int row = 0; row < 8; row++)
-        {
-            ImGui::TableNextRow();
-            for (int column = 0; column < 4; column++)
-            {
-                ImGui::TableSetColumnIndex(column);
+    sf::Color color = sf::Color::White;
 
-                char buf[32];
-                sprintf(buf, "%d%d_%d", column, row, row);
-                if(ImGui::Button(buf, ImVec2(-FLT_MIN, 0.0f)))
-                {
-                    char fileName[64];
-                    sprintf(fileName, "splash/splash0%d.jpg", row);
-                    splash->changeTexture(column, fileName);
-                }
-            }
-        }
+    static float totalTime = 0;
+    totalTime += deltaTime;
+    color.a = static_cast<uint8_t>(std::abs(std::sin(totalTime * 2)) * 255);
+    pressAnyKeyText->setTextFillColor(color);
+
+
+//    ImGui::Begin("SplashScene");
+//    if (ImGui::BeginTable("table1", 4, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg))
+//    {
+//        for (int row = 0; row < 8; row++)
+//        {
+//            ImGui::TableNextRow();
+//            for (int column = 0; column < 4; column++)
+//            {
+//                ImGui::TableSetColumnIndex(column);
+//
+//                char buf[32];
+//                sprintf(buf, "%d%d_%d", column, row, row);
+//                if(ImGui::Button(buf, ImVec2(-FLT_MIN, 0.0f)))
+//                {
+//                    char fileName[64];
+//                    sprintf(fileName, "splash/splash0%d.jpg", row);
+//                    splash->changeTexture(column, fileName);
+//                }
+//            }
+//        }
+//    }
+//    ImGui::EndTable();
+//    ImGui::End();
+
+    bool bLoadLoginScene = sf::Keyboard::isKeyPressed(sf::Keyboard::Space)
+                        || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape);
+    if(bLoadLoginScene)
+    {
+        getEngine()->loadScene("login");
     }
-    ImGui::EndTable();
-    ImGui::End();
 }

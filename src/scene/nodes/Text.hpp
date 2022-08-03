@@ -21,22 +21,41 @@
 
 #pragma once
 
-#include <scene/Scene.hpp>
+#include <scene/SceneNode.hpp>
+#include <memory>
+
+#include <SFML/System/String.hpp>
+
+namespace sf
+{
+    class Text;
+    class Color;
+}
 
 namespace lpm
 {
-    class Text;
-
-    class SplashScene : public Scene
+    class Text final : public SceneNode
     {
     public:
-        SplashScene(class Engine* engine);
+        Text(std::string_view fontName, unsigned fontSize);
+        ~Text() override;
+
+    public:
+        void setTextString(const sf::String& string);
+        void setTextFillColor(const sf::Color& color);
+
+
+    public:
+        void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+
 
     protected:
-        void tick(float deltaTime) override;
+        void init() override;
+
 
     private:
-        class SplashNode* splash = nullptr;
-        lpm::Text* pressAnyKeyText = nullptr;
+        std::unique_ptr<sf::Text> text_;
+        std::string fontName_;
+        unsigned fontSize_;
     };
 }

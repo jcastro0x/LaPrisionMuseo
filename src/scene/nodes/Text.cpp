@@ -19,24 +19,54 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-#pragma once
+#include "Text.hpp"
+
+#include <SFML/Graphics/Text.hpp>
 
 #include <scene/Scene.hpp>
+#include <Engine.hpp>
+#include <Resources.hpp>
 
-namespace lpm
+using namespace lpm;
+
+
+Text::Text(std::string_view fontName, unsigned fontSize)
+: text_(std::make_unique<sf::Text>())
+, fontName_(fontName.data())
+, fontSize_(fontSize)
 {
-    class Text;
+}
 
-    class SplashScene : public Scene
+Text::~Text() = default;
+
+void Text::setTextString(const sf::String& string)
+{
+    text_->setString(string);
+    text_->setOrigin(text_->getGlobalBounds().width / 2.f, text_->getGlobalBounds().height / 2.f);
+}
+
+void Text::setTextFillColor(const sf::Color& color)
+{
+    text_->setFillColor(color);
+}
+
+void Text::init()
+{
+    const auto& resources = getSceneOwner()->getEngine()->getResources();
+
+    if(auto font = resources.getFont(fontName_))
     {
-    public:
-        SplashScene(class Engine* engine);
+        text_->setFont(**font);
+        text_->setCharacterSize(fontSize_);
+    }
+    else
+    {
+        throw resource_exception();
+    }
+}
 
-    protected:
-        void tick(float deltaTime) override;
-
-    private:
-        class SplashNode* splash = nullptr;
-        lpm::Text* pressAnyKeyText = nullptr;
-    };
+void Text::draw(sf::RenderTarget& target, sf::RenderStates states) const
+{
+    states.transform *= getTransform();
+    target.draw(*text_, states);
 }
