@@ -108,16 +108,11 @@ void SplashNode::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
 void SplashNode::initializeTextures()
 {
-    // Fill default pixels to fill textures with black color (RGBA32)
-    std::array<sf::Uint8, Configuration::BACKGROUND_TEX_SIZE_X * Configuration::BACKGROUND_TEX_SIZE_Y * 4> pixels{};
-    std::ranges::fill(pixels, 0 /*BLACK*/);
-
-    // Create default black textures
+    // Create default textures
     for(size_t i = 0; i < 4; i++)
     {
         textures_[i] = std::make_unique<sf::Texture>();
         textures_[i]->create(Configuration::BACKGROUND_TEX_SIZE_X, Configuration::BACKGROUND_TEX_SIZE_Y);
-        textures_[i]->update(pixels.data());
     }
 
     // Load mask
@@ -136,11 +131,14 @@ void SplashNode::initializeShader()
     shader_->setUniform("mask_texture", *maskTexture_);
     shader_->setUniform("top_mask_texture", *topMaskTexture_);
 
+    static constexpr auto quarter = 1 - 1/4.f;
+    static constexpr auto fade    = 1 - 1/40.f;
+
     // Vector3(offset, limit, velocity)
-    shader_->setUniform("displacement[0]", sf::Vector3f(0,       1 - 1/4.f,  .10f));
-    shader_->setUniform("displacement[1]", sf::Vector3f(-1/4.f,  1 - 1/4.f,  .07f));
-    shader_->setUniform("displacement[2]", sf::Vector3f(-2/4.f,  1 - 1/4.f,  .09f));
-    shader_->setUniform("displacement[3]", sf::Vector3f(-3/4.f,  1 - 1/4.f,  .06f));
+    shader_->setUniform("displacement[0]", sf::Vector3f(0,       quarter,  .10f));
+    shader_->setUniform("displacement[1]", sf::Vector3f(-1/4.f,  quarter,  .07f));
+    shader_->setUniform("displacement[2]", sf::Vector3f(-2/4.f,  quarter,  .09f));
+    shader_->setUniform("displacement[3]", sf::Vector3f(-3/4.f,  quarter,  .06f));
 
     shader_->setUniform("textures[0]", *textures_[0]);
     shader_->setUniform("textures[1]", *textures_[1]);

@@ -84,3 +84,5 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
     ${CMAKE_SOURCE_DIR}/binaries $<TARGET_FILE_DIR:${PROJECT_NAME}>
 )
+
+add_definitions(-D_CRT_SECURE_NO_WARNINGS)
