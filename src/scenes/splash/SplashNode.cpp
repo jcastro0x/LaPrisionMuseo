@@ -52,16 +52,17 @@ SplashNode::SplashNode()
 
 SplashNode::~SplashNode() = default;
 
+#include <iostream>
 void SplashNode::changeTexture(size_t index, std::string_view textureName)
 {
     assert(index <= 4 && "SplashNode::changeTexture called with value bigger than 4");
-    initializeTexture(textures_[index].get(), textureName.data());
-}
+    setTextureIntensityTarget(index, 0.f, [this, index, textureName = std::string(textureName.data())](){
 
-//float texture0_intensity = 1;
-//float texture1_intensity = 1;
-//float texture2_intensity = 1;
-//float texture3_intensity = 1;
+        std::cout << "JAHASHASH\n";
+        initializeTexture(textures_[index].get(), textureName);
+        setTextureIntensityTarget(index, 1.f);
+    });
+}
 
 void SplashNode::tick(float deltaTime)
 {
@@ -74,30 +75,29 @@ void SplashNode::tick(float deltaTime)
     for(size_t i = 0; i < texturesIntensities.size(); i++)
     {
         auto& intensity = texturesIntensities[i];
-        const auto direction = intensity > texturesIntensitiesTargets[i]
-                             ? -1.f
-                             : +1.f;
+
+        float direction = 0;
+        if(intensity != texturesIntensitiesTargets[i])
+        {
+            direction = intensity > texturesIntensitiesTargets[i]
+                      ? -1.f
+                      : +1.f;
+        }
 
         intensity = std::clamp(intensity + deltaTime * texturesIntensitiesVelocity * direction, 0.f, 1.f);
+
+        static constexpr float ACCEPTANCE = 0.1f;
+        if(std::abs(intensity - texturesIntensitiesTargets[i]) < ACCEPTANCE && texturesIntensitiesCallbacks[i])
+        {
+            texturesIntensitiesCallbacks[i]();
+            texturesIntensitiesCallbacks[i] = {};
+        }
     }
 
     shader_->setUniform("textures_intensity[0]", texturesIntensities[0]);
     shader_->setUniform("textures_intensity[1]", texturesIntensities[1]);
     shader_->setUniform("textures_intensity[2]", texturesIntensities[2]);
     shader_->setUniform("textures_intensity[3]", texturesIntensities[3]);
-
-//    ImGui::Begin("SplashNode");
-//    ImGui::DragFloat("textures_intensity[0]", &texture0_intensity, 0.1f);
-//    ImGui::DragFloat("textures_intensity[1]", &texture1_intensity, 0.1f);
-//    ImGui::DragFloat("textures_intensity[2]", &texture2_intensity, 0.1f);
-//    ImGui::DragFloat("textures_intensity[3]", &texture3_intensity, 0.1f);
-//    ImGui::End();
-//
-//    shader_->setUniform("textures_intensity[0]", texture0_intensity);
-//    shader_->setUniform("textures_intensity[1]", texture1_intensity);
-//    shader_->setUniform("textures_intensity[2]", texture2_intensity);
-//    shader_->setUniform("textures_intensity[3]", texture3_intensity);
-
 }
 
 void SplashNode::draw(sf::RenderTarget& target, sf::RenderStates states) const
@@ -125,26 +125,6 @@ void SplashNode::initializeTextures()
 
     std::ranges::fill(texturesIntensities, 0.f);
     std::ranges::fill(texturesIntensitiesTargets, 1.f);
-
-
-    // std::array<const char*, 5> files = {
-    //     "splash/splash00.jpg",
-    //     "splash/splash01.jpg",
-    //     "splash/splash02.jpg",
-    //     "splash/splash03.jpg",
-    //     "splash/splashMask.png"
-    // };
-
-    // for(size_t i = 0; i < files.size(); i++)
-    // {
-    //     textures_[i] = std::make_unique<sf::Texture>();
-    //     initializeTexture(textures_[i].get(), files[i]);
-    // }
-
-    // for(size_t i = 0; i < texturesBackBuffer_.size(); i++)
-    // {
-    //     texturesBackBuffer_[i] = std::make_unique<sf::Texture>();
-    // }
 }
 
 void SplashNode::initializeShader()
@@ -175,4 +155,11 @@ void SplashNode::initializeTexture(sf::Texture* texture, std::string_view textur
     texture->setSrgb(false);
     texture->setRepeated(true);
     texture->setSmooth(true);
+}
+
+
+void SplashNode::setTextureIntensityTarget(size_t index, float intensity, std::function<void()> const& callback)
+{
+    texturesIntensitiesTargets[index]   = intensity;
+    texturesIntensitiesCallbacks[index] = callback;
 }

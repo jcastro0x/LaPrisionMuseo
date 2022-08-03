@@ -24,6 +24,7 @@
 #include <scene/SceneNode.hpp>
 #include <memory>
 #include <array>
+#include <functional>
 
 namespace sf
 {
@@ -67,6 +68,8 @@ namespace lpm
         void initializeShader();
         void initializeTexture(sf::Texture* texture, std::string_view textureName);
 
+        void setTextureIntensityTarget(size_t index, float intensity, std::function<void()> const& callback = {});
+
 
     private:
         std::unique_ptr<sf::Shader> shader_;
@@ -76,8 +79,9 @@ namespace lpm
         std::array<std::unique_ptr<sf::Texture>, 4> textures_;
         std::array<std::unique_ptr<sf::Texture>, 4> texturesBackBuffer_;
 
-        float texturesIntensitiesVelocity = .25f;
+        float texturesIntensitiesVelocity = .5f;
         std::array<float, 4> texturesIntensities;
         std::array<float, 4> texturesIntensitiesTargets;
+        std::array<std::function<void()>, 4> texturesIntensitiesCallbacks;
     };
 }
