@@ -25,24 +25,21 @@
 
 #include <SFML/Graphics.hpp>
 #include <SFML/System/Clock.hpp>
-
 #include <TGUI/TGUI.hpp>
 #include <TGUI/Backend/SFML-Graphics.hpp>
-
 #include <imgui.h>
 #include <imgui-SFML.h>
 
-#include <scene/SceneManager.hpp>
-
-#include <Configuration.hpp>
-
-#include <login/LoginScene.hpp>
-#include <world/WorldScene.hpp>
 #include <widgets/Cursor.hpp>
-
 #include <network/DebugNetwork.hpp>
 #include <components/Internationalization.hpp>
 #include <Resources.hpp>
+#include <Configuration.hpp>
+
+#include <scene/SceneManager.hpp>
+#include <login/LoginScene.hpp>
+#include <world/WorldScene.hpp>
+#include <splash/SplashScene.hpp>
 
 using namespace lpm;
 
@@ -67,6 +64,7 @@ Engine::Engine()
     // REGISTER SCENES
     SceneManager::registerScene<LoginScene>("login", this);
     SceneManager::registerScene<WorldScene>("world", this);
+    SceneManager::registerScene<SplashScene>("splash", this);
     //~===================================================================
 
 
@@ -89,7 +87,7 @@ Engine::Engine()
 
 void Engine::run()
 {
-    loadScene("login");
+    loadScene("splash");
 
     auto menu = tgui::MenuBar::create();
     menu->setHeight(22.f);

@@ -31,7 +31,7 @@ set(SRC_FILES
     src/widgets/Cursor.cpp
 
     src/world/WorldScene.cpp
-)
+        src/splash/SplashScene.cpp src/splash/SplashScene.hpp)
 
 set(SRC_IMGUI
     libs/imgui/imgui.cpp
