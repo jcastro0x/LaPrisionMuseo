@@ -22,12 +22,18 @@
 #include "SplashScene.hpp"
 #include "SplashNode.hpp"
 
+#include <SFML/Graphics/Text.hpp>
 #include <imgui.h>
+
+#include <Engine.hpp>
+#include <Resources.hpp>
+#include <Configuration.hpp>
 
 using namespace lpm;
 
 SplashScene::SplashScene(Engine* engine)
 : Scene(engine)
+, logoText(std::make_unique<sf::Text>())
 {
     splash = &addSceneNode<SplashNode>();
 
@@ -35,6 +41,12 @@ SplashScene::SplashScene(Engine* engine)
     splash->changeTexture(SplashNode::TEXTURE_1, "splash/splash01.jpg");
     splash->changeTexture(SplashNode::TEXTURE_2, "splash/splash02.jpg");
     splash->changeTexture(SplashNode::TEXTURE_3, "splash/splash03.jpg");
+
+    auto* font = *getEngine()->getResources().getFont("FontLogo");
+    logoText->setFont(*font);
+    logoText->setString("La Prision");
+    logoText->setOrigin(logoText->getGlobalBounds().width / 2.f, logoText->getGlobalBounds().height / 2.f);
+    logoText->setPosition(Configuration::BACKGROUND_TEX_SIZE_X / 2.f, Configuration::BACKGROUND_TEX_SIZE_Y - 100.f);
 }
 
 void SplashScene::tick(float deltaTime)

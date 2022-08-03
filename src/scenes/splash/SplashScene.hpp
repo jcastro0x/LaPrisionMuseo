@@ -23,6 +23,11 @@
 
 #include <scene/Scene.hpp>
 
+namespace sf
+{
+    class Text;
+}
+
 namespace lpm
 {
     class SplashScene : public Scene
@@ -35,5 +40,6 @@ namespace lpm
 
     private:
         class SplashNode* splash = nullptr;
+        std::unique_ptr<sf::Text> logoText;
     };
 }

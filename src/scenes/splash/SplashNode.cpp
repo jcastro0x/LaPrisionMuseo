@@ -52,13 +52,10 @@ SplashNode::SplashNode()
 
 SplashNode::~SplashNode() = default;
 
-#include <iostream>
 void SplashNode::changeTexture(size_t index, std::string_view textureName)
 {
     assert(index <= 4 && "SplashNode::changeTexture called with value bigger than 4");
     setTextureIntensityTarget(index, 0.f, [this, index, textureName = std::string(textureName.data())](){
-
-        std::cout << "JAHASHASH\n";
         initializeTexture(textures_[index].get(), textureName);
         setTextureIntensityTarget(index, 1.f);
     });
@@ -86,7 +83,7 @@ void SplashNode::tick(float deltaTime)
 
         intensity = std::clamp(intensity + deltaTime * texturesIntensitiesVelocity * direction, 0.f, 1.f);
 
-        static constexpr float ACCEPTANCE = 0.1f;
+        static constexpr float ACCEPTANCE = 0.01f;
         if(std::abs(intensity - texturesIntensitiesTargets[i]) < ACCEPTANCE && texturesIntensitiesCallbacks[i])
         {
             texturesIntensitiesCallbacks[i]();

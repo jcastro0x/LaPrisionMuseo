@@ -76,10 +76,8 @@ namespace lpm
         std::unique_ptr<sf::RectangleShape> rectangleShape_;
         std::unique_ptr<sf::Texture> maskTexture_;
 
+        float texturesIntensitiesVelocity = 1.95f;
         std::array<std::unique_ptr<sf::Texture>, 4> textures_;
-        std::array<std::unique_ptr<sf::Texture>, 4> texturesBackBuffer_;
-
-        float texturesIntensitiesVelocity = .5f;
         std::array<float, 4> texturesIntensities;
         std::array<float, 4> texturesIntensitiesTargets;
         std::array<std::function<void()>, 4> texturesIntensitiesCallbacks;
