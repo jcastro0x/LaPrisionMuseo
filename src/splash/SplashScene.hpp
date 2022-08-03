@@ -23,37 +23,14 @@
 
 #include <scene/Scene.hpp>
 
-#include <vector>
-
-namespace sf
-{
-    class Shader;
-    class Texture;
-    class RectangleShape;
-
-    class RenderTarget;
-    class RenderStates;
-}
-
 namespace lpm
 {
     class SplashScene : public Scene
     {
     public:
         SplashScene(class Engine* engine);
-        ~SplashScene() override;
 
     protected:
-        void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
         void tick(float deltaTime) override;
-
-    private:
-        void initializeTextures();
-        void initializeShader();
-
-    private:
-        std::unique_ptr<sf::Shader> shader_;
-        std::unique_ptr<sf::RectangleShape> rectangleShape_;
-        std::vector<std::unique_ptr<sf::Texture>> textures_;
     };
 }

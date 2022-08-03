@@ -19,18 +19,41 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-#include "SplashScene.hpp"
-#include "SplashNode.hpp"
+#pragma once
 
-using namespace lpm;
+#include <scene/SceneNode.hpp>
+#include <memory>
+#include <vector>
 
-SplashScene::SplashScene(Engine* engine)
-: Scene(engine)
+namespace sf
 {
-    addSceneNode<SplashNode>();
+    class Shader;
+    class Texture;
+    class RectangleShape;
+
+    class RenderTarget;
+    class RenderStates;
 }
 
-void SplashScene::tick(float deltaTime)
+namespace lpm
 {
-    Scene::tick(deltaTime);
+    class SplashNode : public SceneNode
+    {
+    public:
+        SplashNode();
+        ~SplashNode();
+
+    protected:
+        void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+        void tick(float deltaTime) override;
+
+    private:
+        void initializeTextures();
+        void initializeShader();
+
+    private:
+        std::unique_ptr<sf::Shader> shader_;
+        std::unique_ptr<sf::RectangleShape> rectangleShape_;
+        std::vector<std::unique_ptr<sf::Texture>> textures_;
+    };
 }
