@@ -23,7 +23,7 @@
 
 #include <scene/SceneNode.hpp>
 #include <memory>
-#include <vector>
+#include <array>
 
 namespace sf
 {
@@ -43,6 +43,9 @@ namespace lpm
         SplashNode();
         ~SplashNode();
 
+    public:
+        void changeTexture(size_t index, std::string_view textureName);
+
     protected:
         void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
         void tick(float deltaTime) override;
@@ -51,9 +54,15 @@ namespace lpm
         void initializeTextures();
         void initializeShader();
 
+        void initializeTexture(sf::Texture* texture, std::string_view textureName);
+
+
     private:
         std::unique_ptr<sf::Shader> shader_;
         std::unique_ptr<sf::RectangleShape> rectangleShape_;
-        std::vector<std::unique_ptr<sf::Texture>> textures_;
+
+        std::array<std::unique_ptr<sf::Texture>, 5> textures_;
+        std::array<std::unique_ptr<sf::Texture>, 5> texturesBackBuffer_;
+        std::array<float, 5> texturesIntensities;
     };
 }

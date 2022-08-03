@@ -42,6 +42,8 @@ namespace lpm
         static void registerScene(std::string_view name, class Engine* engine)
         {
             assert(!std::ranges::any_of(name.begin(), name.end(), ::isupper) && "registerScene only accepts lower strings");
+            assert(!scenes_.contains(name.data()) && "trying to registerScene with name already registered");
+
             scenes_.try_emplace(name.data(), [engine](){
                 return std::make_unique<SceneType>(engine);
             });

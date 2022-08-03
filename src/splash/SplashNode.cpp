@@ -21,18 +21,17 @@
 
 #include "SplashNode.hpp"
 
-#include <array>
+#include <cassert>
+#include <imgui.h>
 
 #include <SFML/Graphics/Shader.hpp>
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
-
 #include <SFML/Graphics/RenderStates.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
 
 #include <scene/nodes/BackgroundNode.hpp>
 
-#include <imgui.h>
 
 
 using namespace lpm;
@@ -49,14 +48,18 @@ SplashNode::SplashNode()
     rectangleShape_->setTexture(textures_[0].get());
 }
 
-SplashNode::~SplashNode()
+SplashNode::~SplashNode() = default;
+
+void SplashNode::changeTexture(size_t index, std::string_view textureName)
 {
+    assert(index <= 5 && "SplashNode::changeTexture called with value bigger than 5");
+    initializeTexture(texturesBackBuffer_[index].get(), textureName.data());
 }
 
-float texture0_intensity = 1;
-float texture1_intensity = 1;
-float texture2_intensity = 1;
-float texture3_intensity = 1;
+//float texture0_intensity = 1;
+//float texture1_intensity = 1;
+//float texture2_intensity = 1;
+//float texture3_intensity = 1;
 
 void SplashNode::tick(float deltaTime)
 {
@@ -66,17 +69,17 @@ void SplashNode::tick(float deltaTime)
     totalTime += deltaTime;
     shader_->setUniform("time", totalTime);
 
-    ImGui::Begin("SplashScreen");
-    ImGui::DragFloat("textures_intensity[0]", &texture0_intensity, 0.1f);
-    ImGui::DragFloat("textures_intensity[1]", &texture1_intensity, 0.1f);
-    ImGui::DragFloat("textures_intensity[2]", &texture2_intensity, 0.1f);
-    ImGui::DragFloat("textures_intensity[3]", &texture3_intensity, 0.1f);
-    ImGui::End();
-
-    shader_->setUniform("textures_intensity[0]", texture0_intensity);
-    shader_->setUniform("textures_intensity[1]", texture1_intensity);
-    shader_->setUniform("textures_intensity[2]", texture2_intensity);
-    shader_->setUniform("textures_intensity[3]", texture3_intensity);
+//    ImGui::Begin("SplashNode");
+//    ImGui::DragFloat("textures_intensity[0]", &texture0_intensity, 0.1f);
+//    ImGui::DragFloat("textures_intensity[1]", &texture1_intensity, 0.1f);
+//    ImGui::DragFloat("textures_intensity[2]", &texture2_intensity, 0.1f);
+//    ImGui::DragFloat("textures_intensity[3]", &texture3_intensity, 0.1f);
+//    ImGui::End();
+//
+//    shader_->setUniform("textures_intensity[0]", texture0_intensity);
+//    shader_->setUniform("textures_intensity[1]", texture1_intensity);
+//    shader_->setUniform("textures_intensity[2]", texture2_intensity);
+//    shader_->setUniform("textures_intensity[3]", texture3_intensity);
 
 }
 
@@ -96,14 +99,15 @@ void SplashNode::initializeTextures()
         "splash/splashMask.png"
     };
 
-    textures_.reserve(files.size());
     for(size_t i = 0; i < files.size(); i++)
     {
-        textures_.emplace_back(std::make_unique<sf::Texture>());
-        textures_[i]->loadFromFile(files[i]);
-        textures_[i]->setSrgb(true);
-        textures_[i]->setRepeated(true);
-        textures_[i]->setSmooth(true);
+        textures_[i] = std::make_unique<sf::Texture>();
+        initializeTexture(textures_[i].get(), files[i]);
+    }
+
+    for(size_t i = 0; i < texturesBackBuffer_.size(); i++)
+    {
+        texturesBackBuffer_[i] = std::make_unique<sf::Texture>();
     }
 }
 
@@ -127,4 +131,12 @@ void SplashNode::initializeShader()
     shader_->setUniform("pan_velocity[1]", 0.025f);
     shader_->setUniform("pan_velocity[2]", 0.07f);
     shader_->setUniform("pan_velocity[3]", 0.065f);
+}
+
+void SplashNode::initializeTexture(sf::Texture* texture, std::string_view textureName)
+{
+    texture->loadFromFile(textureName.data());
+    texture->setSrgb(true);
+    texture->setRepeated(true);
+    texture->setSmooth(true);
 }

@@ -57,8 +57,7 @@ Engine::Engine()
     window_.setFramerateLimit(Configuration::FRAME_RATE);
     window_.setMouseCursorVisible(false);
 
-    auto p = std::bit_cast<tgui::Gui*>(gui_.get());
-    p->setWindow(window_);
+    std::bit_cast<tgui::Gui*>(gui_.get())->setWindow(window_);
 
     //~===================================================================
     // REGISTER SCENES
