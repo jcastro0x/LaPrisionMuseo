@@ -132,7 +132,7 @@ void SplashNode::initializeShader()
     shader_->setUniform("top_mask_texture", *topMaskTexture_);
 
     static constexpr auto quarter = 1 - 1/4.f;
-    static constexpr auto fade    = 1 - 1/40.f;
+    //static constexpr auto fade    = 1 - 1/40.f;
 
     // Vector3(offset, limit, velocity)
     shader_->setUniform("displacement[0]", sf::Vector3f(0,       quarter,  .10f));

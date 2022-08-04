@@ -10,7 +10,6 @@ set(SRC_FILES
 
     src/components/Animator.cpp
     src/components/AspectRatio.cpp
-    src/components/Internationalization.cpp
 
     src/network/DebugNetwork.cpp
     src/network/NullNetwork.cpp
@@ -30,8 +29,10 @@ set(SRC_FILES
     src/scenes/world/WorldScene.cpp
     src/scenes/world/room/RoomCamera.cpp
     src/scenes/world/room/RoomSceneNode.cpp
-    
-    src/Resources.cpp
+
+    src/system/Internationalization.cpp
+    src/system/Resources.cpp
+
     src/widgets/Cursor.cpp
 )
 
