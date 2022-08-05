@@ -86,7 +86,7 @@ namespace lpm
                     positions.try_emplace(entry.path(), out.tellp());
 
                     // Fill with zeroes
-                    for(int i = 0; i < 8; i++) out.put(0);
+                    for(size_t i = 0; i < sizeof(uint64_t); i++) out.put(0);
                 }
             }
 
@@ -99,18 +99,57 @@ namespace lpm
                 std::ifstream ifs(entry.path().c_str(), std::ios::binary);
                 if(ifs.is_open())
                 {
-                    auto currentPosition = out.tellp();
+                    std::vector<char> assetBytes(entry.file_size());
+                    ifs.read(&assetBytes[0], assetBytes.size());
+
+                    auto assetPosition = out.tellp();
                     auto tablePosition = positions[entry.path()];
 
                     // Fill asset's data position
                     out.seekp(tablePosition, std::ios::beg);
-                    for(const auto& byte : extractNumber(currentPosition))
+                    for(const auto& byte : extractNumber(assetPosition))
                     {
                         out << byte;
                     }
+                    out.seekp(assetPosition, std::ios::beg);
+
+                    // Fill asset size with zeroes
+                    for(size_t i = 0; i < sizeof(uint64_t); i++) out.put(0);
+
+                    if(zlibCompressionLevel_ != 0)
+                    {
+                        std::vector<char> assetCompressedBytes(entry.file_size());
+
+                        z_stream strm;
+                        strm.zalloc    = Z_NULL;
+                        strm.zfree     = Z_NULL;
+                        strm.next_in   = std::bit_cast<uint8_t*>(&assetBytes[0]);
+                        strm.avail_in  = assetBytes.size();
+                        strm.next_out  = std::bit_cast<uint8_t*>(&assetCompressedBytes[0]);
+                        strm.avail_out = assetCompressedBytes.size();
+
+                        deflateInit(&strm, zlibCompressionLevel_);
+
+                        while (strm.avail_in != 0)
+                        {
+                            int res = deflate(&strm, Z_NO_FLUSH);
+                            assert(res == Z_OK);
+                            if (strm.avail_out == 0)
+                            {
+                                buffer.insert(buffer.end(), temp_buffer, temp_buffer + BUFSIZE);
+                                strm.next_out = temp_buffer;
+                                strm.avail_out = BUFSIZE;
+                            }
+                        }
+                    }
 
 
-                    out.seekp(currentPosition, std::ios::beg);
+
+
+
+
+
+
 
                     // No compression
                     if(zlibCompressionLevel_ == 0)
@@ -139,6 +178,7 @@ namespace lpm
                         strm.zalloc  = Z_NULL;
                         strm.zfree   = Z_NULL;
                         strm.opaque  = Z_NULL;
+
 //
 //                        int flush = Z_NO_FLUSH;
 //                        int ret   = deflateInit(&strm, zlibCompressionLevel_);
