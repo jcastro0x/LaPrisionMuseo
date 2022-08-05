@@ -20,6 +20,12 @@ jobs:
       run: |
         lsb_release -a
         gcc --version
+
+    - name: Install zlib
+      run: |
+        git clone --branch "v1.2.12" https://github.com/madler/zlib
+        sudo cmake -B zlib/_b -S zlib -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+        sudo cmake --build zlib/_b --config ${{env.BUILD_TYPE}} --target install        
             
     - name:  Install OpenSSL
       run: |

@@ -91,11 +91,13 @@ namespace lpm
 
         static void createPackFile(std::string_view relativePath)
         {
+            constexpr const char* OUT_FILE_NAME = "out.bin";
+
             auto path = std::filesystem::current_path() / relativePath.data();
 
             std::cout << "Packing files from " << path << "\n";
 
-            std::ofstream out(path / "out.bin", std::ios::binary);
+            std::ofstream out(path / OUT_FILE_NAME, std::ios::binary);
 
             // Magic Number
             out << "LA PRISION MUSEO RESOURCE FILE";
@@ -114,6 +116,7 @@ namespace lpm
 
             // Assets in resource file
             uint64_t filesCount = std::count_if(std::filesystem::recursive_directory_iterator(path), std::filesystem::recursive_directory_iterator{}, [](auto& entry){
+                if(entry.path().string().find(OUT_FILE_NAME) == std::string::npos) return false;
                 return entry.is_regular_file();
             });
             pushNumber64(out, filesCount);
@@ -122,7 +125,7 @@ namespace lpm
             for(auto& entry : std::filesystem::recursive_directory_iterator(path))
             {
                 if(entry.is_directory()) continue;
-                if(entry.path().string().find("out.bin") != std::string::npos) continue;
+                if(entry.path().string().find(OUT_FILE_NAME) != std::string::npos) continue;
 
                 std::ifstream ifs(entry.path().c_str(), std::ios::binary);
                 if(ifs.is_open())

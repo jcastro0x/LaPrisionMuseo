@@ -255,9 +255,11 @@ extern "C" void handle_signals(int signal_number)
     std::cerr << "Ungracefully exit: " << signType << '(' << signal_number << ')' << '\n';
 }
 
+#include <system/BinaryFormatter.hpp>
 int main(const int, const char**)
 {
-    ResourcesManager::createPackFile("splash");
+    BinaryFormatter fmt;
+    fmt.createFile("splash", 0);
     return 0;
 
     signal(SIGILL,   &handle_signals);

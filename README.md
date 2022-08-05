@@ -30,7 +30,8 @@ Obten más información en https://forum.prisonserver.net/
 Las siguientes librerias deben estar instaladas en el equipo con el fin de compilar el proyecto:
 - SFML 2.5.1
 - TGUI 0.10
-- OpenSSL 3.X.X
+- OpenSSL 3.0.1
+- ZLIB 1.2.12
 
 Puedes consultar los workflow (~/.github/workflows) para obtener una lista detallada de la instalación. Windows y Linux
 requieren diferentes dependencias, las cuales pueden ser consultadas en estos scripts.

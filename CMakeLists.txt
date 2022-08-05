@@ -47,6 +47,10 @@ set(SRC_IMGUI
 
 add_executable(${PROJECT_NAME} ${SRC_FILES} ${SRC_IMGUI})
 
+# LIBRARY - ZLIB
+find_package(ZLIB 1.2.12 REQUIRED)
+include_directories(${ZLIB_INCLUDE_DIRS})
+
 # LIBRARY - SFML
 set(SFML_STATIC_LIBRARIES TRUE)
 find_package(SFML 2.5 COMPONENTS graphics audio system window REQUIRED)
@@ -66,7 +70,8 @@ find_package(TGUI 0.10 REQUIRED)
 
 find_package(Threads REQUIRED)
 
-target_link_libraries(${PROJECT_NAME} 
+target_link_libraries(${PROJECT_NAME}
+    ${ZLIB_LIBRARIES}
     sfml-graphics
     sfml-audio
     sfml-system

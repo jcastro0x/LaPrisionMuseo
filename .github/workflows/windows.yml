@@ -27,7 +27,13 @@ jobs:
     - uses: shogo82148/actions-setup-perl@v1
       with:
         perl-version: '5.34'
-          
+
+    - name: Install zlib
+      run: |
+        git clone --branch "v1.2.12" https://github.com/madler/zlib
+        cmake -B zlib/_b -S zlib -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+        cmake --build zlib/_b --config ${{env.BUILD_TYPE}} --target install          
+
     - name:  Installing OpenSSL
       shell: powershell
       run: |
