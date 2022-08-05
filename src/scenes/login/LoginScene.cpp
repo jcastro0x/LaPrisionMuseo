@@ -21,7 +21,7 @@
 
 #include "LoginScene.hpp"
 
-#include <components/Internationalization.hpp>
+#include <system/Internationalization.hpp>
 #include <scene/nodes/BackgroundNode.hpp>
 #include <scene/nodes/ClickableText.hpp>
 

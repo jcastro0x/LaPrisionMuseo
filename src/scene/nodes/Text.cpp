@@ -22,10 +22,11 @@
 #include "Text.hpp"
 
 #include <SFML/Graphics/Text.hpp>
+#include <SFML/Audio/SoundBuffer.hpp>
 
 #include <scene/Scene.hpp>
 #include <Engine.hpp>
-#include <Resources.hpp>
+#include <system/ResourcesManager.hpp>
 
 using namespace lpm;
 
@@ -45,16 +46,14 @@ void Text::setTextString(const sf::String& string)
     text_->setOrigin(text_->getGlobalBounds().width / 2.f, text_->getGlobalBounds().height / 2.f);
 }
 
-void Text::setTextFillColor(const sf::Color& color)
+void Text::setTextFillColor(const sf::Color& /*color*/)
 {
-    text_->setFillColor(color);
+ //   text_->setFillColor(color);
 }
 
 void Text::init()
 {
-    const auto& resources = getSceneOwner()->getEngine()->getResources();
-
-    if(auto font = resources.getFont(fontName_))
+    if(auto font = ResourcesManager::getFont(fontName_))
     {
         text_->setFont(**font);
         text_->setCharacterSize(fontSize_);

@@ -19,7 +19,7 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-#include "Resources.hpp"
+#include "ResourcesManager.hpp"
 
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Graphics/Font.hpp>
@@ -27,45 +27,45 @@
 
 using namespace lpm;
 
-Resources::Resources()
-{
-    auto createTexture = [&](std::string_view key, std::string_view fileName){
-        if(auto asset = std::make_unique<sf::Texture>(); asset->loadFromFile(fileName.data()))
-        {
-            textures_.try_emplace(key.data(), std::move(asset));
-        }
-        else throw resource_exception();
-    };
+//ResourcesManager::ResourcesManager()
+//{
+//    auto createTexture = [&](std::string_view key, std::string_view fileName){
+//        if(auto asset = std::make_unique<sf::Texture>(); asset->loadFromFile(fileName.data()))
+//        {
+//            textures_.try_emplace(key.data(), std::move(asset));
+//        }
+//        else throw resource_exception();
+//    };
+//
+//    auto createSound = [&](std::string_view key, std::string_view fileName){
+//        if(auto asset = std::make_unique<sf::SoundBuffer>(); asset->loadFromFile(fileName.data()))
+//        {
+//            sounds_.try_emplace(key.data(), std::move(asset));
+//        }
+//        else throw resource_exception();
+//    };
+//
+//    auto createFont = [&](std::string_view key, std::string_view fileName){
+//        if(auto asset = std::make_unique<sf::Font>(); asset->loadFromFile(fileName.data()))
+//        {
+//            fonts_.try_emplace(key.data(), std::move(asset));
+//        }
+//        else throw resource_exception();
+//    };
+//
+//    createTexture("Cursors", "cursors.png");
+//    createTexture("LoginScreen", "loginScreen.png");
+//
+//    createSound("ButtonClick", "ButtonClick.wav");
+//    createSound("ButtonHover", "ButtonHover.wav");
+//
+//    createFont("FontEntry", "FontEntry.ttf");
+//    createFont("FontLogo", "FontLogo.ttf");
+//}
 
-    auto createSound = [&](std::string_view key, std::string_view fileName){
-        if(auto asset = std::make_unique<sf::SoundBuffer>(); asset->loadFromFile(fileName.data()))
-        {
-            sounds_.try_emplace(key.data(), std::move(asset));
-        }
-        else throw resource_exception();
-    };
+ResourcesManager::~ResourcesManager() = default;
 
-    auto createFont = [&](std::string_view key, std::string_view fileName){
-        if(auto asset = std::make_unique<sf::Font>(); asset->loadFromFile(fileName.data()))
-        {
-            fonts_.try_emplace(key.data(), std::move(asset));
-        }
-        else throw resource_exception();
-    };
-
-    createTexture("Cursors", "cursors.png");
-    createTexture("LoginScreen", "loginScreen.png");
-
-    createSound("ButtonClick", "ButtonClick.wav");
-    createSound("ButtonHover", "ButtonHover.wav");
-
-    createFont("FontEntry", "FontEntry.ttf");
-    createFont("FontLogo", "FontLogo.ttf");
-}
-
-Resources::~Resources() = default;
-
-std::optional<const sf::Texture*> Resources::getTexture(std::string_view key) const
+std::optional<const sf::Texture*> ResourcesManager::getTexture(std::string_view key)
 {
     if(const auto it = textures_.find(key.data()); it != textures_.cend())
     {
@@ -74,7 +74,7 @@ std::optional<const sf::Texture*> Resources::getTexture(std::string_view key) co
     return {};
 }
 
-std::optional<const sf::SoundBuffer*> Resources::getSoundBuffer(std::string_view key) const
+std::optional<const sf::SoundBuffer*> ResourcesManager::getSoundBuffer(std::string_view key)
 {
     if(const auto it = sounds_.find(key.data()); it != sounds_.cend())
     {
@@ -83,7 +83,7 @@ std::optional<const sf::SoundBuffer*> Resources::getSoundBuffer(std::string_view
     return {};
 }
 
-std::optional<const sf::Font*> Resources::getFont(std::string_view key) const
+std::optional<const sf::Font*> ResourcesManager::getFont(std::string_view key)
 {
     if(const auto it = fonts_.find(key.data()); it != fonts_.cend())
     {

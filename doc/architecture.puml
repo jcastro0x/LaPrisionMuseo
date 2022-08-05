@@ -9,13 +9,30 @@ class Program
 class Engine
 {
     - network : INetwork
-    - binaryReader : Packager
     - cursor : Cursor
     - scene : Scene
     - window : RenderWindow
     - clock : clock
-
     + run()
+}
+
+class BinaryReader
+{
+}
+
+class ResourceManager
+{
+    - reader : BinaryReader
+    - resources : Resource[]
+    + load<Type : Resource>(hash) : Type*
+}
+
+class Resource<Type>
+{
+    - hash : uint64
+    - manager : ResourceManager*
+    - data : Type
+    + free()
 }
 
 class Configuration
@@ -69,7 +86,7 @@ class SceneNode
 class RoomSceneNode
 {
     - name : string
-    - background : QuadAspectRatio
+    - background : sf::RectangleShape
     - soundPlayer : Sound
     - music : SoundBuffer
     - sfx : SoundBuffer[]
@@ -160,7 +177,7 @@ SceneNode <|-- RoomSceneNode
 SceneNode <|-- LoginScreen
 
 RoomSceneNode *-- RoomCamera
-RoomSceneNode *-- QuadAspectRatio
+RoomSceneNode *-- Player
 
 RoomCamera *-- RoomNote
 RoomCamera *-- BackgroundAnim
@@ -178,6 +195,9 @@ Engine *-- SceneManager
 Engine *-- Configuration
 
 Program *-- Engine
+
+ResourceManager *-- BinaryReader
+ResourceManager *-- Resource
 
 
 

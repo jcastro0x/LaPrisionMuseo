@@ -29,20 +29,20 @@ namespace sf    { class Clock;      }
 
 namespace lpm
 {
-    class Resources;
     class Internationalization;
     class Cursor;
     class SceneManager;
     class INetwork;
     class Scene;
 
-    class Engine
+    class Engine final
     {
         template<typename T>
         using Pointer = std::unique_ptr<T>;
 
     public:
         Engine();
+        ~Engine();
 
     public:
         void run();
@@ -51,7 +51,6 @@ namespace lpm
         void loadScene(std::string_view name);
 
     public:
-        [[nodiscard]] const Resources& getResources() const;
         [[nodiscard]] const Internationalization& getI18N() const;
         [[nodiscard]] Cursor& getCursor();
         [[nodiscard]] sf::Vector2i getMousePosition() const;
@@ -73,7 +72,6 @@ namespace lpm
         Pointer<Internationalization> internationalization_;    //< i18n pointer
         Pointer<tgui::BackendGui> gui_;                         //< TGUI pointer
         Pointer<Scene> scene_;                                  //< Current scene drawn
-        Pointer<Resources> resources_;                          //< Resources game pointer
 
         std::string scenePendingToLoad_;                        //< Pending scene to load
     };

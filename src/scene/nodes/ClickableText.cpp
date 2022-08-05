@@ -24,13 +24,14 @@
 #include <SFML/Graphics/Text.hpp>
 #include <SFML/Window/Mouse.hpp>
 #include <SFML/Audio/Sound.hpp>
+#include <SFML/Audio/SoundBuffer.hpp>
 
 #include <scene/Scene.hpp>
 #include <Engine.hpp>
 
 #include <imgui.h>
 #include <widgets/Cursor.hpp>
-#include <Resources.hpp>
+#include <system/ResourcesManager.hpp>
 
 using namespace lpm;
 
@@ -52,9 +53,7 @@ void ClickableText::setTextString(const sf::String& string)
 
 void ClickableText::init()
 {
-    const auto& resources = getSceneOwner()->getEngine()->getResources();
-
-    if(auto font = resources.getFont("FontEntry"))
+    if(auto font = ResourcesManager::getFont("FontEntry"))
     {
         text_->setFont(**font);
     }
@@ -63,7 +62,7 @@ void ClickableText::init()
         throw resource_exception();
     }
 
-    if(auto soundHover = resources.getSoundBuffer("ButtonHover"))
+    if(auto soundHover = ResourcesManager::getSoundBuffer("ButtonHover"))
     {
         soundHover_->setBuffer(**soundHover);
     }
@@ -72,7 +71,7 @@ void ClickableText::init()
         throw resource_exception();
     }
 
-    if(auto soundClick = resources.getSoundBuffer("ButtonClick"))
+    if(auto soundClick = ResourcesManager::getSoundBuffer("ButtonClick"))
     {
         soundClick_->setBuffer(**soundClick);
     }

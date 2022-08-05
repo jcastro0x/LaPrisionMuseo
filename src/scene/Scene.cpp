@@ -26,7 +26,7 @@
 #include <Engine.hpp>
 #include <scene/SceneNode.hpp>
 #include <components/AspectRatio.hpp>
-#include <Configuration.hpp>
+#include <system/Configuration.hpp>
 
 using namespace lpm;
 

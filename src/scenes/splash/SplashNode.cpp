@@ -30,8 +30,10 @@
 #include <SFML/Graphics/RenderStates.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
 
+#include <SFML/System.hpp>
+
 #include <scene/nodes/BackgroundNode.hpp>
-#include <Configuration.hpp>
+#include <system/Configuration.hpp>
 
 
 
@@ -148,7 +150,12 @@ void SplashNode::initializeShader()
 
 void SplashNode::initializeTexture(sf::Texture* texture, std::string_view textureName)
 {
-    texture->loadFromFile(textureName.data());
+    sf::FileInputStream ifs;
+    ifs.open(textureName.data());
+    texture->loadFromStream(ifs);
+
+
+    //texture->loadFromFile(textureName.data());
     texture->setSrgb(false);
     texture->setRepeated(true);
     texture->setSmooth(true);

@@ -31,7 +31,7 @@ set(SRC_FILES
     src/scenes/world/room/RoomSceneNode.cpp
 
     src/system/Internationalization.cpp
-    src/system/Resources.cpp
+        src/system/ResourcesManager.cpp
 
     src/widgets/Cursor.cpp
 )

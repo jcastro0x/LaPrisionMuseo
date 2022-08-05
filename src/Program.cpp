@@ -27,14 +27,16 @@
 #include <SFML/System/Clock.hpp>
 #include <TGUI/TGUI.hpp>
 #include <TGUI/Backend/SFML-Graphics.hpp>
+#include <SFML/Audio/SoundBuffer.hpp>
 #include <imgui.h>
 #include <imgui-SFML.h>
 
 #include <widgets/Cursor.hpp>
 #include <network/DebugNetwork.hpp>
-#include <components/Internationalization.hpp>
-#include <Resources.hpp>
-#include <Configuration.hpp>
+
+#include <system/Internationalization.hpp>
+#include <system/ResourcesManager.hpp>
+#include <system/Configuration.hpp>
 
 #include <scene/SceneManager.hpp>
 #include <scenes/login/LoginScene.hpp>
@@ -66,22 +68,11 @@ Engine::Engine()
     SceneManager::registerScene<SplashScene>("splash", this);
     //~===================================================================
 
-
-
-    try
-    {
-        resources_ = std::make_unique<Resources>();
-    }
-    catch(resource_exception const&)
-    {
-        std::cerr << "FATAL ERROR reading resources\n";
-        throw;
-    }
-
     ImGui::SFML::Init(window_);
     ImGui::GetIO().ConfigFlags ^= ImGuiConfigFlags_::ImGuiConfigFlags_NoMouseCursorChange;
 }
 
+Engine::~Engine() = default;
 
 
 void Engine::run()
@@ -216,11 +207,6 @@ void Engine::drawFPS(float deltaSeconds)
 }
 #endif
 
-const Resources& Engine::getResources() const
-{
-    return *resources_;
-}
-
 const Internationalization& Engine::getI18N() const
 {
     return *internationalization_;
@@ -271,6 +257,9 @@ extern "C" void handle_signals(int signal_number)
 
 int main(const int, const char**)
 {
+    ResourcesManager::createPackFile("splash");
+    return 0;
+
     signal(SIGILL,   &handle_signals);
     signal(SIGFPE,   &handle_signals);
     signal(SIGSEGV,  &handle_signals);

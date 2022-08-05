@@ -27,12 +27,13 @@
 #include <SFML/Graphics/Text.hpp>
 #include <SFML/Window/Keyboard.hpp>
 #include <SFML/Window/Mouse.hpp>
+#include <SFML/Audio/SoundBuffer.hpp>
 #include <imgui.h>
 
 #include <Engine.hpp>
-#include <Resources.hpp>
-#include <components/Internationalization.hpp>
-#include <Configuration.hpp>
+#include <system/ResourcesManager.hpp>
+#include <system/Internationalization.hpp>
+#include <system/Configuration.hpp>
 
 #include <scene/nodes/Text.hpp>
 
@@ -51,36 +52,36 @@ SplashScene::SplashScene(Engine* engine)
     splash->changeTexture(SplashNode::TEXTURE_2, "splash/splash02.jpg");
     splash->changeTexture(SplashNode::TEXTURE_3, "splash/splash03.jpg");
 
-    auto& logoTextShadow = addSceneNode<lpm::Text>("FontLogo", 150);
-    logoTextShadow.setTextFillColor(sf::Color::Black);
-    logoTextShadow.setTextString("La Prision");
-    logoTextShadow.setDrawOrder(CommonDepths::MIDDLE, 0);
-    logoTextShadow.setPosition(223 + 2, Configuration::BACKGROUND_TEX_SIZE_Y - 230.f - 2);
-
-    auto& logoText = addSceneNode<lpm::Text>("FontLogo", 150);
-    logoText.setTextString("La Prision");
-    logoText.setDrawOrder(CommonDepths::MIDDLE, 1);
-    logoText.setPosition(223, Configuration::BACKGROUND_TEX_SIZE_Y - 230.f);
-
-
-    auto& museoTextShadow = addSceneNode<lpm::Text>("FontEntry", 125);
-    museoTextShadow.setTextFillColor(sf::Color::Black);
-    museoTextShadow.setTextString("MUSEO");
-    museoTextShadow.setDrawOrder(CommonDepths::MIDDLE, 0);
-    museoTextShadow.setPosition(513 + 2, Configuration::BACKGROUND_TEX_SIZE_Y - 215.f - 2);
-
-    auto& museoText = addSceneNode<lpm::Text>("FontEntry", 125);
-    museoText.setTextFillColor(sf::Color::Red);
-    museoText.setTextString("MUSEO");
-    museoText.setDrawOrder(CommonDepths::MIDDLE, 1);
-    museoText.setPosition(513, Configuration::BACKGROUND_TEX_SIZE_Y - 215.f);
-
-
-    pressAnyKeyText = &addSceneNode<lpm::Text>("FontEntry", 25);
-    pressAnyKeyText->setTextFillColor(sf::Color::White);
-    pressAnyKeyText->setTextString(getEngine()->getI18N().getString("ui", "press_any_key"));
-    pressAnyKeyText->setDrawOrder(CommonDepths::MIDDLE, 0);
-    pressAnyKeyText->setPosition(Configuration::BACKGROUND_TEX_SIZE_X / 2.f, Configuration::BACKGROUND_TEX_SIZE_Y - 85.f);
+//    auto& logoTextShadow = addSceneNode<lpm::Text>("FontLogo", 150);
+//    logoTextShadow.setTextFillColor(sf::Color::Black);
+//    logoTextShadow.setTextString("La Prision");
+//    logoTextShadow.setDrawOrder(CommonDepths::MIDDLE, 0);
+//    logoTextShadow.setPosition(223 + 2, Configuration::BACKGROUND_TEX_SIZE_Y - 230.f - 2);
+//
+//    auto& logoText = addSceneNode<lpm::Text>("FontLogo", 150);
+//    logoText.setTextString("La Prision");
+//    logoText.setDrawOrder(CommonDepths::MIDDLE, 1);
+//    logoText.setPosition(223, Configuration::BACKGROUND_TEX_SIZE_Y - 230.f);
+//
+//
+//    auto& museoTextShadow = addSceneNode<lpm::Text>("FontEntry", 125);
+//    museoTextShadow.setTextFillColor(sf::Color::Black);
+//    museoTextShadow.setTextString("MUSEO");
+//    museoTextShadow.setDrawOrder(CommonDepths::MIDDLE, 0);
+//    museoTextShadow.setPosition(513 + 2, Configuration::BACKGROUND_TEX_SIZE_Y - 215.f - 2);
+//
+//    auto& museoText = addSceneNode<lpm::Text>("FontEntry", 125);
+//    museoText.setTextFillColor(sf::Color::Red);
+//    museoText.setTextString("MUSEO");
+//    museoText.setDrawOrder(CommonDepths::MIDDLE, 1);
+//    museoText.setPosition(513, Configuration::BACKGROUND_TEX_SIZE_Y - 215.f);
+//
+//
+//    pressAnyKeyText = &addSceneNode<lpm::Text>("FontEntry", 25);
+//    pressAnyKeyText->setTextFillColor(sf::Color::White);
+//    pressAnyKeyText->setTextString(getEngine()->getI18N().getString("ui", "press_any_key"));
+//    pressAnyKeyText->setDrawOrder(CommonDepths::MIDDLE, 0);
+//    pressAnyKeyText->setPosition(Configuration::BACKGROUND_TEX_SIZE_X / 2.f, Configuration::BACKGROUND_TEX_SIZE_Y - 85.f);
 }
 
 void SplashScene::tick(float deltaTime)
