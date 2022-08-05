@@ -29,14 +29,45 @@
 #include <filesystem>
 #include <algorithm>
 #include <map>
+#include <type_traits>
 
 #include <zlib.h>
 
 namespace lpm
 {
+    template<size_t ArrSize>
+    std::ostream& operator<<(std::ostream& os, const std::array<uint8_t, ArrSize>& arr)
+    {
+        for(const auto& byte : arr)
+        {
+            out << byte;
+        }
+    }
+
+    template<typename SizeType>
+    void fill_ostream(std::ostream& os, uint8_t byte)
+    {
+        for(size_t i = 0; i < sizeof(SizeType); i++) out.put(byte);
+    }
+
     class BinaryFormatter
     {
     public:
+        bool compress(std::vector<uint8_t>& data)
+        {
+            constexpr size_t CHUNK = 16384;
+
+            
+
+            return true;
+        }
+
+        bool decompress(std::vector<uint8_t>& data)
+        {
+
+            
+            return true;
+        }
 
         void createFile(std::string_view relativePath, uint8_t zlibCompressionLevel = Z_BEST_COMPRESSION)
         {
@@ -47,24 +78,21 @@ namespace lpm
 
             std::ofstream out(path / outFileName_, std::ios::binary);
 
-            out << magicNumber_;
-            for(const auto& byte : extractNumber(version_))
+            // Write header
             {
-                out << byte;
-            }
-            out.put(zlibCompressionLevel_);
-            out.put(endianness_);
+                out << magicNumber_;
+                out << extractNumber(version_);
+                out.put(zlibCompressionLevel_);
+                out.put(endianness_);
 
-            // Assets in resource file
-            const uint64_t filesCount = std::count_if(std::filesystem::recursive_directory_iterator(path), std::filesystem::recursive_directory_iterator{}, [](auto& entry){
-                if(entry.path().string().find(outFileName_) != std::string::npos) return false;
-                return !entry.is_directory();
-            });
-            for(const auto& byte : extractNumber(filesCount))
-            {
-                out << byte;
+                // Assets in resource file
+                const uint64_t filesCount = std::count_if(std::filesystem::recursive_directory_iterator(path), std::filesystem::recursive_directory_iterator{}, [](auto& entry){
+                    if(entry.path().string().find(outFileName_) != std::string::npos) return false;
+                    return !entry.is_directory();
+                });
+                out << extractNumber(filesCount);
             }
-
+            
             std::map<std::string, uint64_t> positions;
 
             // Creating access table
@@ -86,7 +114,7 @@ namespace lpm
                     positions.try_emplace(entry.path(), out.tellp());
 
                     // Fill with zeroes
-                    for(size_t i = 0; i < sizeof(uint64_t); i++) out.put(0);
+                    fill_ostream<uint64_t>(out, 0);
                 }
             }
 
@@ -105,16 +133,13 @@ namespace lpm
                     auto assetPosition = out.tellp();
                     auto tablePosition = positions[entry.path()];
 
-                    // Fill asset's data position
+                    // Fill asset's data position into access table
                     out.seekp(tablePosition, std::ios::beg);
-                    for(const auto& byte : extractNumber(assetPosition))
-                    {
-                        out << byte;
-                    }
+                    out << extractNumber(assetPosition);
                     out.seekp(assetPosition, std::ios::beg);
 
                     // Fill asset size with zeroes
-                    for(size_t i = 0; i < sizeof(uint64_t); i++) out.put(0);
+                    fill_ostream<uint64_t>(out, 0);
 
                     if(zlibCompressionLevel_ != 0)
                     {
@@ -178,43 +203,7 @@ namespace lpm
                         strm.zalloc  = Z_NULL;
                         strm.zfree   = Z_NULL;
                         strm.opaque  = Z_NULL;
-
-//
-//                        int flush = Z_NO_FLUSH;
-//                        int ret   = deflateInit(&strm, zlibCompressionLevel_);
-//
-//                        if(ret != Z_OK)
-//                        {
-//                            std::cerr << "Error compressing " << entry.path().filename() << "\n";
-//                            continue;
-//                        }
-//
-//                        do
-//                        {
-//                            strm.avail_in = fread(in, 1, CHUNK, source);
-//                            if (ferror(source)) {
-//                                (void)deflateEnd(&strm);
-//                                return Z_ERRNO;
-//                            }
-//                            flush = feof(source) ? Z_FINISH : Z_NO_FLUSH;
-//                            strm.next_in = in;
-//
-//                            do {
-//                                strm.avail_out = CHUNK;
-//                                strm.next_out = out;
-//                                ret = deflate(&strm, flush);    /* anyone error value */
-//                                assert(ret != Z_STREAM_ERROR);
-//                                have = CHUNK - strm.avail_out;
-//                                if (fwrite(out, 1, have, dest) != have || ferror(dest)) {
-//                                    (void)deflateEnd(&strm);
-//                                    return Z_ERRNO;
-//                                }
-//                        }
-//                        while(flush != Z_FINISH)
                     }
-
-
-
                 }
             }
         }
@@ -226,6 +215,8 @@ namespace lpm
          */
         static std::array<uint8_t, 8> extractNumber(uint64_t number)
         {
+            static_assert(sizeof(number) == 8, "extractNumber only accepts 64bits integers");
+
             std::array<uint8_t, 8> values;
             values[0] = static_cast<uint8_t>((number & 0xFF00'0000'0000'0000) >> 56);
             values[1] = static_cast<uint8_t>((number & 0x00FF'0000'0000'0000) >> 48);
