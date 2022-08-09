@@ -259,22 +259,24 @@ extern "C" void handle_signals(int signal_number)
 int main(const int, const char**)
 {
     BinaryFormatter fmt;
-    fmt.createFile("splash", 0);
+
+    auto binariesPath = (std::filesystem::current_path() / ".." / "binaries").string();
+    fmt.createFile(binariesPath);
     return 0;
 
-    signal(SIGILL,   &handle_signals);
-    signal(SIGFPE,   &handle_signals);
-    signal(SIGSEGV,  &handle_signals);
-    signal(SIGTERM,  &handle_signals);
-    signal(SIGABRT,  &handle_signals);
-
-    #ifdef _WIN32
-    signal(SIGBREAK, &handle_signals);
-    #endif
-
-
-    Engine engine;
-    engine.run();
-
-    return EXIT_SUCCESS;
+//    signal(SIGILL,   &handle_signals);
+//    signal(SIGFPE,   &handle_signals);
+//    signal(SIGSEGV,  &handle_signals);
+//    signal(SIGTERM,  &handle_signals);
+//    signal(SIGABRT,  &handle_signals);
+//
+//    #ifdef _WIN32
+//    signal(SIGBREAK, &handle_signals);
+//    #endif
+//
+//
+//    Engine engine;
+//    engine.run();
+//
+//    return EXIT_SUCCESS;
 }

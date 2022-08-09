@@ -31,7 +31,7 @@ set(SRC_FILES
     src/scenes/world/room/RoomSceneNode.cpp
 
     src/system/Internationalization.cpp
-        src/system/ResourcesManager.cpp
+    src/system/ResourcesManager.cpp
 
     src/widgets/Cursor.cpp
 )
@@ -48,7 +48,7 @@ set(SRC_IMGUI
 add_executable(${PROJECT_NAME} ${SRC_FILES} ${SRC_IMGUI})
 
 # LIBRARY - ZLIB
-find_package(ZLIB 1.2.12 REQUIRED)
+find_package(ZLIB 1.2 REQUIRED)
 include_directories(${ZLIB_INCLUDE_DIRS})
 
 # LIBRARY - SFML
@@ -81,10 +81,10 @@ target_link_libraries(${PROJECT_NAME}
     ${CMAKE_THREAD_LIBS_INIT}
 )
 
-target_compile_options(${PROJECT_NAME} BEFORE PRIVATE
-    $<$<CXX_COMPILER_ID:MSVC>:/W4 /WX>
-    $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra -pedantic -Werror>
-)
+#target_compile_options(${PROJECT_NAME} BEFORE PRIVATE
+#    $<$<CXX_COMPILER_ID:MSVC>:/W4 /WX>
+#    $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra -pedantic -Werror>
+#)
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
