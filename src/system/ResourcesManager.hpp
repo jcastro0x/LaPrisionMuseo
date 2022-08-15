@@ -35,6 +35,8 @@
 #include <fstream>
 #include <filesystem>
 
+#include "BinaryFormatter.hpp"
+
 namespace sf
 {
     class Texture;
@@ -62,8 +64,10 @@ namespace lpm
 
     public:
         template<typename T> requires true
-        void foo(std::string_view path)
+        static void loadAsset(std::string_view path)
         {
+
+
             sf::FileInputStream ifs;
             ifs.open(path.data());
 
@@ -90,5 +94,7 @@ namespace lpm
         inline static Resource<sf::Texture> textures_;
         inline static Resource<sf::SoundBuffer> sounds_;
         inline static Resource<sf::Font> fonts_;
+
+        inline static BinaryFormatter binaryFormatter;
     };
 }

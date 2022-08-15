@@ -30,17 +30,14 @@
 #include <algorithm>
 #include <map>
 #include <type_traits>
+#include <cassert>
 
 #include <zlib.h>
 
 namespace lpm
 {
-    using uifstream = std::basic_ifstream<uint8_t, std::char_traits<uint8_t>>;
-    using uofstream = std::basic_ofstream<uint8_t, std::char_traits<uint8_t>>;
-
-
     template<size_t ArrSize>
-    uofstream& operator<<(uofstream& os, const std::array<uint8_t, ArrSize>& arr)
+    std::ostream& operator<<(std::ostream& os, const std::array<uint8_t, ArrSize>& arr)
     {
         for(const auto& byte : arr)
         {
@@ -51,7 +48,7 @@ namespace lpm
     }
 
     template<typename SizeType>
-    void fill_ostream(uofstream& os, uint8_t byte)
+    void fill_ostream(std::ostream& os, uint8_t byte)
     {
         for(size_t i = 0; i < sizeof(SizeType); i++) os.put(byte);
     }
@@ -108,10 +105,10 @@ namespace lpm
                 auto path = entry.path().string().substr(origin.string().size() + 1,
                                                          entry.path().string().size() - origin.string().size());
 
-                // Convert origin separator to unix style
+                // Convert separator to unix style
                 #if WIN32
                 std::ranges::for_each(path, [](auto& c){
-                    if(c == '\\') c = '/';
+                    if(c == std::filesystem::path::preferred_separator) c = '/';
                 });
                 #endif
 
@@ -119,8 +116,46 @@ namespace lpm
                 std::ranges::transform(path.begin(), path.end(), path.begin(),
                                        [](uint8_t c) { return static_cast<uint8_t>(std::tolower(c)); });
 
+//                std::ifstream ifs(entry.path(), std::ios::in | std::ios::binary);
+//                std::vector<char> bytes(entry.file_size());
+//                ifs.read(bytes.data(), static_cast<std::streamsize>(bytes.size()));
+
                 func(path, entry.file_size());
             }
+        }
+
+        std::vector<uint8_t> readAsset(std::string_view path) const
+        {
+            assert(!std::ranges::any_of(path.begin(), path.end(), ::isupper) && "readAsset only accepts lower strings");
+
+            const auto dataPath = std::filesystem::current_path() / outFileName_;
+            std::cout << "Data File size: " << file_size(dataPath) << "\n";
+            if(file_size(dataPath) < strlen(magicNumber_) + 1)
+            {
+                std::cerr << "Wrong header: File too small.\n";
+            }
+
+            std::ifstream ifs(std::filesystem::current_path() / outFileName_, std::ios::in | std::ios::binary);
+            std::string mm;
+            ifs >> mm;
+
+            std::cout << "Magic Number read: "     << mm << "\n";
+            std::cout << "Magic Number expected: " << magicNumber_ << "\n";
+            if(mm != std::string(magicNumber_))
+            {
+                std::cerr << "Wrong header: Magic number doesn't match.\n";
+                return {};
+            }
+
+            uint8_t zlibCompressionLevel = 0;
+            ifs >> zlibCompressionLevel;
+
+            uint64_t filesCount = 0;
+            ifs >> filesCount;
+
+
+
+            return {};
         }
 
         void createFile(std::filesystem::path const& assetsPath, uint8_t zlibCompressionLevel = Z_BEST_COMPRESSION)
@@ -128,11 +163,11 @@ namespace lpm
             zlibCompressionLevel_ = zlibCompressionLevel;
 
             std::cout << "Packing files from " << assetsPath << "\n";
-            uofstream out(assetsPath / outFileName_, std::ios::out | std::ios::binary);
+            std::ofstream out(assetsPath / outFileName_, std::ios::out | std::ios::binary);
 
             // Write header
             {
-                out << magicNumber_;
+                out << magicNumber_; out.put(0);
                 out << extractNumber(version_);
                 out.put(zlibCompressionLevel_);
 
@@ -150,8 +185,7 @@ namespace lpm
             iterateFiles(assetsPath, [&](auto& entry, size_t size)
             {
                 // Asset name
-                out << entry.c_str();
-                out.put(0);
+                out << entry; out.put(0);
 
                 // Store asset position
                 positions.try_emplace(entry, out.tellp());
@@ -166,9 +200,10 @@ namespace lpm
 
             iterateFiles(assetsPath, [&](auto& entry, size_t size)
             {
-                uifstream ifs(entry, std::ios::in | std::ios::binary);
-                if(ifs.is_open()) {
-                    std::vector<uint8_t> assetBytes(size);
+                std::ifstream ifs(entry, std::ios::in | std::ios::binary);
+                if(ifs.is_open())
+                {
+                    std::vector<char> assetBytes(size);
                     ifs.read(&assetBytes[0], static_cast<std::streamsize>(size));
 
                     auto assetPosition = out.tellp();
@@ -181,7 +216,14 @@ namespace lpm
 
                     // Compress asset
                     if (zlibCompressionLevel_ > 0) {
-                        compress(assetBytes);
+
+                        std::vector<unsigned char> v(assetBytes.begin(), assetBytes.end());
+                        compress(v);
+                        assetBytes.resize(v.size());
+                        for(size_t i = 0; i < v.size(); i++)
+                        {
+                            assetBytes[i] = static_cast<char>(v[i]);
+                        }
                     }
 
                     // Write asset size

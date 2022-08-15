@@ -262,6 +262,9 @@ int main(const int, const char**)
 
     auto binariesPath = (std::filesystem::current_path() / ".." / "binaries").string();
     fmt.createFile(binariesPath);
+
+    fmt.readAsset("asas");
+
     return 0;
 
 //    signal(SIGILL,   &handle_signals);
