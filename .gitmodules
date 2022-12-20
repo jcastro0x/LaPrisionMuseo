@@ -10,3 +10,6 @@
 [submodule "include/json"]
 	path = include/json
 	url = https://github.com/nlohmann/json.git
+[submodule "libs/GamePacker"]
+	path = libs/GamePacker
+	url = https://github.com/jcastro0x/GamePacker
