@@ -35,7 +35,7 @@ using namespace lpm;
 
 LoginScene::LoginScene(class Engine* engine) : Scene(engine)
 {
-    addSceneNode<BackgroundNode>("loginScreen.png")
+    addSceneNode<BackgroundNode>("ui/loginScreen.png")
     .setName("Background")
     .setDrawOrder(CommonDepths::BACKGROUND);
 

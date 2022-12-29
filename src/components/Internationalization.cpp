@@ -25,10 +25,9 @@
 
 using namespace lpm;
 
-Internationalization::Internationalization()
+Internationalization::Internationalization(std::string_view json)
 {
-    std::ifstream f("i18n.json");
-    json_ = nlohmann::json::parse(f);
+    json_ = nlohmann::json::parse(json.begin(), json.end());
 }
 
 sf::String Internationalization::getString(std::string ns, std::string key) const

@@ -25,7 +25,7 @@
 
 #include <scene/Scene.hpp>
 #include <Engine.hpp>
-#include <Resources.hpp>
+#include <assets/AssetManager.hpp>
 
 using namespace lpm;
 
@@ -52,17 +52,11 @@ void Text::setTextFillColor(const sf::Color& color)
 
 void Text::init()
 {
-    const auto& resources = getSceneOwner()->getEngine()->getResources();
+    auto& resources = getSceneOwner()->getEngine()->getAssetManager();
 
-    if(auto font = resources.getFont(fontName_))
-    {
-        text_->setFont(**font);
-        text_->setCharacterSize(fontSize_);
-    }
-    else
-    {
-        throw resource_exception();
-    }
+    const auto font = resources.loadFont("fonts/" + fontName_ + ".ttf");
+    text_->setFont(*font);
+    text_->setCharacterSize(fontSize_);
 }
 
 void Text::draw(sf::RenderTarget& target, sf::RenderStates states) const

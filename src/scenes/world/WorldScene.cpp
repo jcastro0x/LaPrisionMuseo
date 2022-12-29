@@ -31,7 +31,7 @@ using namespace lpm;
 
 WorldScene::WorldScene(Engine* engine) : Scene(engine)
 {
-    addSceneNode<BackgroundNode>("AL_Almacen1.jpg")
+    addSceneNode<BackgroundNode>("rooms/AL_Almacen1.jpg")
     .setName("Background")
     .setDrawOrder(CommonDepths::BACKGROUND);
 

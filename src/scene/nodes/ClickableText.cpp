@@ -30,7 +30,8 @@
 
 #include <imgui.h>
 #include <widgets/Cursor.hpp>
-#include <Resources.hpp>
+#include <assets/AssetManager.hpp>
+
 
 using namespace lpm;
 
@@ -52,34 +53,16 @@ void ClickableText::setTextString(const sf::String& string)
 
 void ClickableText::init()
 {
-    const auto& resources = getSceneOwner()->getEngine()->getResources();
+    auto& resources = getSceneOwner()->getEngine()->getAssetManager();
 
-    if(auto font = resources.getFont("FontEntry"))
-    {
-        text_->setFont(**font);
-    }
-    else
-    {
-        throw resource_exception();
-    }
+    const auto font = resources.loadFont("fonts/FontEntry.ttf");
+    text_->setFont(*font);
 
-    if(auto soundHover = resources.getSoundBuffer("ButtonHover"))
-    {
-        soundHover_->setBuffer(**soundHover);
-    }
-    else
-    {
-        throw resource_exception();
-    }
+    const auto soundHover = resources.loadSoundBuffer("audio/ButtonHover.wav");
+    soundHover_->setBuffer(*soundHover);
 
-    if(auto soundClick = resources.getSoundBuffer("ButtonClick"))
-    {
-        soundClick_->setBuffer(**soundClick);
-    }
-    else
-    {
-        throw resource_exception();
-    }
+    const auto soundClick = resources.loadSoundBuffer("audio/ButtonClick.wav");
+    soundClick_->setBuffer(*soundClick);
 }
 
 void ClickableText::draw(sf::RenderTarget& target, sf::RenderStates states) const

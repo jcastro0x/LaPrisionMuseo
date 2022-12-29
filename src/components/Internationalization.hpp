@@ -29,7 +29,7 @@ namespace lpm
     class Internationalization
     {
     public:
-        Internationalization();
+        Internationalization(std::string_view json);
         sf::String getString(std::string ns, std::string key) const;
 
     private:

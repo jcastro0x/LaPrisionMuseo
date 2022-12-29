@@ -1,6 +1,9 @@
 #Submodules
 
 Submodules used:
+- GamePacker
+- imgui
+- imgui-sfml
 - socket.io-client-cpp
 
 ## Add submodule

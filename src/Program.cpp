@@ -33,7 +33,7 @@
 #include <widgets/Cursor.hpp>
 #include <network/DebugNetwork.hpp>
 #include <components/Internationalization.hpp>
-#include <Resources.hpp>
+#include <assets/AssetManagerSFML.hpp>
 #include <Configuration.hpp>
 
 #include <scene/SceneManager.hpp>
@@ -49,8 +49,6 @@ Engine::Engine()
 : window_(sf::VideoMode(Configuration::WINDOW_SIZE_X, Configuration::WINDOW_SIZE_Y), Configuration::WINWDOW_TITLE)
 , network_(std::make_unique<DebugNetwork>())
 , clock_(std::make_unique<sf::Clock>())
-, cursor_(std::make_unique<Cursor>())
-, internationalization_(std::make_unique<Internationalization>())
 , gui_(std::make_unique<tgui::Gui>())
 
 {
@@ -66,17 +64,9 @@ Engine::Engine()
     SceneManager::registerScene<SplashScene>("splash", this);
     //~===================================================================
 
-
-
-    try
-    {
-        resources_ = std::make_unique<Resources>();
-    }
-    catch(resource_exception const&)
-    {
-        std::cerr << "FATAL ERROR reading resources\n";
-        throw;
-    }
+    assetManager_           = std::make_unique<AssetManagerSFML>();
+    cursor_                 = std::make_unique<Cursor>(*this);
+    internationalization_   = std::make_unique<Internationalization>(assetManager_->loadText("ui/i18n.json")->toAnsiString());
 
     ImGui::SFML::Init(window_);
     ImGui::GetIO().ConfigFlags ^= ImGuiConfigFlags_::ImGuiConfigFlags_NoMouseCursorChange;
@@ -216,9 +206,9 @@ void Engine::drawFPS(float deltaSeconds)
 }
 #endif
 
-const Resources& Engine::getResources() const
+IAssetManager& Engine::getAssetManager() const
 {
-    return *resources_;
+    return *assetManager_;
 }
 
 const Internationalization& Engine::getI18N() const
@@ -269,6 +259,8 @@ extern "C" void handle_signals(int signal_number)
     std::cerr << "Ungracefully exit: " << signType << '(' << signal_number << ')' << '\n';
 }
 
+
+#include <packer/Packer.hpp>
 int main(const int, const char**)
 {
     signal(SIGILL,   &handle_signals);
@@ -280,7 +272,6 @@ int main(const int, const char**)
     #ifdef _WIN32
     signal(SIGBREAK, &handle_signals);
     #endif
-
 
     Engine engine;
     engine.run();

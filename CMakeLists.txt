@@ -31,8 +31,10 @@ set(SRC_FILES
     src/scenes/world/room/RoomCamera.cpp
     src/scenes/world/room/RoomSceneNode.cpp
     
-    src/Resources.cpp
+    #src/Resources.cpp
     src/widgets/Cursor.cpp
+
+    src/assets/AssetManagerSFML.cpp
 )
 
 set(SRC_IMGUI
@@ -48,6 +50,7 @@ add_executable(${PROJECT_NAME} ${SRC_FILES} ${SRC_IMGUI})
 
 # LIBRARY - GAME PACKER
 add_subdirectory(libs/GamePacker)
+include_directories(libs/GamePacker/src)
 
 # LIBRARY - SFML
 set(SFML_STATIC_LIBRARIES TRUE)
@@ -79,10 +82,10 @@ target_link_libraries(${PROJECT_NAME}
     ${CMAKE_THREAD_LIBS_INIT}
 )
 
-target_compile_options(${PROJECT_NAME} BEFORE PRIVATE
-    $<$<CXX_COMPILER_ID:MSVC>:/W4 /WX>
-    $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra -pedantic -Werror>
-)
+#target_compile_options(${PROJECT_NAME} BEFORE PRIVATE
+#    $<$<CXX_COMPILER_ID:MSVC>:/W4 /WX>
+#    $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra -pedantic -Werror>
+#)
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory

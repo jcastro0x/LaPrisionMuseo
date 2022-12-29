@@ -30,11 +30,12 @@
 #include <imgui.h>
 
 #include <Engine.hpp>
-#include <Resources.hpp>
+#include <assets/AssetManager.hpp>
 #include <components/Internationalization.hpp>
 #include <Configuration.hpp>
 
 #include <scene/nodes/Text.hpp>
+
 
 
 using namespace lpm;
@@ -45,11 +46,23 @@ SplashScene::SplashScene(Engine* engine)
     splash = &addSceneNode<SplashNode>();
     splash->setDrawOrder(CommonDepths::BACKGROUND);
 
-    //TODO: Get textures from Resouces instead "loadFromFile"
-    splash->changeTexture(SplashNode::TEXTURE_0, "splash/splash00.jpg");
-    splash->changeTexture(SplashNode::TEXTURE_1, "splash/splash04.jpg");
-    splash->changeTexture(SplashNode::TEXTURE_2, "splash/splash02.jpg");
-    splash->changeTexture(SplashNode::TEXTURE_3, "splash/splash03.jpg");
+//    auto rooms = engine->getAssetManager().getAssetsInDirectory("rooms");
+//    std::default_random_engine rand_engine;
+//    std::uniform_int_distribution<size_t> rand_distri(0, rooms.size()-1);
+//
+//    for(int i = 0; i < 4; i++)
+//    {
+//        auto const room_name = fmt::format("rooms/{}", rooms[rand_distri(rand_engine)]);
+//        std::cout << room_name << "\n";
+//        splash->changeTexture(i, room_name);
+//    }
+
+
+//    //TODO: Get textures from Resouces instead "loadFromFile"
+//    splash->changeTexture(SplashNode::TEXTURE_0, "splash/splash00.jpg");
+//    splash->changeTexture(SplashNode::TEXTURE_1, "splash/splash04.jpg");
+//    splash->changeTexture(SplashNode::TEXTURE_2, "splash/splash02.jpg");
+//    splash->changeTexture(SplashNode::TEXTURE_3, "splash/splash03.jpg");
 
     auto& logoTextShadow = addSceneNode<lpm::Text>("FontLogo", 150);
     logoTextShadow.setTextFillColor(sf::Color::Black);

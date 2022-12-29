@@ -25,18 +25,26 @@
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
 
+#include <scene/Scene.hpp>
+#include <Engine.hpp>
+#include <assets/AssetManager.hpp>
+
 using namespace lpm;
 
 BackgroundNode::BackgroundNode(std::string_view textureName)
-: texture_(std::make_unique<sf::Texture>())
+: textureName_(textureName)
 , sprite_(std::make_unique<sf::Sprite>())
 {
-    texture_->loadFromFile(textureName.data());
-    sprite_->setTexture(*texture_);
 }
 
 BackgroundNode::~BackgroundNode() = default;
 
+void BackgroundNode::init()
+{
+    auto& resources = getSceneOwner()->getEngine()->getAssetManager();
+    texture_ = resources.loadTexture(textureName_.data());
+    sprite_->setTexture(*texture_);
+}
 
 void BackgroundNode::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {

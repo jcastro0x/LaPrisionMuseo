@@ -10,6 +10,7 @@ src/server/version_config.h
 libs-build/
 build/
 libs-build-shared/
+binaries/
 
 # User-specific stuff
 .idea/

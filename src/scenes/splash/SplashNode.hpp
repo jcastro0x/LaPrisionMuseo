@@ -56,31 +56,27 @@ namespace lpm
         SplashNode();
         ~SplashNode();
 
-    public:
-        void changeTexture(size_t index, std::string_view textureName);
-
     protected:
+        void init() override;
         void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
         void tick(float deltaTime) override;
 
     private:
-        void initializeTextures();
         void initializeShader();
-        void initializeTexture(sf::Texture* texture, std::string_view textureName);
-
-        void setTextureIntensityTarget(size_t index, float intensity, std::function<void()> const& callback = {});
 
 
     private:
-        std::unique_ptr<sf::Shader> shader_;
+        sf::Shader* shader_ = nullptr;
         std::unique_ptr<sf::RectangleShape> rectangleShape_;
-        std::unique_ptr<sf::Texture> maskTexture_;
-        std::unique_ptr<sf::Texture> topMaskTexture_;
+        sf::Texture* maskTexture_ = nullptr;
+        sf::Texture* topMaskTexture_ = nullptr;
 
         float texturesIntensitiesVelocity = 1.95f;
-        std::array<std::unique_ptr<sf::Texture>, 4> textures_;
+        std::array<sf::Texture*, 4> textures_;
         std::array<float, 4> texturesIntensities;
         std::array<float, 4> texturesIntensitiesTargets;
         std::array<std::function<void()>, 4> texturesIntensitiesCallbacks;
+
+
     };
 }

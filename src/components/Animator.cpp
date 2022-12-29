@@ -31,23 +31,21 @@ void Animator::tick(float deltaTime)
     currentTime_ += deltaTime;
 }
 
-void Animator::loadAnimations(std::string_view fileName)
+void Animator::loadAnimations(std::string_view json)
 {
-    std::ifstream f(fileName.data());
-    auto json = nlohmann::json::parse(f);
-    for(auto anim : json)
+    for(auto anim : nlohmann::json::parse(json.begin(), json.end()))
     {
         Animation animation;
         animation.name = anim["name"];
         animation.rate = anim["rate"];
         for(auto frame : anim["frames"])
         {
-            animation.frames.emplace_back(sf::IntRect{
+            animation.frames.emplace_back(
                 frame["x"],
                 frame["y"],
                 frame["w"],
                 frame["h"]
-            });
+            );
         }
 
         animations_.emplace_back(animation);
@@ -56,7 +54,7 @@ void Animator::loadAnimations(std::string_view fileName)
 
 sf::IntRect Animator::getCurrentRect(std::string_view animation) const
 {
-    if(auto it = std::find_if(animations_.begin(), animations_.end(), [&](auto& anim){
+    if(std::input_iterator auto it = std::ranges::find_if(animations_.begin(), animations_.end(), [&](auto& anim){
         return anim.name == animation.data();
     }); it != animations_.end())
     {

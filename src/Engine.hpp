@@ -29,7 +29,7 @@ namespace sf    { class Clock;      }
 
 namespace lpm
 {
-    class Resources;
+    class IAssetManager;
     class Internationalization;
     class Cursor;
     class SceneManager;
@@ -51,7 +51,7 @@ namespace lpm
         void loadScene(std::string_view name);
 
     public:
-        [[nodiscard]] const Resources& getResources() const;
+        [[nodiscard]] IAssetManager& getAssetManager() const;
         [[nodiscard]] const Internationalization& getI18N() const;
         [[nodiscard]] Cursor& getCursor();
         [[nodiscard]] sf::Vector2i getMousePosition() const;
@@ -73,7 +73,7 @@ namespace lpm
         Pointer<Internationalization> internationalization_;    //< i18n pointer
         Pointer<tgui::BackendGui> gui_;                         //< TGUI pointer
         Pointer<Scene> scene_;                                  //< Current scene drawn
-        Pointer<Resources> resources_;                          //< Resources game pointer
+        Pointer<IAssetManager> assetManager_;                   //< Asset Manager pointer
 
         std::string scenePendingToLoad_;                        //< Pending scene to load
     };

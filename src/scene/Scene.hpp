@@ -65,7 +65,7 @@ namespace lpm
         /**
          * @brief Create SceneNode and add into Scene.
          * 
-         * SceneNodes created thorugh this are memory automatic handled by the scene,
+         * SceneNodes created through this are memory automatic handled by the scene,
          * for that, this function only returns a raw pointer. DONT DELETE IT YOURSELF. 
          * 
          * @return Pointer to created SceneNode casted to tparam SceneNodeType 

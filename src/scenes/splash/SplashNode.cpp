@@ -21,7 +21,6 @@
 
 #include "SplashNode.hpp"
 
-#include <cassert>
 #include <imgui.h>
 
 #include <SFML/Graphics/Shader.hpp>
@@ -33,35 +32,53 @@
 #include <scene/nodes/BackgroundNode.hpp>
 #include <Configuration.hpp>
 
+#include <scene/Scene.hpp>
+#include <Engine.hpp>
+#include <assets/AssetManager.hpp>
 
+#include <random>
+#include <fmt/format.h>
+#include <iostream>
 
 using namespace lpm;
 
 SplashNode::SplashNode()
-: shader_(std::make_unique<sf::Shader>())
+: shader_(nullptr)
 , rectangleShape_(std::make_unique<sf::RectangleShape>())
-, maskTexture_(std::make_unique<sf::Texture>())
-, topMaskTexture_(std::make_unique<sf::Texture>())
 {
-    initializeTextures();
-    initializeShader();
-
-    rectangleShape_->setSize({Configuration::BACKGROUND_TEX_SIZE_X, Configuration::BACKGROUND_TEX_SIZE_Y});
-    rectangleShape_->setPosition(0,0);
-    rectangleShape_->setTexture(textures_[TEXTURE_0].get());
+    std::ranges::fill(texturesIntensities, 0.f);
+    std::ranges::fill(texturesIntensitiesTargets, 1.f);
 }
 
 SplashNode::~SplashNode() = default;
 
-void SplashNode::changeTexture(size_t index, std::string_view textureName)
+void SplashNode::init()
 {
-    assert(index <= 4 && "SplashNode::changeTexture called with value bigger than 4");
-    setTextureIntensityTarget(index, 0.f, [this, index, textureName = std::string(textureName.data())](){
-        initializeTexture(textures_[index].get(), textureName);
-        setTextureIntensityTarget(index, 1.f);
-    });
-}
+    // Load masks
+    auto& resources  = getSceneOwner()->getEngine()->getAssetManager();
+    maskTexture_     = resources.loadTexture("splash/splashMask.png");
+    topMaskTexture_  = resources.loadTexture("splash/topmask.png");
 
+    // Load rooms textures
+    auto rooms = getSceneOwner()->getEngine()->getAssetManager().getAssetsInDirectory("rooms");
+    std::default_random_engine rand_engine(time(NULL));
+    std::uniform_int_distribution<size_t> rand_distri(0, rooms.size()-1);
+
+    for(int i = 0; i < 4; i++)
+    {
+        auto const room_name = fmt::format("rooms/{}", rooms[rand_distri(rand_engine)]);
+        std::cout << room_name << "\n";
+        textures_[i] = getSceneOwner()->getEngine()->getAssetManager().loadTexture(room_name);
+    }
+
+    // Load shader
+    initializeShader();
+
+    // Apply loaded assets to be drawn
+    rectangleShape_->setSize({Configuration::BACKGROUND_TEX_SIZE_X, Configuration::BACKGROUND_TEX_SIZE_Y});
+    rectangleShape_->setPosition(0,0);
+    rectangleShape_->setTexture(textures_[TEXTURE_0]);
+}
 
 
 void SplashNode::tick(float deltaTime)
@@ -102,61 +119,27 @@ void SplashNode::tick(float deltaTime)
 
 void SplashNode::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-    states.shader = shader_.get();
+    states.shader = shader_;
     target.draw(*rectangleShape_, states);
-}
-
-void SplashNode::initializeTextures()
-{
-    // Create default textures
-    for(size_t i = 0; i < 4; i++)
-    {
-        textures_[i] = std::make_unique<sf::Texture>();
-        textures_[i]->create(Configuration::BACKGROUND_TEX_SIZE_X, Configuration::BACKGROUND_TEX_SIZE_Y);
-    }
-
-    // Load mask
-    maskTexture_->loadFromFile("splash/splashMask.png");
-
-    topMaskTexture_->loadFromFile("splash/topmask.png");
-
-    std::ranges::fill(texturesIntensities, 0.f);
-    std::ranges::fill(texturesIntensitiesTargets, 1.f);
 }
 
 void SplashNode::initializeShader()
 {
-    shader_->loadFromFile("splash/splash.frag", sf::Shader::Fragment);
+    auto& resources = getSceneOwner()->getEngine()->getAssetManager();
+    shader_ = resources.loadShader("splash/splash.frag");
 
     shader_->setUniform("mask_texture", *maskTexture_);
     shader_->setUniform("top_mask_texture", *topMaskTexture_);
 
     static constexpr auto quarter = 1 - 1/4.f;
-    //static constexpr auto fade    = 1 - 1/40.f;
 
-    // Vector3(offset, limit, velocity)
     shader_->setUniform("displacement[0]", sf::Vector3f(0,       quarter,  .10f));
     shader_->setUniform("displacement[1]", sf::Vector3f(-1/4.f,  quarter,  .07f));
     shader_->setUniform("displacement[2]", sf::Vector3f(-2/4.f,  quarter,  .09f));
     shader_->setUniform("displacement[3]", sf::Vector3f(-3/4.f,  quarter,  .06f));
 
-    shader_->setUniform("textures[0]", *textures_[0]);
-    shader_->setUniform("textures[1]", *textures_[1]);
-    shader_->setUniform("textures[2]", *textures_[2]);
-    shader_->setUniform("textures[3]", *textures_[3]);
-}
-
-void SplashNode::initializeTexture(sf::Texture* texture, std::string_view textureName)
-{
-    texture->loadFromFile(textureName.data());
-    texture->setSrgb(false);
-    texture->setRepeated(true);
-    texture->setSmooth(true);
-}
-
-
-void SplashNode::setTextureIntensityTarget(size_t index, float intensity, std::function<void()> const& callback)
-{
-    texturesIntensitiesTargets[index]   = intensity;
-    texturesIntensitiesCallbacks[index] = callback;
+    shader_->setUniform("textures[0]", *textures_[TEXTURE_0]);
+    shader_->setUniform("textures[1]", *textures_[TEXTURE_1]);
+    shader_->setUniform("textures[2]", *textures_[TEXTURE_2]);
+    shader_->setUniform("textures[3]", *textures_[TEXTURE_3]);
 }

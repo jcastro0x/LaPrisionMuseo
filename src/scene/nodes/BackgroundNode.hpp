@@ -39,10 +39,12 @@ namespace lpm
         BackgroundNode(std::string_view textureName);
         ~BackgroundNode();
 
+        void init() override;
         void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
     private:
-        std::unique_ptr<sf::Texture> texture_;
+        std::string textureName_;
+        sf::Texture* texture_ = nullptr;
         std::unique_ptr<sf::Sprite> sprite_;
     };
 }

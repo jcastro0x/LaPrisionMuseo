@@ -14,6 +14,7 @@
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
 // EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
 // MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
 // NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
 // LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
@@ -22,32 +23,32 @@
 #pragma once
 
 #include <string>
+#include <unordered_map>
 #include <vector>
-#include <SFML/Graphics/Rect.hpp>
+
+#include <SFML/Graphics/Texture.hpp>
+#include <SFML/Graphics/Font.hpp>
+#include <SFML/Graphics/Shader.hpp>
+#include <SFML/Audio/SoundBuffer.hpp>
 
 namespace lpm
 {
-    class Animator
+    /**
+     * A singleton that is responsible for loading and unloading PrimaryAssets, and maintaining game-specific asset
+     * references Games should override this class and change the class reference
+     **/
+    class IAssetManager
     {
     public:
-        struct Animation
-        {
-            std::string name;
-            float rate = 0;
-            std::vector<sf::IntRect> frames;
-        };
+        virtual ~IAssetManager() = default;
 
-    public:
-        void tick(float deltaTime);
-        void loadAnimations(std::string_view json);
+        virtual sf::Texture* loadTexture(std::string_view path)                             = 0;
+        virtual const sf::SoundBuffer* loadSoundBuffer(std::string_view path)               = 0;
+        virtual const sf::Font* loadFont(std::string_view path)                             = 0;
+        virtual const sf::String* loadText(std::string_view path)                           = 0;
+        virtual sf::Shader* loadShader(std::string_view path)                               = 0;
+        virtual std::vector<std::string> getAssetsInDirectory(std::string_view path) const  = 0;
 
-        sf::IntRect getCurrentRect(std::string_view animation) const;
-
-
-        const std::vector<Animation>& getAnimations() const;
-
-    private:
-        float currentTime_ = 0;
-        std::vector<Animation> animations_;
+        virtual bool unloadAsset(std::string_view path)                                     = 0;
     };
 }

@@ -31,7 +31,7 @@ namespace lpm
     class Cursor : public sf::Sprite
     {
     public:
-        Cursor();
+        Cursor(const class Engine& engine);
         ~Cursor() override;
 
         void tick(float deltaTime, const sf::Window& window);
@@ -39,8 +39,10 @@ namespace lpm
         void setCursor(std::string_view name);
 
     private:
-        sf::Texture texture_;
+        sf::Texture* texture_ = nullptr;
         std::unique_ptr<class Animator> animator_;
         std::string_view currentAnimation_;
+
+        const class Engine& engine_;
     };
 }

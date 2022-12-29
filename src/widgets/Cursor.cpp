@@ -21,6 +21,8 @@
 
 #include "Cursor.hpp"
 
+#include <Engine.hpp>
+#include <assets/AssetManager.hpp>
 #include <components/Animator.hpp>
 
 #include <imgui.h>
@@ -28,15 +30,18 @@
 
 using namespace lpm;
 
-Cursor::Cursor()
+Cursor::Cursor(const Engine& engine)
 : animator_(std::make_unique<Animator>())
 , currentAnimation_("default")
+, engine_(engine)
 {
-    texture_.loadFromFile("cursors.png");
-    setTexture(texture_);
+    texture_ = engine_.getAssetManager().loadTexture("ui/cursors.png");
+
+    setTexture(*texture_);
     setTextureRect(sf::IntRect(2, 4, 23, 23));
 
-    animator_->loadAnimations("cursors.json");
+    auto animation = engine_.getAssetManager().loadText("ui/cursors.json");
+    animator_->loadAnimations(animation->toAnsiString());
 }
 
 Cursor::~Cursor() = default;
