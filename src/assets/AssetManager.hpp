@@ -34,8 +34,7 @@
 namespace lpm
 {
     /**
-     * A singleton that is responsible for loading and unloading PrimaryAssets, and maintaining game-specific asset
-     * references Games should override this class and change the class reference
+     * A class that is responsible for loading and unloading assets
      **/
     class IAssetManager
     {
@@ -49,6 +48,12 @@ namespace lpm
         virtual sf::Shader* loadShader(std::string_view path)                               = 0;
         virtual std::vector<std::string> getAssetsInDirectory(std::string_view path) const  = 0;
 
-        virtual bool unloadAsset(std::string_view path)                                     = 0;
+
+        virtual bool unloadTexture(sf::Texture* texture)                                    = 0;
+        virtual bool unloadSoundBuffer(sf::SoundBuffer* sound)                              = 0;
+        virtual bool unloadFont(sf::Font* font)                                             = 0;
+        virtual bool unloadText(sf::String* text)                                           = 0;
+        virtual bool unloadShader(sf::Shader* shader)                                       = 0;
+
     };
 }

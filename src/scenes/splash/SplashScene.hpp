@@ -36,7 +36,13 @@ namespace lpm
         void tick(float deltaTime) override;
 
     private:
+        static void onKeyPressed(int key);
+
+
+    private:
         class SplashNode* splash = nullptr;
         lpm::Text* pressAnyKeyText = nullptr;
+
+        inline static Engine* engine_ = nullptr;
     };
 }

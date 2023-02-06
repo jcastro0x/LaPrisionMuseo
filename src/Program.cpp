@@ -171,6 +171,18 @@ void Engine::loadScene(std::string_view name)
     }
 }
 
+void Engine::setKeyPressedEvent(KeyPressedEvent event)
+{
+    keyPressedEvent_ = event;
+}
+
+void Engine::setMousePressedEvent(MousePressedEvent event)
+{
+    mousePressedEvent_ = event;
+}
+
+
+
 void Engine::processEvents(sf::Event& event)
 {
     while (window_.pollEvent(event))
@@ -180,6 +192,16 @@ void Engine::processEvents(sf::Event& event)
         switch (event.type) 
         {
             default:break;
+
+            case sf::Event::KeyPressed:
+                if(keyPressedEvent_)
+                    keyPressedEvent_(event.key.code);
+                break;
+
+            case sf::Event::MouseButtonPressed:
+                if(mousePressedEvent_)
+                    mousePressedEvent_(event.mouseButton.button);
+                break;
 
             case sf::Event::Closed:
                 window_.close();

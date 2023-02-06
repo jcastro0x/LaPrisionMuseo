@@ -36,6 +36,7 @@ namespace lpm
         operator sf::String*();
 
         TextResource() = default;
+        TextResource(sf::String* text) : text_(*text) {}
 
     private:
         sf::String text_;
@@ -43,11 +44,8 @@ namespace lpm
 
     class AssetManagerSFML : public IAssetManager
     {
-        using texture_map = std::unordered_map<std::string, sf::Texture>;
-        using sound_map   = std::unordered_map<std::string, sf::SoundBuffer>;
-        using font_map    = std::unordered_map<std::string, sf::Font>;
-        using text_map    = std::unordered_map<std::string, TextResource>;
-        using shader_map  = std::unordered_map<std::string, std::unique_ptr<sf::Shader>>;
+        template<typename Resource>
+        using resource = std::unordered_map<std::string, Resource>;
 
     public:
         sf::Texture* loadTexture(std::string_view path)                             override;
@@ -57,13 +55,18 @@ namespace lpm
         sf::Shader* loadShader(std::string_view path)                               override;
         std::vector<std::string> getAssetsInDirectory(std::string_view path) const  override;
 
-        bool unloadAsset(std::string_view path)                                     override;
+
+        bool unloadTexture(sf::Texture* texture)                                    override;
+        bool unloadSoundBuffer(sf::SoundBuffer* sound)                              override;
+        bool unloadFont(sf::Font* font)                                             override;
+        bool unloadText(sf::String* text)                                           override;
+        bool unloadShader(sf::Shader* shader)                                       override;
 
     private:
-        texture_map textures_;
-        sound_map sounds_;
-        font_map fonts_;
-        text_map texts_;
-        shader_map shaders_;
+        resource<sf::Texture> textures_;
+        resource<sf::SoundBuffer> sounds_;
+        resource<sf::Font> fonts_;
+        resource<TextResource> texts_;
+        resource<std::unique_ptr<sf::Shader>> shaders_;
     };
 }

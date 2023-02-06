@@ -40,29 +40,25 @@
 
 using namespace lpm;
 
+void SplashScene::onKeyPressed(int)
+{
+    auto engine = SplashScene::engine_;
+    SplashScene::engine_ = nullptr;
+
+    engine->setKeyPressedEvent(nullptr);
+    engine->setMousePressedEvent(nullptr);
+    engine->loadScene("login");
+}
+
 SplashScene::SplashScene(Engine* engine)
 : Scene(engine)
 {
+    SplashScene::engine_ = engine;
+    engine->setKeyPressedEvent(SplashScene::onKeyPressed);
+    engine->setMousePressedEvent(SplashScene::onKeyPressed);
+
     splash = &addSceneNode<SplashNode>();
     splash->setDrawOrder(CommonDepths::BACKGROUND);
-
-//    auto rooms = engine->getAssetManager().getAssetsInDirectory("rooms");
-//    std::default_random_engine rand_engine;
-//    std::uniform_int_distribution<size_t> rand_distri(0, rooms.size()-1);
-//
-//    for(int i = 0; i < 4; i++)
-//    {
-//        auto const room_name = fmt::format("rooms/{}", rooms[rand_distri(rand_engine)]);
-//        std::cout << room_name << "\n";
-//        splash->changeTexture(i, room_name);
-//    }
-
-
-//    //TODO: Get textures from Resouces instead "loadFromFile"
-//    splash->changeTexture(SplashNode::TEXTURE_0, "splash/splash00.jpg");
-//    splash->changeTexture(SplashNode::TEXTURE_1, "splash/splash04.jpg");
-//    splash->changeTexture(SplashNode::TEXTURE_2, "splash/splash02.jpg");
-//    splash->changeTexture(SplashNode::TEXTURE_3, "splash/splash03.jpg");
 
     auto& logoTextShadow = addSceneNode<lpm::Text>("FontLogo", 150);
     logoTextShadow.setTextFillColor(sf::Color::Black);
@@ -74,7 +70,6 @@ SplashScene::SplashScene(Engine* engine)
     logoText.setTextString("La Prision");
     logoText.setDrawOrder(CommonDepths::MIDDLE, 1);
     logoText.setPosition(223, Configuration::BACKGROUND_TEX_SIZE_Y - 230.f);
-
 
     auto& museoTextShadow = addSceneNode<lpm::Text>("FontEntry", 125);
     museoTextShadow.setTextFillColor(sf::Color::Black);
@@ -88,7 +83,6 @@ SplashScene::SplashScene(Engine* engine)
     museoText.setDrawOrder(CommonDepths::MIDDLE, 1);
     museoText.setPosition(513, Configuration::BACKGROUND_TEX_SIZE_Y - 215.f);
 
-
     pressAnyKeyText = &addSceneNode<lpm::Text>("FontEntry", 25);
     pressAnyKeyText->setTextFillColor(sf::Color::White);
     pressAnyKeyText->setTextString(getEngine()->getI18N().getString("ui", "press_any_key"));
@@ -100,45 +94,10 @@ void SplashScene::tick(float deltaTime)
 {
     Scene::tick(deltaTime);
 
-    sf::Color color = sf::Color::White;
-
+    static auto color = sf::Color::White;
     static float totalTime = 0;
+
     totalTime += deltaTime;
     color.a = static_cast<uint8_t>(std::abs(std::sin(totalTime * 2)) * 255);
     pressAnyKeyText->setTextFillColor(color);
-
-
-//    ImGui::Begin("SplashScene");
-//    if (ImGui::BeginTable("table1", 4, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg))
-//    {
-//        for (int row = 0; row < 8; row++)
-//        {
-//            ImGui::TableNextRow();
-//            for (int column = 0; column < 4; column++)
-//            {
-//                ImGui::TableSetColumnIndex(column);
-//
-//                char buf[32];
-//                sprintf(buf, "%d%d_%d", column, row, row);
-//                if(ImGui::Button(buf, ImVec2(-FLT_MIN, 0.0f)))
-//                {
-//                    char fileName[64];
-//                    sprintf(fileName, "splash/splash0%d.jpg", row);
-//                    splash->changeTexture(column, fileName);
-//                }
-//            }
-//        }
-//    }
-//    ImGui::EndTable();
-//    ImGui::End();
-
-    //TODO: Detect any key instead this
-    bool bLoadLoginScene = sf::Keyboard::isKeyPressed(sf::Keyboard::Space)
-                        || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)
-                        || sf::Mouse::isButtonPressed(sf::Mouse::Left)
-                        || sf::Mouse::isButtonPressed(sf::Mouse::Right);
-    if(bLoadLoginScene)
-    {
-        getEngine()->loadScene("login");
-    }
 }

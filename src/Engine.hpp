@@ -40,6 +40,8 @@ namespace lpm
     {
         template<typename T>
         using Pointer = std::unique_ptr<T>;
+        using KeyPressedEvent = void (*)(int);
+        using MousePressedEvent = void (*)(int);
 
     public:
         Engine();
@@ -49,6 +51,9 @@ namespace lpm
         void stop();
 
         void loadScene(std::string_view name);
+
+        void setKeyPressedEvent(KeyPressedEvent event);
+        void setMousePressedEvent(MousePressedEvent event);
 
     public:
         [[nodiscard]] IAssetManager& getAssetManager() const;
@@ -76,5 +81,8 @@ namespace lpm
         Pointer<IAssetManager> assetManager_;                   //< Asset Manager pointer
 
         std::string scenePendingToLoad_;                        //< Pending scene to load
+
+        MousePressedEvent mousePressedEvent_ = nullptr;
+        KeyPressedEvent keyPressedEvent_     = nullptr;         //< Event called when a key is pressed
     };
 }

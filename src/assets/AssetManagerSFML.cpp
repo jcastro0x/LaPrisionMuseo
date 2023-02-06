@@ -51,6 +51,21 @@ Resource* loadOrCreate(std::string_view path, Container& container)
     }
 }
 
+template<typename Resource, typename Container>
+bool unload(Resource* res, Container& container)
+{
+    for(auto it = container.begin(); it != container.end(); ++it)
+    {
+        if(&it->second == res)
+        {
+            container.erase(it);
+            return true;
+        }
+    }
+
+    return false;
+}
+
 
 sf::Texture* AssetManagerSFML::loadTexture(std::string_view path)
 {
@@ -125,7 +140,36 @@ std::vector<std::string> AssetManagerSFML::getAssetsInDirectory(std::string_view
     return files;
 }
 
-bool AssetManagerSFML::unloadAsset(std::string_view path)
+
+
+
+
+
+
+
+
+
+bool AssetManagerSFML::unloadTexture(sf::Texture* texture)
 {
-    return false;
+    return unload(texture, textures_);
+}
+
+bool AssetManagerSFML::unloadSoundBuffer(sf::SoundBuffer* sound)
+{
+    return unload(sound, sounds_);
+}
+
+bool AssetManagerSFML::unloadFont(sf::Font* font)
+{
+    return unload(font, fonts_);
+}
+
+bool AssetManagerSFML::unloadText(sf::String* text)
+{
+    return unload(text, texts_);
+}
+
+bool AssetManagerSFML::unloadShader(sf::Shader* shader)
+{
+    //return unload(shader, shaders_);
 }
